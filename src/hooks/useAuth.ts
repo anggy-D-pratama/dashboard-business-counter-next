@@ -13,6 +13,7 @@ interface User {
   api_key: string;
   is_active: boolean;
   business_model_id: string;
+  business_model: any;
 }
 
 export function useAuth() {
@@ -23,7 +24,6 @@ export function useAuth() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // 1. Initial Load: Load cookies into state on component mount (client-side only)
   useEffect(() => {
     const savedToken = getCookie("auth_token");
     const savedUser = getCookie("auth_user");
@@ -40,7 +40,6 @@ export function useAuth() {
     }
   }, []);
 
-  // Wrappers to update state and update the cookies simultaneously
   const setToken = (value: string | null) => {
     setTokenState(value);
     if (value) {
@@ -59,7 +58,6 @@ export function useAuth() {
     }
   };
 
-  // Equivalent to computed(() => !!token.value)
   const isAuthenticated = useMemo(() => !!token, [token]);
 
   const login = async (identifier: string, password: string) => {
@@ -84,9 +82,32 @@ export function useAuth() {
 
       if (response.status === "success") {
         setToken(response.data.token);
-        setUser(response.data.user);
-        router.push("/");
+        let finalUser = response.data.user;
+
+        const modelReq = await fetch(
+          `${config.apiUrl}/business-model/current`,
+          {
+            headers: {
+              Authorization: `Bearer ${response.data.token}`,
+              "Content-Type": "application/json",
+            },
+          },
+        );
+
+        const modelRes = await modelReq.json();
+
+        if (modelRes.status === "success") {
+          finalUser = {
+            ...response.data.user,
+            business_model: modelRes.data || [],
+            business_model_id: modelRes.data.id,
+          };
+        }
+
+        setUser(finalUser);
       }
+
+      router.push("/");
     } catch (err: any) {
       setError(err.message || "Login failed. Please check your credentials.");
       console.error("Login error:", err);
@@ -141,6 +162,7 @@ export function useAuth() {
   const logout = () => {
     setToken(null);
     setUser(null);
+    sessionStorage.removeItem("rec-model");
     router.push("/login");
   };
 

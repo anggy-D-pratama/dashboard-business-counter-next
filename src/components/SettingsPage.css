@@ -182,3 +182,245 @@
 @media (max-width: 600px) {
   .password-requirements { grid-template-columns: 1fr; }
 }
+
+/* Tab Navigation */
+.tabs-nav {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  gap: 2rem;
+}
+
+.tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 1rem 0;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-muted);
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
+}
+
+.tab-btn:hover {
+  color: var(--text-main);
+  border-bottom-color: var(--border-active);
+}
+
+.tab-btn.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+.tab-btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: -2px;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+.tab-icon {
+  transition: transform 0.2s ease;
+}
+
+.tab-btn:hover .tab-icon {
+  transform: translateY(-1px);
+}
+
+.tab-btn.active .tab-icon {
+  stroke: var(--primary);
+}
+
+/* Tab Panels */
+.tab-panels {
+  position: relative;
+  width: 100%;
+}
+
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.active {
+  display: block;
+}
+
+/* Business Model Settings Card Grid */
+.business-model-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.model-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.model-card {
+  position: relative;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.model-card:hover {
+  border-color: var(--theme-color, var(--primary));
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.model-card.active {
+  border-color: var(--theme-color, var(--primary));
+  background: var(--theme-bg);
+}
+
+.model-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.model-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: var(--theme-badge);
+  color: var(--theme-color, var(--primary));
+  transition: transform 0.2s ease;
+}
+
+.model-card:hover .model-icon-wrapper {
+  transform: scale(1.05);
+}
+
+.model-active-badge {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+  padding: 0.25rem 0.625rem;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.model-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-grow: 1;
+}
+
+.model-details h4 {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.model-details p {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.model-examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  margin-top: auto;
+  padding-top: 0.5rem;
+}
+
+.example-tag {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  background: var(--bg-main);
+  padding: 0.1875rem 0.5rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+.model-card.active .example-tag {
+  background: var(--bg-card);
+}
+
+.model-card-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+}
+
+.model-select-btn {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+  text-align: center;
+}
+
+.model-card:hover .model-select-btn {
+  border-color: var(--theme-color, var(--primary));
+  background: var(--theme-color, var(--primary));
+  color: white;
+}
+
+.model-card.active .model-select-btn {
+  display: none;
+}
+
+/* --- Styling for the Currently Selected Model Card --- */
+.model-card.selected {
+  /* Give it a bold border matching its specific theme color */
+  border: 2px solid var(--theme-color, #3b82f6) !important;
+  
+  /* A soft background tint */
+  background: var(--theme-bg, rgba(59, 130, 246, 0.05));
+  
+  /* A beautiful floating shadow and an outer glow ring */
+  box-shadow: 
+    0 10px 25px -5px rgba(0, 0, 0, 0.1), 
+    0 0 0 4px var(--theme-badge, rgba(59, 130, 246, 0.1));
+    
+  /* Lift the card up slightly */
+  transform: translateY(-4px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.model-card.selected .model-icon-wrapper {
+  background: var(--theme-color, #3b82f6);
+  color: white;
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px var(--theme-badge, rgba(59, 130, 246, 0.2));
+  transition: all 0.3s ease;
+}

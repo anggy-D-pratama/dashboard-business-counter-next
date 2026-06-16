@@ -21,11 +21,11 @@ export default function RegisterPage() {
   const error = localError || apiError;
 
   const passwordRules = [
-    { label: "At least 6 characters", valid: password.length >= 6 },
-    { label: "One uppercase letter", valid: /[A-Z]/.test(password) },
-    { label: "One lowercase letter", valid: /[a-z]/.test(password) },
-    { label: "One number", valid: /\d/.test(password) },
-    { label: "One special character", valid: /[@$!%*?&]/.test(password) },
+    { label: "Minimal 6 karakter", valid: password.length >= 6 },
+    { label: "Satu huruf besar", valid: /[A-Z]/.test(password) },
+    { label: "Satu huruf kecil", valid: /[a-z]/.test(password) },
+    { label: "Satu angka", valid: /\d/.test(password) },
+    { label: "Satu karakter spesial", valid: /[@$!%*?&]/.test(password) },
   ];
 
   const isPasswordValid = passwordRules.every((rule) => rule.valid);
@@ -47,23 +47,23 @@ export default function RegisterPage() {
   const validate = () => {
     setLocalError(null);
     if (!nameRegex.test(name)) {
-      setLocalError("Name is required.");
+      setLocalError("Nama wajib diisi.");
       return false;
     }
     if (!email) {
-      setLocalError("Email is required.");
+      setLocalError("Email wajib diisi.");
       return false;
     }
     if (!phoneRegex.test(phone)) {
-      setLocalError("Phone number is required.");
+      setLocalError("Nomor telepon wajib diisi.");
       return false;
     }
     if (!isPasswordValid) {
-      setLocalError("Password does not meet requirements.");
+      setLocalError("Kata sandi tidak memenuhi syarat.");
       return false;
     }
     if (password !== password_confirmation) {
-      setLocalError("Passwords do not match.");
+      setLocalError("Kata sandi tidak cocok.");
       return false;
     }
     return true;
@@ -83,8 +83,8 @@ export default function RegisterPage() {
           <div className="logo-mark">
             <div className="mark-inner"></div>
           </div>
-          <h1>Register</h1>
-          <p>Access your daily business analytics</p>
+          <h1>Daftar</h1>
+          <p>Akses analitik bisnis harian Anda</p>
         </div>
 
         <form onSubmit={handleRegister} className="auth-form">
@@ -107,7 +107,7 @@ export default function RegisterPage() {
           )}
 
           <div className="form-group">
-            <label htmlFor="name">Full Name</label>
+            <label htmlFor="name">Nama Lengkap</label>
             <input
               id="name"
               value={name}
@@ -127,13 +127,13 @@ export default function RegisterPage() {
                 setEmail(e.target.value);
               }}
               type="email"
-              placeholder="john@sisense.com"
+              placeholder="email@notakita.com"
               required
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="phone">Phone Number</label>
+            <label htmlFor="phone">Nomor Telepon</label>
             <div className="phone-input-minimal">
               <div className="prefix">62</div>
               <input
@@ -148,7 +148,7 @@ export default function RegisterPage() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">Kata Sandi</label>
             <div className="password-input-wrapper">
               <input
                 id="password"
@@ -222,7 +222,7 @@ export default function RegisterPage() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="confirm">Confirm Password</label>
+            <label htmlFor="confirm">Konfirmasi Kata Sandi</label>
             <div className="password-input-wrapper">
               <input
                 id="confirm"
@@ -277,11 +277,11 @@ export default function RegisterPage() {
             disabled={isLoading}
           >
             {isLoading && <span className="spinner"></span>}
-            {isLoading ? "Deploying..." : "Register"}
+            {isLoading ? "Mendaftar..." : "Daftar"}
           </button>
 
           <div className="auth-footer">
-            <Link href="/login">Sign In</Link>
+            <Link href="/login">Masuk</Link>
           </div>
         </form>
       </div>

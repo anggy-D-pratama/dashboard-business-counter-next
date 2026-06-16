@@ -12,19 +12,19 @@ export function DashboardOverview() {
 
   const stats = [
     {
-      label: "Total Revenue",
+      label: "Total Pemasukan",
       value: reportData?.total_income ?? 0,
       trend: "+12.5%",
       type: "primary",
     },
     {
-      label: "Operational Cost",
+      label: "Biaya Operasional",
       value: reportData?.total_outcome ?? 0,
       trend: "-2.4%",
       type: "danger",
     },
     {
-      label: "Net Earnings",
+      label: "Keuntungan Bersih",
       value: reportData?.net_profit ?? 0,
       trend: "+8.1%",
       type: "success",
@@ -35,8 +35,8 @@ export function DashboardOverview() {
     <div className="dashboard-overview">
       <header className="dashboard-header animate-fade-in">
         <div className="header-info">
-          <h1>Executive Dashboard</h1>
-          <p>Strategic insights for your business performance</p>
+          <h1>Dasbor Eksekutif</h1>
+          <p>Wawasan strategis untuk performa bisnis Anda</p>
         </div>
         <div className="header-actions">
           <button className="btn btn-secondary" onClick={fetchDailyReport}>
@@ -50,7 +50,7 @@ export function DashboardOverview() {
             >
               <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
             </svg>
-            Sync Data
+            Sinkronkan Data
           </button>
         </div>
       </header>
@@ -92,15 +92,15 @@ export function DashboardOverview() {
           style={{ animationDelay: `0.3s` }}
         >
           <div className="insight-header">
-            <h3>Transaction Volume</h3>
-            <span className="badge">Real-time</span>
+            <h3>Volume Transaksi</h3>
+            <span className="badge">Langsung</span>
           </div>
           <div className="volume-display">
             <div className="volume-number">
               {isLoading
                 ? "..."
                 : (reportData?.transaction_count || 0).toLocaleString()}
-              <span>TXNS</span>
+              <span>TRX</span>
             </div>
             <div className="volume-visual">
               <svg viewBox="0 0 100 20" className="sparkline">
@@ -114,7 +114,7 @@ export function DashboardOverview() {
             </div>
           </div>
           <p className="insight-desc">
-            Transaction frequency is up 15% compared to the previous period.
+            Frekuensi transaksi naik 15% dibanding periode sebelumnya.
           </p>
         </div>
 
@@ -122,19 +122,19 @@ export function DashboardOverview() {
           className="card side-insight animate-fade-in"
           style={{ animationDelay: `0.4s` }}
         >
-          <h3>System Health</h3>
+          <h3>Status Sistem</h3>
           <div className="health-grid">
             <div className="health-item">
               <div className="dot success"></div>
-              <span>API Status: Operational</span>
+              <span>Status API: Operasional</span>
             </div>
             <div className="health-item">
               <div className="dot success"></div>
-              <span>WA Engine: Ready</span>
+              <span>Mesin WA: Siap</span>
             </div>
             <div className="health-item">
               <div className="dot warning"></div>
-              <span>Worker Queue: 2 Pending</span>
+              <span>Antrean Pekerja: 2 Tertunda</span>
             </div>
           </div>
         </div>

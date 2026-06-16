@@ -45,8 +45,8 @@ export function UploadData() {
     <div className="upload-view">
       <header className="header animate-fade-in">
         <div className="header-text">
-          <h1>Data Integration</h1>
-          <p>Sync your business datasets via secure spreadsheet upload.</p>
+          <h1>Integrasi Data</h1>
+          <p>Sinkronkan data bisnis Anda melalui unggahan spreadsheet yang aman.</p>
         </div>
       </header>
 
@@ -100,8 +100,8 @@ export function UploadData() {
 
             {(uploadStatus === "idle" || uploadStatus === "error") && (
               <>
-                <h3>Select Source File</h3>
-                <p>Drag and drop or click to browse local files</p>
+                <h3>Pilih File Sumber</h3>
+                <p>Tarik dan lepas atau klik untuk mencari file</p>
                 <div className="file-types">
                   <span>CSV</span>
                   <span>XLSX</span>
@@ -131,7 +131,7 @@ export function UploadData() {
 
             {uploadStatus === "success" && (
               <div className="success-box">
-                <h3>Ingestion Complete</h3>
+                <h3>Proses Selesai</h3>
                 <p>{uploadMessage}</p>
 
                 <button
@@ -141,7 +141,7 @@ export function UploadData() {
                     setUploadStatus("idle");
                   }}
                 >
-                  Upload Another
+                  Unggah Lainnya
                 </button>
               </div>
             )}
@@ -165,26 +165,26 @@ export function UploadData() {
               <line x1="12" y1="16" x2="12" y2="12"></line>
               <line x1="12" y1="8" x2="12.01" y2="8"></line>
             </svg>
-            <h3>Technical Specs</h3>
+            <h3>Spesifikasi Teknis</h3>
           </div>
           <div className="spec-list">
             <div className="spec-item">
-              <span className="spec-label">Schema</span>
+              <span className="spec-label">Skema</span>
               <code className="spec-value">
                 invoice_number, income, outcome, time
               </code>
             </div>
             <div className="spec-item">
-              <span className="spec-label">Max Payload</span>
+              <span className="spec-label">Maksimal Ukuran</span>
               <span className="spec-value">25.00 MB</span>
             </div>
             <div className="spec-item">
-              <span className="spec-label">Header Row</span>
-              <span className="spec-value">Required (Row 1)</span>
+              <span className="spec-label">Baris Header</span>
+              <span className="spec-value">Wajib (Baris 1)</span>
             </div>
             <div className="spec-item">
-              <span className="spec-label">Character Set</span>
-              <span className="spec-value">UTF-8 Recommended</span>
+              <span className="spec-label">Set Karakter</span>
+              <span className="spec-value">UTF-8 Direkomendasikan</span>
             </div>
           </div>
         </div>

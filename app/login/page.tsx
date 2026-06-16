@@ -21,7 +21,7 @@ export default function LoginPage() {
     const isStartWith62 = identifier.startsWith("62");
 
     if (!isEmail && isHasNumbers && !isStartWith62) {
-      setLocalError("Phone numbers must start with 62.");
+      setLocalError("Nomor telepon harus diawali dengan 62.");
       return false;
     }
     return true;
@@ -41,8 +41,8 @@ export default function LoginPage() {
           <div className="logo-mark">
             <div className="mark-inner"></div>
           </div>
-          <h1>Sign In</h1>
-          <p>Access your daily business analytics</p>
+          <h1>Masuk</h1>
+          <p>Akses analitik bisnis harian Anda</p>
         </div>
 
         <form onSubmit={handleLogin} className="auth-form">
@@ -65,7 +65,7 @@ export default function LoginPage() {
           )}
 
           <div className="form-group">
-            <label htmlFor="identifier">Email or Phone</label>
+            <label htmlFor="identifier">Email atau Telepon</label>
             <input
               id="identifier"
               value={identifier}
@@ -77,7 +77,7 @@ export default function LoginPage() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">Kata Sandi</label>
             <div className="password-input-wrapper">
               <input
                 id="password"
@@ -129,11 +129,11 @@ export default function LoginPage() {
           >
             {isLoading && <span className="spinner"></span>}
 
-            {isLoading ? "Authenticating..." : "Sign In"}
+            {isLoading ? "Mengautentikasi..." : "Masuk"}
           </button>
 
           <div className="auth-footer">
-            <Link href="/register">Register</Link>
+            <Link href="/register">Daftar</Link>
           </div>
         </form>
       </div>
