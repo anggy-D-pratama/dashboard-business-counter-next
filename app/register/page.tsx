@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
+import logoImg from "@/public/logo.png";
 import { useState } from "react";
 import { useAuth } from "@/src/hooks/useAuth";
 import "./page.css";
@@ -80,8 +82,8 @@ export default function RegisterPage() {
     <div className="auth-page">
       <div className="auth-card card animate-fade-in">
         <div className="auth-header">
-          <div className="logo-mark">
-            <div className="mark-inner"></div>
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: "1.5rem" }}>
+            <Image src={logoImg} alt="Notakita Logo" width={250} height={80} style={{ objectFit: "cover", objectPosition: "center" }} priority />
           </div>
           <h1>Daftar</h1>
           <p>Akses analitik bisnis harian Anda</p>
