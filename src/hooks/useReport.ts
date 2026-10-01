@@ -4,12 +4,21 @@ import { useCallback, useState } from "react";
 import { useAuth } from "./useAuth";
 import { config } from "../config";
 
+interface ReportMetric {
+  key: string;
+  label: string;
+  value?: number;
+  available: boolean;
+  reason?: string;
+}
+
 interface ReportData {
   report_date: string;
   total_income: number;
   total_outcome: number;
   net_profit: number;
   transaction_count: number;
+  summary_data?: { model?: string; metrics: ReportMetric[] };
 }
 
 export function useReport() {

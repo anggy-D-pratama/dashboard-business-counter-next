@@ -4,32 +4,28 @@ import { useEffect } from "react";
 import { useReport } from "../hooks/useReport";
 import "./DashboardOverview.css";
 
+const METRIC_KEYS = {
+  INCOME: "income",
+  OUTCOME: "outcome",
+  NET_PROFIT: "net_profit",
+  TRANSACTION_COUNT: "transaction_count",
+  PRODUCTION_COST: "production_cost",
+  HPP: "hpp",
+  FOOD_COST_PERCENTAGE: "food_cost_percentage",
+} as const;
+
 export function DashboardOverview() {
   const { fetchDailyReport, reportData, isLoading } = useReport();
   useEffect(() => {
     fetchDailyReport();
   }, [fetchDailyReport]);
 
-  const stats = [
-    {
-      label: "Total Pemasukan",
-      value: reportData?.total_income ?? 0,
-      trend: "+12.5%",
-      type: "primary",
-    },
-    {
-      label: "Biaya Operasional",
-      value: reportData?.total_outcome ?? 0,
-      trend: "-2.4%",
-      type: "danger",
-    },
-    {
-      label: "Keuntungan Bersih",
-      value: reportData?.net_profit ?? 0,
-      trend: "+8.1%",
-      type: "success",
-    },
-  ];
+  const stats = reportData?.summary_data?.metrics ?? (reportData ? [
+    { key: METRIC_KEYS.INCOME, label: "Total Pemasukan", value: reportData.total_income, available: true },
+    { key: METRIC_KEYS.OUTCOME, label: "Total Pengeluaran", value: reportData.total_outcome, available: true },
+    { key: METRIC_KEYS.NET_PROFIT, label: "Laba Bersih", value: reportData.net_profit, available: true },
+    { key: METRIC_KEYS.TRANSACTION_COUNT, label: "Jumlah Transaksi", value: reportData.transaction_count, available: true },
+  ] : []);
 
   return (
     <div className="dashboard-overview">
@@ -56,21 +52,24 @@ export function DashboardOverview() {
       </header>
 
       <section className="metrics-grid">
-        {stats.map((stat, index) => (
+        {stats.filter(stat => stat.key !== METRIC_KEYS.TRANSACTION_COUNT).map((stat, index) => {
+          const isPrimary = stat.key === METRIC_KEYS.INCOME || stat.key === METRIC_KEYS.NET_PROFIT;
+          const typeClass = stat.key === METRIC_KEYS.OUTCOME || stat.key === METRIC_KEYS.PRODUCTION_COST || stat.key === METRIC_KEYS.HPP ? "danger" : isPrimary ? "primary" : "success";
+          return (
           <div
-            key={index}
+            key={stat.key}
             className="card metric-card animate-fade-in"
             style={{ animationDelay: `${index * 0.1}s` }}
           >
             <div className="metric-header">
               <span className="label">{stat.label}</span>
-              <span className={`trend ${stat.type}`}>{stat.trend}</span>
+              <span className={`trend ${typeClass}`}>-</span>
             </div>
             <div className="metric-body">
               <h3
-                className={`metric-value ${stat.type === "primary" ? "metric-glow-blue" : ""}`}
+                className={`metric-value ${isPrimary ? "metric-glow-blue" : ""}`}
               >
-                {isLoading ? "..." : stat.value}
+                {isLoading ? "..." : (!stat.available ? <span className="text-sm opacity-50">{stat.reason || "Data tidak tersedia"}</span> : (stat.key === METRIC_KEYS.FOOD_COST_PERCENTAGE ? `${stat.value?.toFixed(1)}%` : `Rp ${(stat.value ?? 0).toLocaleString()}`))}
               </h3>
             </div>
             <div className="metric-footer">
@@ -83,7 +82,7 @@ export function DashboardOverview() {
               </div>
             </div>
           </div>
-        ))}
+        )})}
       </section>
 
       <section className="insights-row">
