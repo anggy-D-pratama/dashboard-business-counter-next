@@ -3,11 +3,14 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "../hooks/useAuth";
+import { LanguageSwitcher } from "./LanguageSwitcher";
+import { useLocale } from "../contexts/LocaleContext";
 import "./Navigation.css";
 
 export function Navigation() {
   const { isAuthenticated, user, logout } = useAuth();
   const pathname = usePathname();
+  const { t } = useLocale();
 
   // Helper function
   const getInitials = (name: string) => {
@@ -20,16 +23,17 @@ export function Navigation() {
 
   return (
     <aside className="sidebar">
-      <div className="sidebar-header">
+      <div className="sidebar-header flex justify-between items-center w-full px-2">
         <Link href="/" className="logo">
           <img src="/logo.png" alt="NotaKita Logo" className="brand-logo" />
         </Link>
+        <LanguageSwitcher />
       </div>
 
       <div className="sidebar-content">
         {isAuthenticated && (
           <div className="nav-menu">
-            <div className="menu-label">Menu Utama</div>
+            <div className="menu-label">{t.nav.mainMenu}</div>
 
             <Link
               href="/"
@@ -48,7 +52,7 @@ export function Navigation() {
                 <rect x="14" y="12" width="7" height="9"></rect>
                 <rect x="3" y="16" width="7" height="5"></rect>
               </svg>
-              Dasbor
+              {t.nav.dashboard}
             </Link>
 
             <Link
@@ -67,10 +71,10 @@ export function Navigation() {
                 <polyline points="17 8 12 3 7 8"></polyline>
                 <line x1="12" y1="3" x2="12" y2="15"></line>
               </svg>
-              Impor Data
+              {t.nav.importData}
             </Link>
 
-            <div className="menu-label mt-4">Preferensi</div>
+            <div className="menu-label mt-4">{t.nav.preferences}</div>
             <Link
               href="/settings"
               className={pathname === "/settings" ? "active" : ""}
@@ -86,7 +90,7 @@ export function Navigation() {
                 <circle cx="12" cy="12" r="3"></circle>
                 <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
               </svg>
-              Pengaturan
+              {t.nav.settings}
             </Link>
           </div>
         )}
@@ -100,12 +104,12 @@ export function Navigation() {
             </div>
             <div className="user-info">
               <span className="user-name">{user?.name}</span>
-              <span className="user-role">Admin</span>
+              <span className="user-role">{t.nav.admin}</span>
             </div>
             <button
               onClick={logout}
               className="icon-btn logout-btn"
-              title="Keluar"
+              title={t.nav.logout}
             >
               <svg
                 width="18"
@@ -122,10 +126,10 @@ export function Navigation() {
         ) : (
           <div className="auth-group">
             <Link href="/login" className="btn btn-secondary w-full">
-              Masuk
+              {t.nav.login}
             </Link>
             <Link href="/register" className="btn btn-primary w-full">
-              Coba Gratis
+              {t.nav.tryFree}
             </Link>
           </div>
         )}
