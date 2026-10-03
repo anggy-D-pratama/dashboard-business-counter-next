@@ -39,7 +39,7 @@ jobs:
       run: |
         # Bikin variabel path image biar rapi
         # Pastikan lu udah bikin folder "business-counter" di Artifact Registry GCP lu
-        IMAGE_PATH="asia-southeast2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/business-counter/dashboard-next"
+        IMAGE_PATH="asia-southeast2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/business-counter/frontend"
         
         # Build image dari Dockerfile
         docker build -t $IMAGE_PATH:${{ github.sha }} -t $IMAGE_PATH:latest .
