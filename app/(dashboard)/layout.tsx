@@ -9,10 +9,10 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="dashboard-page flex pl-[260px]">
+    <div className="dashboard-page flex">
       <Navigation />
 
-      <div className="main-wrapper flex-1 flex flex-col min-w-0">
+      <div className="main-wrapper flex-1 flex flex-col min-w-0 md:ml-[260px]">
         <TopMenu />
         
         <main className="container main-content">{children}</main>
