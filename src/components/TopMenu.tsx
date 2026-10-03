@@ -18,7 +18,7 @@ export function TopMenu() {
   };
 
   return (
-    <header className="w-full bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between gap-4 sticky top-0 z-30">
+    <header className="w-full bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between gap-4 sticky top-0 z-30 h-16 shrink-0">
       <div className="flex-1 max-w-md">
         <div className="relative flex items-center">
           <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
