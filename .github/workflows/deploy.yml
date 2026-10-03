@@ -52,7 +52,7 @@ jobs:
     - name: Deploy to Cloud Run
       run: |
         gcloud run deploy dashboard-business-counter \
-          --image "asia-southeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/business-counter/dashboard-next:${{ github.sha }}" \
+          --image "asia-southeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/business-counter/frontend:${{ github.sha }}" \
           --region asia-southeast1 \
           --platform managed \
           --allow-unauthenticated \
@@ -63,6 +63,6 @@ jobs:
     - name: Show Service URL
       run: |
         gcloud run services describe dashboard-business-counter \
-          --region asia-southeast2 \
+          --region asia-southeast1 \
           --project ${{ secrets.GCP_PROJECT_ID }} \
           --format 'value(status.url)'
