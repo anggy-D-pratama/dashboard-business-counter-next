@@ -1,40 +1,83 @@
-name: Deploy to GCP
+name: Deploy Next.js to Cloud Run
 
 on:
   push:
     branches:
       - main
+      - master
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
-    # WAJIB ADA: Biar GitHub bisa bikin token OIDC buat ngobrol sama GCP
+
+    # Required for Workload Identity Federation
     permissions:
       contents: 'read'
       id-token: 'write'
-      
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
 
-    - name: Authenticate to Google Cloud
-      id: auth
-      uses: google-github-actions/auth@v2
-      with:
-        workload_identity_provider: '${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}'
-        service_account: '${{ secrets.GCP_SERVICE_ACCOUNT }}'
-        
-    - name: Set up Cloud SDK
-      uses: google-github-actions/setup-gcloud@v2
-      
-    - name: Test Auth (Cek siapa yang lagi login)
-      run: gcloud auth list
-    - name: Deploy to Cloud Run
-      run: |
-        gcloud run deploy dashboard-business-counter \
-          --source . \
-          --region asia-southeast2 \
-          --project project-f643cc3e-cf6f-4622-865 \
-          --allow-unauthenticated \
-          --port 3000
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 1. Authenticate to GCP via WIF
+      - name: Auth to GCP
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      # 2. Set up gcloud CLI
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      # 3. Build and push Docker image to Artifact Registry
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker asia-southeast1-docker.pkg.dev
+
+      - name: Build and Push Docker Image
+        run: |
+          # Fetch the API URL from GCP Secret Manager (Pastikan udah bikin secret NEXT_PUBLIC_API_URL)
+          NEXT_PUBLIC_API_URL=$(gcloud secrets versions access latest --secret="NEXT_PUBLIC_API_URL" --project="${{ secrets.GCP_PROJECT_ID }}" || echo "")
+          
+          if [ -z "$NEXT_PUBLIC_API_URL" ]; then
+            echo "::warning::NEXT_PUBLIC_API_URL secret not found in GCP Secret Manager, using default."
+          else
+            echo "::add-mask::$NEXT_PUBLIC_API_URL"
+          fi
+
+          # Nama image dibedain jadi dashboard-next biar nggak nabrak nuxt lu
+          docker build \
+            --build-arg NEXT_PUBLIC_API_URL="$NEXT_PUBLIC_API_URL" \
+            -t asia-southeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/business-counter/dashboard-next:${{ github.sha }} \
+            -t asia-southeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/business-counter/dashboard-next:latest \
+            .
+            
+          docker push asia-southeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/business-counter/dashboard-next:${{ github.sha }}
+          docker push asia-southeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/business-counter/dashboard-next:latest
+
+      # 4. Deploy to Cloud Run
+      - name: Deploy to Cloud Run
+        run: |
+          # Nama service dibedain jadi dashboard-business-counter
+          gcloud run deploy dashboard-business-counter \
+            --image "asia-southeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/business-counter/dashboard-next:${{ github.sha }}" \
+            --region asia-southeast1 \
+            --platform managed \
+            --allow-unauthenticated \
+            --port 3000 \
+            --memory 512Mi \
+            --cpu 1 \
+            --min-instances 0 \
+            --max-instances 3 \
+            --set-env-vars="NODE_ENV=production" \
+            --project "${{ secrets.GCP_PROJECT_ID }}" \
+            --quiet
+
+      # 5. Print the deployed URL
+      - name: Show Service URL
+        run: |
+          gcloud run services describe dashboard-business-counter \
+            --region asia-southeast1 \
+            --project ${{ secrets.GCP_PROJECT_ID }} \
+            --format 'value(status.url)'
