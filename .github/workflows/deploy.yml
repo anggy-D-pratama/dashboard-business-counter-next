@@ -30,3 +30,11 @@ jobs:
       
     - name: Test Auth (Cek siapa yang lagi login)
       run: gcloud auth list
+    - name: Deploy to Cloud Run
+      run: |
+        gcloud run deploy dashboard-business-counter \
+          --source . \
+          --region asia-southeast2 \
+          --project 867741098367 \
+          --allow-unauthenticated \
+          --port 3000
