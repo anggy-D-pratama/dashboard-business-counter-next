@@ -1,38 +1,37 @@
-# Stage 1: Build
-FROM node:20-alpine AS builder
+FROM node:18-alpine AS base
 
+FROM base AS deps
+RUN apk add --no-cache libc6-compat
 WORKDIR /app
-
-# Accept build-time env vars (Nuxt public vars are baked in at build time)
-ARG NUXT_PUBLIC_API_URL
-ENV NUXT_PUBLIC_API_URL=$NUXT_PUBLIC_API_URL
-
-# Copy package files and install dependencies
-COPY package.json package-lock.json ./
+COPY package.json package-lock.json* ./
 RUN npm ci
 
-# Copy the rest of the source code
+FROM base AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Generate fully static output (no Node.js server needed at runtime)
-RUN npm run generate
+# Nangkep env dari GitHub Actions
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 
-# Stage 2: Serve with nginx (lightweight, battle-tested static server)
-FROM nginx:alpine AS runner
+# Perintahnya BUILD, bukan generate
+RUN npm run build
 
-# Remove default nginx config
-RUN rm /etc/nginx/conf.d/default.conf
+FROM base AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
 
-# Copy our custom nginx config
-COPY nginx.conf /etc/nginx/nginx.conf
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
 
-# Copy static build output from builder
-COPY --from=builder /app/.output/public /usr/share/nginx/html
+COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Cloud Run injects PORT at runtime; nginx listens on it via envsubst
-ENV PORT=8080
+USER nextjs
+EXPOSE 3000
 
-EXPOSE 8080
-
-# Use envsubst to replace $PORT in nginx config at startup
-CMD ["/bin/sh", "-c", "envsubst '$PORT' < /etc/nginx/nginx.conf > /tmp/nginx.conf && mv /tmp/nginx.conf /etc/nginx/nginx.conf && nginx -g 'daemon off;'"]
+CMD ["node", "server.js"]
