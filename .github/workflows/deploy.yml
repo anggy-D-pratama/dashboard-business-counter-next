@@ -55,7 +55,7 @@ jobs:
           --platform managed \
           --allow-unauthenticated \
           --port 3000 \
-          --project "${{ secrets.GCP_PROJECT_ID }}"
+          --project "${{ secrets.GCP_PROJECT_ID }}" \
           --update-secrets="NEXT_PUBLIC_API_URL=NEXT_PUBLIC_API_URL:latest"
 
     # 5. Tampilkan URL hasil deploy di logs GitHub Actions
