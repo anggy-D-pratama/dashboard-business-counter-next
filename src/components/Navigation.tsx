@@ -23,11 +23,10 @@ export function Navigation() {
 
   return (
     <aside className="sidebar">
-      <div className="sidebar-header flex justify-between items-center w-full px-2">
+      <div className="sidebar-header flex items-center w-full px-2">
         <Link href="/" className="logo">
           <img src="/logo.png" alt="NotaKita Logo" className="brand-logo" />
         </Link>
-        <LanguageSwitcher />
       </div>
 
       <div className="sidebar-content">
