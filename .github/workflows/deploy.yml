@@ -52,8 +52,8 @@ jobs:
     - name: Deploy to Cloud Run
       run: |
         gcloud run deploy dashboard-business-counter \
-          --image "asia-southeast2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/business-counter/dashboard-next:${{ github.sha }}" \
-          --region asia-southeast2 \
+          --image "asia-southeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/business-counter/dashboard-next:${{ github.sha }}" \
+          --region asia-southeast1 \
           --platform managed \
           --allow-unauthenticated \
           --port 3000 \
