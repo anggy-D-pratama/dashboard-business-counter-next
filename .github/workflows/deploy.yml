@@ -4,16 +4,17 @@ on:
   push:
     branches:
       - main
+      - master
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
-    # WAJIB ADA: Biar GitHub bisa bikin token OIDC buat ngobrol sama GCP
+
+    # Required for Workload Identity Federation
     permissions:
       contents: 'read'
       id-token: 'write'
-      
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
