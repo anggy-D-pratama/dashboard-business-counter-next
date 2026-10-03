@@ -37,10 +37,13 @@ jobs:
     # 3. Build & Push Docker Image
     - name: Build and Push Docker Image
       run: |
+        NEXT_PUBLIC_API_URL=$(gcloud secrets versions access latest --secret="NEXT_PUBLIC_API_URL" --project="${{ secrets.GCP_PROJECT_ID }}" || echo "")
         IMAGE_PATH="asia-southeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/business-counter/frontend"
         
         # Build image dari Dockerfile
-        docker build -t $IMAGE_PATH:${{ github.sha }} -t $IMAGE_PATH:latest .
+        docker build --no-cache \
+          --build-arg NEXT_PUBLIC_API_URL="$NEXT_PUBLIC_API_URL" \
+          -t $IMAGE_PATH:${{ github.sha }} -t $IMAGE_PATH:latest .
         
         # Upload ke GCP
         docker push $IMAGE_PATH:${{ github.sha }}
