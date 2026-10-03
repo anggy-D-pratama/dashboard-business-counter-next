@@ -9,7 +9,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="dashboard-page flex">
+    <div className="dashboard-page flex pl-[260px]">
       <Navigation />
 
       <div className="main-wrapper flex-1 flex flex-col min-w-0">
