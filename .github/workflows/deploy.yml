@@ -1,4 +1,4 @@
-name: Deploy to GCP
+name: Deploy Next.js to Cloud Run
 
 on:
   push:
@@ -18,6 +18,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    # 1. Otentikasi ke GCP
     - name: Authenticate to Google Cloud
       id: auth
       uses: google-github-actions/auth@v2
@@ -28,5 +29,39 @@ jobs:
     - name: Set up Cloud SDK
       uses: google-github-actions/setup-gcloud@v2
       
-    - name: Test Auth (Cek siapa yang lagi login)
-      run: gcloud auth list
+    # 2. Siapkan otentikasi Docker ke Artifact Registry GCP (Region Jakarta)
+    - name: Configure Docker
+      run: gcloud auth configure-docker asia-southeast2-docker.pkg.dev
+      
+    # 3. Build & Push Docker Image
+    - name: Build and Push Docker Image
+      run: |
+        # Bikin variabel path image biar rapi
+        # Pastikan lu udah bikin folder "business-counter" di Artifact Registry GCP lu
+        IMAGE_PATH="asia-southeast2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/business-counter/dashboard-next"
+        
+        # Build image dari Dockerfile
+        docker build -t $IMAGE_PATH:${{ github.sha }} -t $IMAGE_PATH:latest .
+        
+        # Upload ke GCP
+        docker push $IMAGE_PATH:${{ github.sha }}
+        docker push $IMAGE_PATH:latest
+
+    # 4. Tembak ke Cloud Run
+    - name: Deploy to Cloud Run
+      run: |
+        gcloud run deploy dashboard-business-counter \
+          --image "asia-southeast2-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/business-counter/dashboard-next:${{ github.sha }}" \
+          --region asia-southeast2 \
+          --platform managed \
+          --allow-unauthenticated \
+          --port 3000 \
+          --project "${{ secrets.GCP_PROJECT_ID }}"
+
+    # 5. Tampilkan URL hasil deploy di logs GitHub Actions
+    - name: Show Service URL
+      run: |
+        gcloud run services describe dashboard-business-counter \
+          --region asia-southeast2 \
+          --project ${{ secrets.GCP_PROJECT_ID }} \
+          --format 'value(status.url)'
