@@ -35,6 +35,6 @@ jobs:
         gcloud run deploy dashboard-business-counter \
           --source . \
           --region asia-southeast2 \
-          --project 867741098367 \
+          --project project-f643cc3e-cf6f-4622-865 \
           --allow-unauthenticated \
           --port 3000
