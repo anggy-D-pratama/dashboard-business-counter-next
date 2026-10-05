@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useLocale } from "../contexts/LocaleContext";
 import { Input } from "./ui/input";
+import { SidebarTrigger } from "./ui/sidebar";
 
 export function TopMenu() {
   const { locale } = useLocale();
@@ -20,8 +21,9 @@ export function TopMenu() {
 
   return (
     <header className="w-full bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between gap-4 sticky top-0 z-30 h-16 shrink-0">
-      <div className="flex-1 max-w-md">
-        <div className="relative flex items-center">
+      <div className="flex items-center gap-3 flex-1 max-w-md">
+        <SidebarTrigger className="shrink-0" />
+        <div className="relative flex items-center flex-1">
           <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
             <svg
               className="w-4 h-4"
