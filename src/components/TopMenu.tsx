@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { useLocale } from "../contexts/LocaleContext";
+import { Input } from "./ui/input";
 
 export function TopMenu() {
   const { locale } = useLocale();
@@ -18,10 +19,10 @@ export function TopMenu() {
   };
 
   return (
-    <header className="w-full bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between gap-4 sticky top-0 z-30 h-16 shrink-0">
+    <header className="w-full bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between gap-4 sticky top-0 z-30 h-16 shrink-0">
       <div className="flex-1 max-w-md">
         <div className="relative flex items-center">
-          <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+          <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
             <svg
               className="w-4 h-4"
               viewBox="0 0 24 24"
@@ -35,13 +36,13 @@ export function TopMenu() {
               <line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
           </span>
-          <input
+          <Input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder={placeholderText}
-            className="w-full pl-9 pr-3 py-1.5 text-sm bg-slate-50 border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-colors"
+            className="pl-9"
           />
         </div>
       </div>
