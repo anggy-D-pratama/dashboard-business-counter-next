@@ -416,7 +416,7 @@ input:focus:-webkit-autofill {
 }
 
 .container {
-  max-width: var(--container, 1300px);
-  margin: 0 auto;
+  max-width: var(--container, 1180px);
+  margin-inline: auto;
   padding: 0 2rem;
 }
