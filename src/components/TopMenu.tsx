@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { ThemeToggle } from "./ThemeToggle";
 import { useLocale } from "../contexts/LocaleContext";
 import { Input } from "./ui/input";
 import { SidebarTrigger } from "./ui/sidebar";
@@ -50,6 +51,7 @@ export function TopMenu() {
       </div>
 
       <div className="flex items-center shrink-0">
+        <ThemeToggle />
         <LanguageSwitcher />
       </div>
     </header>
