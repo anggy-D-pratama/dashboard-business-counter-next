@@ -1,161 +1,215 @@
-.dashboard-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2.5rem;
-}
-
-.header-info h1 {
-  font-size: 1.875rem;
-  letter-spacing: -0.02em;
-}
-
-.header-info p {
-  color: var(--text-muted);
-  font-size: 0.9375rem;
-}
-
-.metrics-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.metric-card {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-
-.metric-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.label {
-  color: var(--text-muted);
-  font-size: 0.8125rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.trend {
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 4px;
-}
-
-.trend.primary { color: var(--primary); background: rgba(59, 130, 246, 0.1); }
-.trend.success { color: var(--success); background: rgba(16, 185, 129, 0.1); }
-.trend.danger { color: var(--danger); background: rgba(239, 68, 68, 0.1); }
-
-.mini-chart {
-  display: flex;
-  align-items: flex-end;
-  gap: 4px;
-  height: 24px;
-}
-
-.bar {
-  flex: 1;
-  background: var(--bg-card-hover);
-  border-radius: 1px;
-}
-
-.metric-card:hover .bar {
-  background: var(--primary);
-  opacity: 0.3;
-}
-
-.insights-row {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 1.5rem;
-}
-
-.insight-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-}
-
-.badge {
-  background: rgba(0, 245, 255, 0.1);
-  color: var(--accent-cyan);
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 4px 10px;
-  border-radius: 100px;
-  text-transform: uppercase;
-}
-
-.volume-display {
-  display: flex;
-  align-items: flex-end;
-  gap: 2rem;
-  margin-bottom: 1rem;
-}
-
-.volume-number {
-  font-family: var(--font-mono, var(--font-heading));
-  font-variant-numeric: tabular-nums;
-  font-size: 4rem;
-  font-weight: 800;
-  line-height: 1;
-  color: var(--text-main);
-}
-
-.volume-number span {
-  font-size: 1rem;
-  color: var(--text-muted);
-  margin-left: 0.5rem;
-}
-
-.volume-visual {
-  flex: 1;
-  padding-bottom: 0.5rem;
-}
-
-.sparkline {
+.dashboard-overview {
   width: 100%;
-  height: 40px;
-  overflow: visible;
+  min-width: 0;
 }
 
-.insight-desc {
-  color: var(--text-muted);
-  font-size: 0.875rem;
+/* Title block */
+.dashboard-title {
+  flex-wrap: wrap;
 }
 
-.health-grid {
+.title-copy {
+  gap: 0;
+}
+
+.title-copy .lead {
+  margin-top: 10px;
+}
+
+.dashboard-controls {
+  flex-wrap: wrap;
+}
+
+/* OpenDesign layout helpers (kept local to this component to avoid
+   colliding with existing classes in other pages). */
+.dashboard-overview .section {
+  padding-block: clamp(32px, 5vw, var(--gap-xl));
+}
+
+.dashboard-overview .stack {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  margin-top: 1.5rem;
+  gap: var(--gap-lg);
 }
 
-.health-item {
+.dashboard-overview .row {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 0.875rem;
+  gap: var(--gap-md);
 }
 
-.dot {
+.dashboard-overview .row-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-md);
+}
+
+.dashboard-overview .grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--gap-md);
+}
+
+.dashboard-overview .grid-2-1 {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: var(--gap-md);
+  align-items: start;
+}
+
+.dashboard-overview .eyebrow {
+  font-family: var(--font-mono, ui-monospace, Menlo, monospace);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent, var(--primary));
+  margin: 0 0 var(--gap-sm);
+}
+
+.dashboard-overview .lead {
+  font-size: var(--fs-lead);
+  line-height: 1.55;
+  color: var(--muted, var(--text-muted));
+  max-width: 60ch;
+  margin: 0;
+}
+
+.dashboard-overview h1 {
+  font-size: var(--fs-h1);
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+  margin: 0;
+}
+
+.dashboard-overview h2 {
+  font-size: var(--fs-h2);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  margin: 0;
+}
+
+.dashboard-overview .panel-head {
+  margin-bottom: var(--gap-md);
+}
+
+/* Metric cards follow the OpenDesign metric-value composition. */
+.dashboard-overview .metric-value {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--gap-sm);
+  margin-top: var(--gap-sm);
+}
+
+.dashboard-overview .metric-value strong.num {
+  font-family: var(--font-mono, ui-monospace, Menlo, monospace);
+  font-size: clamp(28px, 3.5vw, 42px);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Bar chart */
+.dashboard-overview .chart {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 10px;
+  height: 220px;
+  align-items: end;
+  margin-top: var(--gap-lg);
+  padding-top: var(--gap-md);
+  border-top: 1px solid var(--border);
+}
+
+.dashboard-overview .bar-wrap {
+  display: grid;
+  gap: 8px;
+  align-items: end;
+  height: 100%;
+}
+
+.dashboard-overview .bar {
+  min-height: 0;
+  border-radius: 8px 8px 2px 2px;
+  background: color-mix(in oklch, var(--fg, var(--text-main)) 18%, var(--surface, var(--bg-card)));
+  border: 1px solid var(--border);
+  transition: height 0.2s ease;
+}
+
+.dashboard-overview .bar.active {
+  background: var(--fg, var(--text-main));
+  border-color: var(--fg, var(--text-main));
+}
+
+.dashboard-overview .bar-label {
+  text-align: center;
+  font-family: var(--font-mono, ui-monospace, Menlo, monospace);
+  color: var(--muted, var(--text-muted));
+  font-size: 11px;
+}
+
+/* Activity / system status */
+.dashboard-overview .activity-list {
+  display: grid;
+  gap: 0;
+}
+
+.dashboard-overview .activity-item {
+  display: grid;
+  grid-template-columns: 10px 1fr auto;
+  gap: 12px;
+  align-items: start;
+  padding: 13px 0;
+  border-top: 1px solid var(--border);
+}
+
+.dashboard-overview .activity-item:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.dashboard-overview .activity-dot {
   width: 8px;
   height: 8px;
-  border-radius: 50%;
+  margin-top: 6px;
+  border-radius: 999px;
+  background: var(--accent, var(--primary));
 }
 
-.dot.success { background: var(--success); box-shadow: 0 0 8px var(--success); }
-.dot.warning { background: var(--warning); box-shadow: 0 0 8px var(--warning); }
+.dashboard-overview .activity-item strong {
+  font-size: 14px;
+  color: var(--fg, var(--text-main));
+}
 
-@media (max-width: 992px) {
-  .insights-row { grid-template-columns: 1fr; }
-  .volume-number { font-size: 3rem; }
+.dashboard-overview .activity-item p {
+  margin: 3px 0 0;
+  color: var(--muted, var(--text-muted));
+  font-size: 13px;
+}
+
+@media (max-width: 920px) {
+  .dashboard-overview .grid-4,
+  .dashboard-overview .grid-2-1 {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-overview .dashboard-title {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 560px) {
+  .dashboard-overview .chart {
+    height: 180px;
+  }
+
+  .dashboard-overview .activity-item {
+    grid-template-columns: 10px 1fr;
+  }
+
+  .dashboard-overview .activity-item .status {
+    grid-column: 2;
+  }
 }
