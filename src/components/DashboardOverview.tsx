@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useReport } from "../hooks/useReport";
+import { useLocale } from "../contexts/LocaleContext";
 import "./DashboardOverview.css";
 
 const METRIC_KEYS = {
@@ -16,6 +17,7 @@ const METRIC_KEYS = {
 
 export function DashboardOverview() {
   const { fetchDailyReport, reportData, isLoading } = useReport();
+  const { t } = useLocale();
   useEffect(() => {
     fetchDailyReport();
   }, [fetchDailyReport]);
@@ -33,8 +35,8 @@ export function DashboardOverview() {
     <div className="dashboard-overview">
       <header className="dashboard-header animate-fade-in">
         <div className="header-info">
-          <h1>Dasbor Eksekutif</h1>
-          <p>Wawasan strategis untuk performa bisnis Anda</p>
+          <h1>{t.dashboard.title}</h1>
+          <p>{t.dashboard.subtitle}</p>
         </div>
         <div className="header-actions">
           <button className="btn btn-secondary" onClick={fetchDailyReport}>
@@ -48,7 +50,7 @@ export function DashboardOverview() {
             >
               <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
             </svg>
-            Sinkronkan Data
+            {t.dashboard.syncButton}
           </button>
         </div>
       </header>
@@ -71,7 +73,7 @@ export function DashboardOverview() {
               <h3
                 className={`metric-value ${isPrimary ? "metric-glow-blue" : ""}`}
               >
-                {isLoading ? "..." : (!stat.available ? <span className="text-sm opacity-50">{stat.reason || "Data tidak tersedia"}</span> : (stat.key === METRIC_KEYS.FOOD_COST_PERCENTAGE ? `${stat.value?.toFixed(1)}%` : `Rp ${(stat.value ?? 0).toLocaleString()}`))}
+                {isLoading ? "..." : (!stat.available ? <span className="text-sm opacity-50">{stat.reason || t.dashboard.dataUnavailable}</span> : (stat.key === METRIC_KEYS.FOOD_COST_PERCENTAGE ? `${stat.value?.toFixed(1)}%` : `Rp ${(stat.value ?? 0).toLocaleString()}`))}
               </h3>
             </div>
             <div className="metric-footer">
@@ -93,8 +95,8 @@ export function DashboardOverview() {
           style={{ animationDelay: `0.3s` }}
         >
           <div className="insight-header">
-            <h3>Volume Transaksi</h3>
-            <span className="badge">Langsung</span>
+            <h3>{t.dashboard.volumeTransactions}</h3>
+            <span className="badge">{t.dashboard.live}</span>
           </div>
           <div className="volume-display">
             <div className="volume-number">
@@ -116,10 +118,10 @@ export function DashboardOverview() {
           </div>
           <p className="insight-desc">
             {isLoading
-              ? "Menganalisis data transaksi..."
+              ? t.dashboard.insightAnalyzing
               : transactionCount > 0
-                ? "Frekuensi transaksi tercatat pada periode ini."
-                : "Belum ada data transaksi untuk dianalisis pada periode ini."}
+                ? t.dashboard.insightHasData
+                : t.dashboard.insightNoData}
           </p>
         </div>
 
@@ -127,19 +129,19 @@ export function DashboardOverview() {
           className="card side-insight animate-fade-in"
           style={{ animationDelay: `0.4s` }}
         >
-          <h3>Status Sistem</h3>
+          <h3>{t.dashboard.statusSystem}</h3>
           <div className="health-grid">
             <div className="health-item">
               <div className="dot success"></div>
-              <span>Status API: {isLoading ? "Memuat..." : "Operasional"}</span>
+              <span>{t.dashboard.apiStatus}: {isLoading ? t.dashboard.loadingStatus : t.dashboard.operational}</span>
             </div>
             <div className="health-item">
               <div className="dot"></div>
-              <span>Mesin WA: —</span>
+              <span>{t.dashboard.waEngine}: —</span>
             </div>
             <div className="health-item">
               <div className="dot"></div>
-              <span>Antrean Pekerja: —</span>
+              <span>{t.dashboard.workerQueue}: —</span>
             </div>
           </div>
         </div>
