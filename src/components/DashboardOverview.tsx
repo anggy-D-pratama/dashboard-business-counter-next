@@ -27,6 +27,8 @@ export function DashboardOverview() {
     { key: METRIC_KEYS.TRANSACTION_COUNT, label: "Jumlah Transaksi", value: reportData.transaction_count, available: true },
   ] : []);
 
+  const transactionCount = reportData?.transaction_count ?? 0;
+
   return (
     <div className="dashboard-overview">
       <header className="dashboard-header animate-fade-in">
@@ -98,7 +100,7 @@ export function DashboardOverview() {
             <div className="volume-number">
               {isLoading
                 ? "..."
-                : (reportData?.transaction_count || 0).toLocaleString()}
+                : transactionCount.toLocaleString()}
               <span>TRX</span>
             </div>
             <div className="volume-visual">
@@ -113,7 +115,11 @@ export function DashboardOverview() {
             </div>
           </div>
           <p className="insight-desc">
-            Frekuensi transaksi naik 15% dibanding periode sebelumnya.
+            {isLoading
+              ? "Menganalisis data transaksi..."
+              : transactionCount > 0
+                ? "Frekuensi transaksi tercatat pada periode ini."
+                : "Belum ada data transaksi untuk dianalisis pada periode ini."}
           </p>
         </div>
 
@@ -125,15 +131,15 @@ export function DashboardOverview() {
           <div className="health-grid">
             <div className="health-item">
               <div className="dot success"></div>
-              <span>Status API: Operasional</span>
+              <span>Status API: {isLoading ? "Memuat..." : "Operasional"}</span>
             </div>
             <div className="health-item">
-              <div className="dot success"></div>
-              <span>Mesin WA: Siap</span>
+              <div className="dot"></div>
+              <span>Mesin WA: —</span>
             </div>
             <div className="health-item">
-              <div className="dot warning"></div>
-              <span>Antrean Pekerja: 2 Tertunda</span>
+              <div className="dot"></div>
+              <span>Antrean Pekerja: —</span>
             </div>
           </div>
         </div>
