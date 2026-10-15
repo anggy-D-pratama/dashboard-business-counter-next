@@ -19,6 +19,12 @@ const LocaleContext = createContext<LocaleContextType | undefined>(undefined);
 export function LocaleProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>("en");
   const { isAuthenticated } = useAuth();
+
+  // Keep the <html lang> attribute in sync with the active locale
+  // for accessibility (screen readers) and SEO.
+  useEffect(() => {
+    document.documentElement.lang = locale;
+  }, [locale]);
   
   // Timeout ref for debouncing API calls
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
