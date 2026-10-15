@@ -1,33 +1,35 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { ThemeToggle } from "./ThemeToggle";
 import { useLocale } from "../contexts/LocaleContext";
 import { Input } from "./ui/input";
 import { SidebarTrigger } from "./ui/sidebar";
+import "./TopMenu.css";
 
 export function TopMenu() {
   const { locale } = useLocale();
-  const [query, setQuery] = useState("");
 
   const placeholderText = locale === "id" ? "Cari sesuatu..." : "Search...";
+  const ariaLabel =
+    locale === "id" ? "Cari (segera hadir)" : "Search (coming soon)";
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      // Dummy search, no DB/backend hit
+      // Inert search: placeholder only, no backend/route action.
     }
   };
 
   return (
-    <header className="w-full bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between gap-4 sticky top-0 z-10 h-16 shrink-0">
-      <div className="flex items-center gap-3 flex-1 max-w-md">
-        <SidebarTrigger className="shrink-0" />
-        <div className="relative flex items-center flex-1">
-          <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
+    <header className="topbar">
+      <div className="topbar-start">
+        <SidebarTrigger className="topbar-trigger" />
+        <div className="topbar-search">
+          <span className="topbar-search-icon" aria-hidden="true">
             <svg
-              className="w-4 h-4"
+              className="topbar-search-svg"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -41,16 +43,16 @@ export function TopMenu() {
           </span>
           <Input
             type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={handleKeyDown}
+            readOnly
+            aria-label={ariaLabel}
             placeholder={placeholderText}
-            className="pl-9"
+            onKeyDown={handleKeyDown}
+            className="topbar-search-input"
           />
         </div>
       </div>
 
-      <div className="flex items-center shrink-0">
+      <div className="topbar-actions">
         <ThemeToggle />
         <LanguageSwitcher />
       </div>
