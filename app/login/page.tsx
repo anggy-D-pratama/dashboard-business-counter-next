@@ -38,16 +38,23 @@ export default function LoginPage() {
 
   return (
     <div className="auth-page">
-      <div className="auth-card card animate-fade-in">
-        <div className="auth-header">
-          <div style={{ display: "flex", justifyContent: "center", marginBottom: "1.5rem" }}>
-            <Image src={logoImg} alt="Notakita Logo" width={250} height={80} style={{ objectFit: "cover", objectPosition: "center" }} priority />
+      <section className="auth-card card animate-fade-in">
+        <header className="auth-header stack">
+          <div className="auth-logo-wrap">
+            <Image
+              className="auth-logo"
+              src={logoImg}
+              alt="Notakita Logo"
+              width={250}
+              height={80}
+              priority
+            />
           </div>
           <h1>Masuk</h1>
-          <p>Akses analitik bisnis harian Anda</p>
-        </div>
+          <p className="lead">Akses analitik bisnis harian Anda</p>
+        </header>
 
-        <form onSubmit={handleLogin} className="auth-form">
+        <form onSubmit={handleLogin} className="auth-form stack">
           {error && (
             <div className="error-banner">
               <svg
@@ -66,10 +73,11 @@ export default function LoginPage() {
             </div>
           )}
 
-          <div className="form-group">
+          <div className="field">
             <label htmlFor="identifier">Email atau Telepon</label>
             <input
               id="identifier"
+              className="input"
               value={identifier}
               onChange={(e) => setIdentifier(e.target.value)}
               type="text"
@@ -78,11 +86,12 @@ export default function LoginPage() {
             />
           </div>
 
-          <div className="form-group">
+          <div className="field">
             <label htmlFor="password">Kata Sandi</label>
             <div className="password-input-wrapper">
               <input
                 id="password"
+                className="input"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 type={showPassword ? "text" : "password"}
@@ -138,7 +147,7 @@ export default function LoginPage() {
             <Link href="/register">Daftar</Link>
           </div>
         </form>
-      </div>
+      </section>
     </div>
   );
 }
