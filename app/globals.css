@@ -416,7 +416,31 @@ input:focus:-webkit-autofill {
 }
 
 .container {
-  max-width: var(--container, 1300px);
-  margin: 0 auto;
-  padding: 0 2rem;
+  max-width: var(--container, 1180px);
+  margin-inline: auto;
+  padding-inline: var(--gutter, 28px);
+  width: 100%;
+}
+
+/* Dashboard shell (EAT-93) — semantic classes consuming OpenDesign tokens */
+.app-shell {
+  display: flex;
+  width: 100%;
+  min-height: 100svh;
+  background: var(--bg, var(--bg-main));
+}
+
+.main-content {
+  flex: 1;
+  min-width: 0;
+  padding-block: var(--gap-lg, 32px);
+}
+
+.app-footer {
+  margin-top: auto;
+  border-top: 1px solid var(--border);
+  background: var(--surface, var(--bg-card));
+  color: var(--muted, var(--text-muted));
+  padding-block: var(--gap-md, 20px);
+  font-size: var(--fs-meta, 12px);
 }
