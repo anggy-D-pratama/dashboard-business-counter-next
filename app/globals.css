@@ -419,4 +419,5 @@ input:focus:-webkit-autofill {
   max-width: var(--container, 1300px);
   margin: 0 auto;
   padding: 0 2rem;
+  width: 100%;
 }
