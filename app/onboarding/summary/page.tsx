@@ -23,8 +23,8 @@ export default function OnboardingSummary() {
 
   return (
     <div className="survey-wrapper">
-      <div className="survey-card result-card mx-auto my-8">
-        <div className="result-header">
+      <main className="survey-card card result-card">
+        <header className="result-header stack">
           <div className="success-icon">
             <svg
               viewBox="0 0 24 24"
@@ -40,32 +40,32 @@ export default function OnboardingSummary() {
             </svg>
           </div>
           <h2>Analisis Selesai!</h2>
-          <p>
+          <p className="lead">
             Berdasarkan jawaban Anda, kami telah menyiapkan konfigurasi dasbor
             yang paling optimal.
           </p>
-        </div>
+        </header>
 
-        <div className="result-content">
-          <p className="result-label">Model Bisnis yang Direkomendasikan</p>
+        <div className="result-content stack">
+          <p className="meta result-label">Model Bisnis yang Direkomendasikan</p>
 
-          <div className="model-highlight-card">
-            <h3>{modelData?.name || "Memuat..."}</h3>
+          <div className="model-highlight-card card">
+            <h3 className="metric-value">{modelData?.name || "Memuat..."}</h3>
             <p>{modelData?.description || "Memuat deskripsi..."}</p>
           </div>
         </div>
 
-        <div className="survey-footer result-footer">
+        <footer className="survey-footer result-footer row-between">
           <button
-            className="btn-next btn-full"
+            className="btn btn-primary btn-full"
             onClick={() => {
               router.push("/");
             }}
           >
             Mulai Gunakan Dasbor
           </button>
-        </div>
-      </div>
+        </footer>
+      </main>
     </div>
   );
 }

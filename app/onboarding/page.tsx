@@ -60,24 +60,28 @@ export default function OnboardingSurvey() {
   if (businessModelQuestions.length === 0) {
     return (
       <div className="survey-wrapper">
-        <div className="text-slate-500 font-medium">Memuat pertanyaan...</div>
+        <div className="card">
+          <p className="lead">Memuat pertanyaan...</p>
+        </div>
       </div>
     );
   }
+
   const selectedOption = answers[businessModelQuestions[step].id];
+
   return (
     <div className="survey-wrapper">
-      <div className="survey-card">
-        <div className="survey-header">
-          <div className="flex items-center justify-center h-16 w-48 overflow-hidden -ml-4">
-            <img 
-              src="/logo.png" 
-              alt="NotaKita Logo" 
-              className="w-full h-full object-cover object-center" 
+      <main className="survey-card card">
+        <header className="survey-header stack">
+          <div className="survey-logo-wrap">
+            <img
+              src="/logo.png"
+              alt="NotaKita Logo"
+              className="survey-logo"
             />
           </div>
-          <div className="progress-container">
-            <span className="progress-text">
+          <div className="progress-container row-between">
+            <span className="meta">
               Langkah {step + 1} dari {totalSteps}
             </span>
             <div className="progress-track">
@@ -87,9 +91,9 @@ export default function OnboardingSurvey() {
               ></div>
             </div>
           </div>
-        </div>
+        </header>
 
-        <div className="survey-content">
+        <div className="survey-content stack">
           <h2 className="question-title">
             {businessModelQuestions[step].question_text}
           </h2>
@@ -102,7 +106,7 @@ export default function OnboardingSurvey() {
                 <button
                   key={index}
                   onClick={() => handleSelect(opt.value)}
-                  className={`option-btn ${isSelected ? "selected" : ""}`}
+                  className={`option-card card ${isSelected ? "selected" : ""}`}
                 >
                   <div className="radio-circle">
                     <div className="radio-dot"></div>
@@ -114,26 +118,26 @@ export default function OnboardingSurvey() {
           </div>
         </div>
 
-        <div className="survey-footer">
+        <footer className="survey-footer row-between">
           <button
-            className="btn-back"
+            className="btn btn-secondary"
             onClick={handleBack}
             disabled={step === 1}
           >
             Kembali
           </button>
-          <button onClick={logout} className="btn-back" title="Logout">
+          <button onClick={logout} className="btn btn-ghost" title="Logout">
             Logout
           </button>
           <button
-            className="btn-next"
+            className="btn btn-primary"
             onClick={handleNext}
             disabled={selectedOption === undefined}
           >
             {step === totalSteps - 1 ? "Simpan" : "Lanjut"}
           </button>
-        </div>
-      </div>
+        </footer>
+      </main>
     </div>
   );
 }
