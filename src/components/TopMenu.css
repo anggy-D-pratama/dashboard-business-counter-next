@@ -1,0 +1,87 @@
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-md, 1rem);
+  height: 64px;
+  padding-inline: var(--gap-md, 20px);
+  background: color-mix(in oklch, var(--surface, var(--bg-card)) 92%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+
+.topbar-start {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md, 0.75rem);
+  flex: 1;
+  min-width: 0;
+  max-width: 480px;
+}
+
+.topbar-trigger {
+  flex-shrink: 0;
+}
+
+.topbar-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.topbar-search-icon {
+  position: absolute;
+  inset-y: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  padding-left: 0.75rem;
+  pointer-events: none;
+  color: var(--muted, var(--text-dim));
+}
+
+.topbar-search-svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.topbar-search-input {
+  padding-left: 2.25rem;
+  background: var(--surface, var(--bg-card));
+  border-color: var(--border);
+  color: var(--fg, var(--text-main));
+  cursor: default;
+  pointer-events: none;
+}
+
+.topbar-search-input::placeholder {
+  color: var(--muted, var(--text-dim));
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md, 0.75rem);
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .topbar {
+    gap: 0.5rem;
+    padding-inline: 0.75rem;
+  }
+
+  .topbar-start {
+    gap: 0.5rem;
+  }
+
+  .topbar-search {
+    max-width: 160px;
+  }
+}
