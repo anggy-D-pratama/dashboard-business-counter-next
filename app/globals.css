@@ -420,3 +420,26 @@ input:focus:-webkit-autofill {
   margin: 0 auto;
   padding: 0 2rem;
 }
+
+/* Dashboard shell — semantic classes consuming OpenDesign tokens only */
+.app-shell {
+  display: flex;
+  width: 100%;
+  min-height: 100svh;
+  background: var(--bg, var(--bg-main));
+}
+
+.main-content {
+  flex: 1;
+  min-width: 0;
+  padding-block: var(--gap-lg, 32px);
+}
+
+.app-footer {
+  margin-top: auto;
+  border-top: 1px solid var(--border);
+  background: var(--surface, var(--bg-card));
+  color: var(--muted, var(--text-muted));
+  padding-block: var(--gap-md, 20px);
+  font-size: var(--fs-meta, 12px);
+}
