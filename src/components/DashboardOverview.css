@@ -102,7 +102,8 @@
 }
 
 .volume-number {
-  font-family: var(--font-heading);
+  font-family: var(--font-mono, var(--font-heading));
+  font-variant-numeric: tabular-nums;
   font-size: 4rem;
   font-weight: 800;
   line-height: 1;
