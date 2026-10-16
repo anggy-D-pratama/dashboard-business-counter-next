@@ -80,16 +80,23 @@ export default function RegisterPage() {
 
   return (
     <div className="auth-page">
-      <div className="auth-card card animate-fade-in">
-        <div className="auth-header">
-          <div style={{ display: "flex", justifyContent: "center", marginBottom: "1.5rem" }}>
-            <Image src={logoImg} alt="Notakita Logo" width={250} height={80} style={{ objectFit: "cover", objectPosition: "center" }} priority />
+      <section className="auth-card card animate-fade-in">
+        <header className="auth-header stack">
+          <div className="auth-logo-wrap">
+            <Image
+              className="auth-logo"
+              src={logoImg}
+              alt="Notakita Logo"
+              width={250}
+              height={80}
+              priority
+            />
           </div>
           <h1>Daftar</h1>
-          <p>Akses analitik bisnis harian Anda</p>
-        </div>
+          <p className="lead">Akses analitik bisnis harian Anda</p>
+        </header>
 
-        <form onSubmit={handleRegister} className="auth-form">
+        <form onSubmit={handleRegister} className="auth-form stack">
           {error && (
             <div className="error-banner">
               <svg
@@ -108,10 +115,11 @@ export default function RegisterPage() {
             </div>
           )}
 
-          <div className="form-group">
+          <div className="field">
             <label htmlFor="name">Nama Lengkap</label>
             <input
               id="name"
+              className="input"
               value={name}
               onChange={(e) => setName(e.target.value)}
               type="text"
@@ -120,10 +128,11 @@ export default function RegisterPage() {
             />
           </div>
 
-          <div className="form-group">
+          <div className="field">
             <label htmlFor="email">Email</label>
             <input
               id="email"
+              className="input"
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
@@ -134,7 +143,7 @@ export default function RegisterPage() {
             />
           </div>
 
-          <div className="form-group">
+          <div className="field">
             <label htmlFor="phone">Nomor Telepon</label>
             <div className="phone-input-minimal">
               <div className="prefix">62</div>
@@ -149,11 +158,12 @@ export default function RegisterPage() {
             </div>
           </div>
 
-          <div className="form-group">
+          <div className="field">
             <label htmlFor="password">Kata Sandi</label>
             <div className="password-input-wrapper">
               <input
                 id="password"
+                className="input"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 type={showPassword ? `text` : `password`}
@@ -223,11 +233,12 @@ export default function RegisterPage() {
             </div>
           </div>
 
-          <div className="form-group">
+          <div className="field">
             <label htmlFor="confirm">Konfirmasi Kata Sandi</label>
             <div className="password-input-wrapper">
               <input
                 id="confirm"
+                className="input"
                 value={password_confirmation}
                 onChange={(e) => {
                   setPasswordConfirmation(e.target.value);
@@ -286,7 +297,7 @@ export default function RegisterPage() {
             <Link href="/login">Masuk</Link>
           </div>
         </form>
-      </div>
+      </section>
     </div>
   );
 }
