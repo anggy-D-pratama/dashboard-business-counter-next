@@ -26,10 +26,17 @@
   padding-block: clamp(32px, 5vw, var(--gap-xl));
 }
 
+.dashboard-overview.stack,
 .dashboard-overview .stack {
   display: flex;
   flex-direction: column;
   gap: var(--gap-lg);
+}
+
+/* The title block is a stack too, but internal title rhythm is handled
+   by eyebrow/lead margins — no extra flex gap. */
+.dashboard-overview .stack.title-copy {
+  gap: 0;
 }
 
 .dashboard-overview .row {
@@ -61,6 +68,7 @@
 .dashboard-overview .eyebrow {
   font-family: var(--font-mono, ui-monospace, Menlo, monospace);
   font-size: 12px;
+  line-height: 1;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--accent, var(--primary));
