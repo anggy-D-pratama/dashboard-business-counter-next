@@ -196,7 +196,7 @@
   font-size: 13px;
 }
 
-/* Skeleton loading (EAT-154) — colors come from the .skeleton primitive
+/* Skeleton loading (EAT-153) — colors come from the .skeleton primitive
    in app/globals.css; local rules only control size/layout. */
 .dashboard-overview .skeleton-card {
   min-height: 118px;

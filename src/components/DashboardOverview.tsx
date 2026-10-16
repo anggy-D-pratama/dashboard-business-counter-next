@@ -80,7 +80,6 @@ export function DashboardOverview() {
   const resolveMetric = (key: string) => stats.find((stat) => stat.key === key);
 
   const formatMetricValue = (key: string, stat?: ReportMetric) => {
-    if (isLoading) return "...";
     if (!stat?.available) return "—";
     const value = stat.value ?? 0;
     if (key === METRIC_KEYS.TRANSACTION_COUNT) return value.toLocaleString();
@@ -92,7 +91,10 @@ export function DashboardOverview() {
   const hasData = transactionCount > 0;
 
   return (
-    <div className="dashboard-overview stack">
+    <div
+      className="dashboard-overview stack"
+      aria-busy={isLoading}
+    >
       <header className="row-between dashboard-title">
         <div className="stack title-copy">
           <p className="eyebrow">{t.dashboard.eyebrow}</p>
@@ -119,12 +121,16 @@ export function DashboardOverview() {
             >
               <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
             </svg>
-            {isLoading ? t.dashboard.loadingStatus : t.dashboard.syncButton}
+            {isLoading ? t.dashboard.syncLoading : t.dashboard.syncButton}
           </button>
         </div>
       </header>
 
-      <section className="grid-4" aria-label="Key metrics">
+      <section
+        className="grid-4"
+        aria-label={t.dashboard.metricsLabel}
+        aria-busy={isLoading}
+      >
         {isLoading
           ? metricDefs.map((def) => <MetricCardSkeleton key={def.key} />)
           : metricDefs.map((def) => {
@@ -153,7 +159,11 @@ export function DashboardOverview() {
             <span className="pill">{t.dashboard.live}</span>
           </div>
 
-          <div className="chart" aria-label={t.dashboard.chartTitle}>
+          <div
+            className="chart"
+            aria-label={t.dashboard.chartTitle}
+            aria-busy={isLoading}
+          >
             {(isLoading
               ? SKELETON_BAR_HEIGHTS
               : TEMPLATE_BAR_HEIGHTS
@@ -195,6 +205,7 @@ export function DashboardOverview() {
             role="status"
             aria-live="polite"
             aria-label={t.dashboard.statusSystem}
+            aria-busy={isLoading}
           >
             {isLoading ? (
               <>
@@ -219,18 +230,22 @@ export function DashboardOverview() {
                   <span className="activity-dot" aria-hidden="true" />
                   <div>
                     <strong>{t.dashboard.waEngine}</strong>
-                    <p>—</p>
+                    <p>{t.dashboard.dataUnavailable}</p>
                   </div>
-                  <span className="status pending">—</span>
+                  <span className="status pending">
+                    {t.dashboard.dataUnavailable}
+                  </span>
                 </div>
 
                 <div className="activity-item">
                   <span className="activity-dot" aria-hidden="true" />
                   <div>
                     <strong>{t.dashboard.workerQueue}</strong>
-                    <p>—</p>
+                    <p>{t.dashboard.dataUnavailable}</p>
                   </div>
-                  <span className="status pending">—</span>
+                  <span className="status pending">
+                    {t.dashboard.dataUnavailable}
+                  </span>
                 </div>
               </>
             )}

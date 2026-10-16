@@ -31,7 +31,7 @@ export default function LoginPage() {
 
   const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!identifier || !password) return;
+    if (!identifier || !password || isLoading) return;
     if (!validate()) return;
     await login(identifier, password);
   };
@@ -84,6 +84,7 @@ export default function LoginPage() {
               type="text"
               placeholder="Email or 62..."
               required
+              disabled={isLoading}
             />
           </div>
 
@@ -98,12 +99,14 @@ export default function LoginPage() {
                 type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
                 required
+                disabled={isLoading}
               />
               <button
                 type="button"
                 className="password-toggle"
                 onClick={() => setShowPassword(!showPassword)}
                 tabIndex={-1}
+                disabled={isLoading}
                 aria-label={showPassword ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
               >
                 {showPassword ? (
@@ -144,11 +147,13 @@ export default function LoginPage() {
             aria-busy={isLoading}
           >
             {isLoading && <span className="spinner" aria-hidden="true"></span>}
-            {isLoading ? "Mengautentikasi..." : "Masuk"}
+            {isLoading ? "Memproses..." : "Masuk"}
           </button>
 
           <div className="auth-footer">
-            <Link href="/register">Daftar</Link>
+            <Link href="/register" aria-disabled={isLoading}>
+              Daftar
+            </Link>
           </div>
         </form>
       </section>
