@@ -87,6 +87,11 @@
   color: var(--fg);
 }
 
+.password-toggle:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 .error-banner {
   background: color-mix(in oklch, var(--danger) 10%, transparent);
   border: 1px solid color-mix(in oklch, var(--danger) 22%, transparent);
@@ -118,6 +123,12 @@
   text-decoration: underline;
 }
 
+.auth-footer a[aria-disabled="true"] {
+  color: var(--muted);
+  pointer-events: none;
+  text-decoration: none;
+}
+
 .spinner {
   width: 16px;
   height: 16px;
@@ -131,6 +142,13 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.btn:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .w-full {
