@@ -9,11 +9,7 @@ import { SidebarTrigger } from "./ui/sidebar";
 import "./TopMenu.css";
 
 export function TopMenu() {
-  const { locale } = useLocale();
-
-  const placeholderText = locale === "id" ? "Cari sesuatu..." : "Search...";
-  const ariaLabel =
-    locale === "id" ? "Cari (segera hadir)" : "Search (coming soon)";
+  const { t } = useLocale();
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -25,7 +21,10 @@ export function TopMenu() {
   return (
     <header className="topbar">
       <div className="topbar-start">
-        <SidebarTrigger className="topbar-trigger" />
+        <SidebarTrigger
+          className="topbar-trigger"
+          aria-label={t.shell.toggleSidebar}
+        />
         <div className="topbar-search">
           <span className="topbar-search-icon" aria-hidden="true">
             <svg
@@ -44,8 +43,8 @@ export function TopMenu() {
           <Input
             type="text"
             readOnly
-            aria-label={ariaLabel}
-            placeholder={placeholderText}
+            aria-label={t.shell.searchAriaLabel}
+            placeholder={t.shell.searchPlaceholder}
             onKeyDown={handleKeyDown}
             className="topbar-search-input"
           />

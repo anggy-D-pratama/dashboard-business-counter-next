@@ -19,6 +19,14 @@ export const translations = {
       dropzoneLabel:
         "Unggah file spreadsheet, tekan Enter atau Spasi untuk memilih file",
     },
+    shell: {
+      searchPlaceholder: "Cari sesuatu...",
+      searchAriaLabel: "Cari (segera hadir)",
+      languageLabel: "Bahasa",
+      themeToDark: "Ganti ke mode gelap",
+      themeToLight: "Ganti ke mode terang",
+      toggleSidebar: "Buka/Tutup Bilah Samping",
+    },
     nav: {
       mainMenu: "Menu Utama",
       dashboard: "Dasbor",
@@ -139,6 +147,14 @@ export const translations = {
       dialogLabel: "Dialog",
       dropzoneLabel:
         "Upload spreadsheet file, press Enter or Space to choose a file",
+    },
+    shell: {
+      searchPlaceholder: "Search...",
+      searchAriaLabel: "Search (coming soon)",
+      languageLabel: "Language",
+      themeToDark: "Switch to dark mode",
+      themeToLight: "Switch to light mode",
+      toggleSidebar: "Toggle Sidebar",
     },
     nav: {
       mainMenu: "Main Menu",

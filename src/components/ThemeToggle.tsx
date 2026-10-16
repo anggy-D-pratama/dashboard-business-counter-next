@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useSyncExternalStore } from "react";
+import { useLocale } from "../contexts/LocaleContext";
 
 type Theme = "light" | "dark";
 
@@ -35,6 +36,7 @@ function getServerSnapshot(): Theme {
 }
 
 export function ThemeToggle({ className = "" }: { className?: string }) {
+  const { t } = useLocale();
   const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   // Keep the <html data-theme> attribute in sync with the active theme.
@@ -57,7 +59,7 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
     <button
       type="button"
       onClick={toggleTheme}
-      aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+      aria-label={theme === "dark" ? t.shell.themeToLight : t.shell.themeToDark}
       aria-pressed={theme === "dark"}
       className={`theme-switch ${className}`}
     >
