@@ -6,20 +6,22 @@ import { ChangePasswordForm } from "./settings/ChangePasswordForm";
 import { BusinessModelSettings } from "./settings/BusinessModelSettings";
 
 export function SettingsPage() {
-  const [activeTab, setActiveTab] = useState("profile");
+  const [activeTab, setActiveTab] = useState<"profile" | "security">("profile");
 
   return (
     <div className="settings-page">
-      <div className="header">
-        <h2>Pengaturan Akun</h2>
-        <p>Kelola keamanan dan preferensi akun Anda</p>
-      </div>
+      <header className="settings-header animate-fade-in">
+        <h1>Pengaturan Akun</h1>
+        <p className="lead">Kelola keamanan dan preferensi akun Anda</p>
+      </header>
 
       <div className="tabs-nav" role="tablist" aria-label="Pengaturan">
         <button
-          className={`tab-btn ${activeTab === "profile" ? "active" : ""}`}
+          className="tab-button"
           role="tab"
+          id="tab-profile"
           aria-selected={activeTab === "profile"}
+          aria-controls="panel-profile"
           onClick={() => setActiveTab("profile")}
         >
           <svg
@@ -37,9 +39,11 @@ export function SettingsPage() {
           Profil Bisnis
         </button>
         <button
-          className={`tab-btn ${activeTab === "security" ? "active" : ""}`}
+          className="tab-button"
           role="tab"
+          id="tab-security"
           aria-selected={activeTab === "security"}
+          aria-controls="panel-security"
           onClick={() => setActiveTab("security")}
         >
           <svg
@@ -59,9 +63,24 @@ export function SettingsPage() {
       </div>
 
       <div className="tab-panels">
-        {activeTab === "profile" && <BusinessModelSettings />}
-
-        {activeTab === "security" && <ChangePasswordForm />}
+        <div
+          className="tab-panel"
+          role="tabpanel"
+          id="panel-profile"
+          aria-labelledby="tab-profile"
+          hidden={activeTab !== "profile"}
+        >
+          <BusinessModelSettings />
+        </div>
+        <div
+          className="tab-panel"
+          role="tabpanel"
+          id="panel-security"
+          aria-labelledby="tab-security"
+          hidden={activeTab !== "security"}
+        >
+          <ChangePasswordForm />
+        </div>
       </div>
     </div>
   );
