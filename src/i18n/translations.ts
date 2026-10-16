@@ -61,6 +61,11 @@ export const translations = {
       transactionUnit: "TRX",
       metricsLabel: "Metrik utama",
       weekdayShort: ["Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"],
+      emptyState: {
+        title: "Belum Ada Data",
+        description: "Data laporan harian belum tersedia. Periksa koneksi atau sinkronkan ulang untuk memuat metrik terbaru.",
+        retryButton: "Sinkronkan Data",
+      },
     },
     upload: {
       title: "Impor Data Transaksi",
@@ -157,6 +162,11 @@ export const translations = {
       transactionUnit: "TRX",
       metricsLabel: "Key metrics",
       weekdayShort: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      emptyState: {
+        title: "No Data Yet",
+        description: "Daily report data isn't available yet. Check your connection or sync again to load the latest metrics.",
+        retryButton: "Sync Data",
+      },
     },
     upload: {
       title: "Import Transaction Data",
