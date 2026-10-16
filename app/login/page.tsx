@@ -105,9 +105,9 @@ export default function LoginPage() {
                 type="button"
                 className="password-toggle"
                 onClick={() => setShowPassword(!showPassword)}
+                tabIndex={-1}
                 disabled={isLoading}
                 aria-label={showPassword ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
-                aria-pressed={showPassword}
               >
                 {showPassword ? (
                   <svg
