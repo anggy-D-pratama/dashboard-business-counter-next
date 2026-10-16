@@ -79,6 +79,11 @@ export const translations = {
         description: "Data laporan harian belum tersedia. Periksa koneksi atau sinkronkan ulang untuk memuat metrik terbaru.",
         retryButton: "Sinkronkan Data",
       },
+      errorState: {
+        title: "Gagal Memuat Data",
+        description: "Data laporan harian gagal dimuat. Periksa koneksi internet Anda, lalu coba lagi.",
+        retryButton: "Coba Lagi",
+      },
     },
     upload: {
       title: "Impor Data Transaksi",
@@ -207,6 +212,11 @@ export const translations = {
         title: "No Data Yet",
         description: "Daily report data isn't available yet. Check your connection or sync again to load the latest metrics.",
         retryButton: "Sync Data",
+      },
+      errorState: {
+        title: "Failed to Load Data",
+        description: "The daily report failed to load. Check your internet connection, then try again.",
+        retryButton: "Retry",
       },
     },
     upload: {
