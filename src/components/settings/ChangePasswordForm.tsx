@@ -146,8 +146,8 @@ export function ChangePasswordForm() {
                   onClick={() => {
                     setShowCurrentPassword(!show_current_password);
                   }}
-                  tabIndex={-1}
                   aria-label={show_current_password ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
+                  aria-pressed={show_current_password}
                 >
                   {show_current_password ? (
                     <svg
@@ -202,8 +202,8 @@ export function ChangePasswordForm() {
                   onClick={() => {
                     setShowNewPassword(!show_new_password);
                   }}
-                  tabIndex={-1}
                   aria-label={show_new_password ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
+                  aria-pressed={show_new_password}
                 >
                   {show_new_password ? (
                     <svg
@@ -289,8 +289,8 @@ export function ChangePasswordForm() {
                   onClick={() =>
                     setShowPasswordConfirmation(!show_password_confirmation)
                   }
-                  tabIndex={-1}
                   aria-label={show_password_confirmation ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
+                  aria-pressed={show_password_confirmation}
                 >
                   {show_password_confirmation ? (
                     <svg
