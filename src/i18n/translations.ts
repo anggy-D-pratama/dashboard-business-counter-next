@@ -14,6 +14,11 @@ export const translations = {
       langId: "Indonesia",
       langEn: "English",
     },
+    a11y: {
+      dialogLabel: "Dialog",
+      dropzoneLabel:
+        "Unggah file spreadsheet, tekan Enter atau Spasi untuk memilih file",
+    },
     nav: {
       mainMenu: "Menu Utama",
       dashboard: "Dasbor",
@@ -114,6 +119,11 @@ export const translations = {
       languageChanged: "Language successfully changed",
       langId: "Indonesia",
       langEn: "English",
+    },
+    a11y: {
+      dialogLabel: "Dialog",
+      dropzoneLabel:
+        "Upload spreadsheet file, press Enter or Space to choose a file",
     },
     nav: {
       mainMenu: "Main Menu",
