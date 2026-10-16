@@ -26,45 +26,29 @@ type ReportMetric = {
 
 const TEMPLATE_BAR_HEIGHTS = [44, 62, 48, 76, 68, 35, 52];
 
+const SKELETON_BAR_HEIGHTS = [46, 62, 50, 82, 72, 38, 56];
+
 function MetricCardSkeleton() {
   return (
-    <article className="card" aria-hidden="true">
-      <Skeleton className="skeleton-label" />
-      <div className="metric-value">
-        <Skeleton className="skeleton-num" />
+    <article className="card skeleton-card" aria-hidden="true">
+      <Skeleton className="skeleton-meta" />
+      <div className="skeleton-metric-row">
+        <Skeleton className="skeleton-value" />
+        <Skeleton className="skeleton-unit" />
       </div>
     </article>
   );
 }
 
-function ChartSkeleton() {
+function StatusRowSkeleton() {
   return (
-    <div className="chart skeleton-chart" aria-hidden="true">
-      {TEMPLATE_BAR_HEIGHTS.map((height, index) => (
-        <div className="skeleton-bar-wrap" key={index}>
-          <Skeleton
-            className="skeleton-bar"
-            style={{ height: `${height}%` }}
-          />
-          <Skeleton className="skeleton-bar-label" />
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function SystemStatusSkeleton() {
-  return (
-    <div className="activity-list" aria-hidden="true">
-      {[0, 1, 2].map((index) => (
-        <div className="activity-item" key={index}>
-          <span className="activity-dot" />
-          <div>
-            <Skeleton className="skeleton-status-label" />
-            <Skeleton className="skeleton-status-value" />
-          </div>
-        </div>
-      ))}
+    <div className="activity-item skeleton-activity-item" aria-hidden="true">
+      <span className="activity-dot" />
+      <div className="skeleton-activity-copy">
+        <Skeleton className="skeleton-activity-title" />
+        <Skeleton className="skeleton-activity-caption" />
+      </div>
+      <Skeleton className="skeleton-activity-status" />
     </div>
   );
 }
@@ -96,6 +80,7 @@ export function DashboardOverview() {
   const resolveMetric = (key: string) => stats.find((stat) => stat.key === key);
 
   const formatMetricValue = (key: string, stat?: ReportMetric) => {
+    if (isLoading) return "...";
     if (!stat?.available) return "—";
     const value = stat.value ?? 0;
     if (key === METRIC_KEYS.TRANSACTION_COUNT) return value.toLocaleString();
@@ -121,6 +106,7 @@ export function DashboardOverview() {
             className="btn btn-filter"
             onClick={fetchDailyReport}
             disabled={isLoading}
+            aria-busy={isLoading}
           >
             <svg
               width="16"
@@ -129,6 +115,7 @@ export function DashboardOverview() {
               fill="none"
               stroke="currentColor"
               strokeWidth="2"
+              aria-hidden="true"
             >
               <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
             </svg>
@@ -138,29 +125,22 @@ export function DashboardOverview() {
       </header>
 
       <section className="grid-4" aria-label="Key metrics">
-        {isLoading ? (
-          <>
-            <MetricCardSkeleton />
-            <MetricCardSkeleton />
-            <MetricCardSkeleton />
-            <MetricCardSkeleton />
-          </>
-        ) : (
-          metricDefs.map((def) => {
-            const stat = resolveMetric(def.key);
-            return (
-              <article key={def.key} className="card">
-                <span className="meta">{def.label}</span>
-                <div className="metric-value">
-                  <strong className="num">{formatMetricValue(def.key, stat)}</strong>
-                  <span className="metric-delta">
-                    {stat?.available ? def.unit : t.dashboard.noData}
-                  </span>
-                </div>
-              </article>
-            );
-          })
-        )}
+        {isLoading
+          ? metricDefs.map((def) => <MetricCardSkeleton key={def.key} />)
+          : metricDefs.map((def) => {
+              const stat = resolveMetric(def.key);
+              return (
+                <article key={def.key} className="card">
+                  <span className="meta">{def.label}</span>
+                  <div className="metric-value">
+                    <strong className="num">{formatMetricValue(def.key, stat)}</strong>
+                    <span className="metric-delta">
+                      {stat?.available ? def.unit : t.dashboard.noData}
+                    </span>
+                  </div>
+                </article>
+              );
+            })}
       </section>
 
       <section className="grid-2-1" aria-label={t.dashboard.chartTitle}>
@@ -173,21 +153,36 @@ export function DashboardOverview() {
             <span className="pill">{t.dashboard.live}</span>
           </div>
 
-          {isLoading ? (
-            <ChartSkeleton />
-          ) : (
-            <div className="chart" aria-label={t.dashboard.chartTitle}>
-              {t.dashboard.weekdayShort.map((day, index) => (
-                <div className="bar-wrap" key={day}>
+          <div className="chart" aria-label={t.dashboard.chartTitle}>
+            {(isLoading
+              ? SKELETON_BAR_HEIGHTS
+              : TEMPLATE_BAR_HEIGHTS
+            ).map((height, index) =>
+              isLoading ? (
+                <div
+                  className="bar-wrap bar-wrap-loading"
+                  key={`skeleton-${index}`}
+                  aria-hidden="true"
+                >
+                  <Skeleton
+                    className="bar-skeleton"
+                    style={{ height: `${height}%` }}
+                  />
+                  <Skeleton className="skeleton-bar-label" />
+                </div>
+              ) : (
+                <div className="bar-wrap" key={t.dashboard.weekdayShort[index]}>
                   <div
                     className={`bar${index === 3 ? " active" : ""}`}
-                    style={{ height: hasData ? `${TEMPLATE_BAR_HEIGHTS[index]}%` : "0%" }}
+                    style={{
+                      height: hasData ? `${height}%` : "0%",
+                    }}
                   />
-                  <span className="bar-label">{day}</span>
+                  <span className="bar-label">{t.dashboard.weekdayShort[index]}</span>
                 </div>
-              ))}
-            </div>
-          )}
+              ),
+            )}
+          </div>
         </article>
 
         <aside className="card">
@@ -195,40 +190,51 @@ export function DashboardOverview() {
             <h2>{t.dashboard.statusSystem}</h2>
           </div>
 
-          {isLoading ? (
-            <SystemStatusSkeleton />
-          ) : (
-            <div className="activity-list">
-              <div className="activity-item">
-                <span className="activity-dot" aria-hidden="true" />
-                <div>
-                  <strong>{t.dashboard.apiStatus}</strong>
-                  <p>{t.dashboard.operational}</p>
+          <div
+            className="activity-list"
+            role="status"
+            aria-live="polite"
+            aria-label={t.dashboard.statusSystem}
+          >
+            {isLoading ? (
+              <>
+                <StatusRowSkeleton />
+                <StatusRowSkeleton />
+                <StatusRowSkeleton />
+              </>
+            ) : (
+              <>
+                <div className="activity-item">
+                  <span className="activity-dot" aria-hidden="true" />
+                  <div>
+                    <strong>{t.dashboard.apiStatus}</strong>
+                    <p>{t.dashboard.operational}</p>
+                  </div>
+                  <span className="status shipped">
+                    {t.dashboard.operational}
+                  </span>
                 </div>
-                <span className="status shipped">
-                  {t.dashboard.operational}
-                </span>
-              </div>
 
-              <div className="activity-item">
-                <span className="activity-dot" aria-hidden="true" />
-                <div>
-                  <strong>{t.dashboard.waEngine}</strong>
-                  <p>—</p>
+                <div className="activity-item">
+                  <span className="activity-dot" aria-hidden="true" />
+                  <div>
+                    <strong>{t.dashboard.waEngine}</strong>
+                    <p>—</p>
+                  </div>
+                  <span className="status pending">—</span>
                 </div>
-                <span className="status pending">—</span>
-              </div>
 
-              <div className="activity-item">
-                <span className="activity-dot" aria-hidden="true" />
-                <div>
-                  <strong>{t.dashboard.workerQueue}</strong>
-                  <p>—</p>
+                <div className="activity-item">
+                  <span className="activity-dot" aria-hidden="true" />
+                  <div>
+                    <strong>{t.dashboard.workerQueue}</strong>
+                    <p>—</p>
+                  </div>
+                  <span className="status pending">—</span>
                 </div>
-                <span className="status pending">—</span>
-              </div>
-            </div>
-          )}
+              </>
+            )}
+          </div>
         </aside>
       </section>
     </div>
