@@ -22,6 +22,19 @@ export const translations = {
       passwordRuleNumber: "Satu angka",
       passwordRuleSpecial: "Satu karakter spesial",
     },
+    a11y: {
+      dialogLabel: "Dialog",
+      dropzoneLabel:
+        "Unggah file spreadsheet, tekan Enter atau Spasi untuk memilih file",
+    },
+    shell: {
+      searchPlaceholder: "Cari sesuatu...",
+      searchAriaLabel: "Cari (segera hadir)",
+      languageLabel: "Bahasa",
+      themeToDark: "Ganti ke mode gelap",
+      themeToLight: "Ganti ke mode terang",
+      toggleSidebar: "Buka/Tutup Bilah Samping",
+    },
     nav: {
       mainMenu: "Menu Utama",
       dashboard: "Dasbor",
@@ -69,6 +82,16 @@ export const translations = {
       transactionUnit: "TRX",
       metricsLabel: "Metrik utama",
       weekdayShort: ["Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"],
+      emptyState: {
+        title: "Belum Ada Data",
+        description: "Data laporan harian belum tersedia. Periksa koneksi atau sinkronkan ulang untuk memuat metrik terbaru.",
+        retryButton: "Sinkronkan Data",
+      },
+      errorState: {
+        title: "Gagal Memuat Data",
+        description: "Data laporan harian gagal dimuat. Periksa koneksi internet Anda, lalu coba lagi.",
+        retryButton: "Coba Lagi",
+      },
     },
     upload: {
       title: "Impor Data Transaksi",
@@ -202,7 +225,22 @@ export const translations = {
       errorPhoneRequired: "Nomor telepon wajib diisi.",
       errorPasswordRules: "Kata sandi tidak memenuhi syarat.",
       errorPasswordMismatch: "Kata sandi tidak cocok.",
-    }
+    },
+    onboarding: {
+      loadingQuestions: "Memuat pertanyaan...",
+      stepIndicator: "Langkah {step} dari {total}",
+      back: "Kembali",
+      logout: "Logout",
+      save: "Simpan",
+      next: "Lanjut",
+      analysisComplete: "Analisis Selesai!",
+      analysisDescription:
+        "Berdasarkan jawaban Anda, kami telah menyiapkan konfigurasi dasbor yang paling optimal.",
+      recommendedModelLabel: "Model Bisnis yang Direkomendasikan",
+      loading: "Memuat...",
+      loadingDescription: "Memuat deskripsi...",
+      startDashboard: "Mulai Gunakan Dasbor",
+    },
   },
   en: {
     common: {
@@ -224,6 +262,19 @@ export const translations = {
       passwordRuleLower: "One lowercase letter",
       passwordRuleNumber: "One number",
       passwordRuleSpecial: "One special character",
+    },
+    a11y: {
+      dialogLabel: "Dialog",
+      dropzoneLabel:
+        "Upload spreadsheet file, press Enter or Space to choose a file",
+    },
+    shell: {
+      searchPlaceholder: "Search...",
+      searchAriaLabel: "Search (coming soon)",
+      languageLabel: "Language",
+      themeToDark: "Switch to dark mode",
+      themeToLight: "Switch to light mode",
+      toggleSidebar: "Toggle Sidebar",
     },
     nav: {
       mainMenu: "Main Menu",
@@ -272,6 +323,16 @@ export const translations = {
       transactionUnit: "TRX",
       metricsLabel: "Key metrics",
       weekdayShort: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      emptyState: {
+        title: "No Data Yet",
+        description: "Daily report data isn't available yet. Check your connection or sync again to load the latest metrics.",
+        retryButton: "Sync Data",
+      },
+      errorState: {
+        title: "Failed to Load Data",
+        description: "The daily report failed to load. Check your internet connection, then try again.",
+        retryButton: "Retry",
+      },
     },
     upload: {
       title: "Import Transaction Data",
@@ -405,6 +466,21 @@ export const translations = {
       errorPhoneRequired: "Phone number is required.",
       errorPasswordRules: "Password does not meet the requirements.",
       errorPasswordMismatch: "Passwords do not match.",
-    }
+    },
+    onboarding: {
+      loadingQuestions: "Loading questions...",
+      stepIndicator: "Step {step} of {total}",
+      back: "Back",
+      logout: "Log Out",
+      save: "Save",
+      next: "Next",
+      analysisComplete: "Analysis Complete!",
+      analysisDescription:
+        "Based on your answers, we have prepared the most optimal dashboard configuration for you.",
+      recommendedModelLabel: "Recommended Business Model",
+      loading: "Loading...",
+      loadingDescription: "Loading description...",
+      startDashboard: "Start Using Dashboard",
+    },
   }
 };

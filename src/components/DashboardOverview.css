@@ -196,6 +196,63 @@
   font-size: 13px;
 }
 
+/* Empty state (EAT-157) — local block shown when report data is
+   empty/unavailable; replaces metric grid + chart + system status. */
+.dashboard-overview .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-sm);
+  width: 100%;
+  min-width: 0;
+  text-align: center;
+  padding: clamp(40px, 8vw, 72px) clamp(20px, 5vw, 40px);
+}
+
+.dashboard-overview .empty-state-icon {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 999px;
+  background: var(--accent-soft, color-mix(in oklch, var(--primary) 12%, transparent));
+  color: var(--accent, var(--primary));
+}
+
+.dashboard-overview .empty-state h2 {
+  margin-top: var(--gap-xs);
+}
+
+.dashboard-overview .empty-state p {
+  max-width: 44ch;
+  margin: 0;
+  color: var(--muted, var(--text-muted));
+  font-size: var(--fs-body);
+  line-height: 1.6;
+}
+
+.dashboard-overview .empty-state .btn {
+  margin-top: var(--gap-xs);
+}
+
+/* Error state (EAT-164) — same layout rhythm as empty state, with a
+   danger-tinted icon and the fetch failure reason shown below the copy. */
+.dashboard-overview .empty-state.error-state .empty-state-icon {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.dashboard-overview .empty-state .error-state-reason {
+  max-width: 56ch;
+  margin: 0;
+  color: var(--danger);
+  font-family: var(--font-mono, ui-monospace, Menlo, monospace);
+  font-size: var(--fs-meta);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
 /* Skeleton loading (EAT-153) — colors come from the .skeleton primitive
    in app/globals.css; local rules only control size/layout. */
 .dashboard-overview .skeleton-card {

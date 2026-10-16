@@ -114,8 +114,7 @@ export function BusinessModelSettings() {
               >
                 <div className='model-card-header'>
                   <div className='model-icon-wrapper'>
-                    <Icon icon={model.icon} width='24' height='24' />
-                  </div>
+                    <Icon icon={model.icon} width='24' height='24' />                  </div>
                   {model.isActive && (
                     <span className='model-active-badge'>
                       <Icon

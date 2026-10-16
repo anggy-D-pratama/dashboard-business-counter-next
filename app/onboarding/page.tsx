@@ -1,8 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import logoImg from "@/public/logo.png";
 import "./page.css";
 import { useAuth } from "@/src/hooks/useAuth";
 import { useBusinessModel } from "@/src/hooks/useBusinessModel";
+import { useLocale } from "@/src/contexts/LocaleContext";
 
 interface Scores {
   retail: number;
@@ -15,6 +18,7 @@ interface Scores {
 export default function OnboardingSurvey() {
   const { logout } = useAuth();
   const { question, assess, businessModelQuestions } = useBusinessModel();
+  const { t } = useLocale();
 
   useEffect(() => {
     question();
@@ -61,7 +65,7 @@ export default function OnboardingSurvey() {
     return (
       <div className="survey-wrapper">
         <div className="card">
-          <p className="lead">Memuat pertanyaan...</p>
+          <p className="lead">{t.onboarding.loadingQuestions}</p>
         </div>
       </div>
     );
@@ -69,20 +73,26 @@ export default function OnboardingSurvey() {
 
   const selectedOption = answers[businessModelQuestions[step].id];
 
+  const stepIndicator = t.onboarding.stepIndicator
+    .replace("{step}", String(step + 1))
+    .replace("{total}", String(totalSteps));
+
   return (
     <div className="survey-wrapper">
       <main className="survey-card card">
         <header className="survey-header stack">
           <div className="survey-logo-wrap">
-            <img
-              src="/logo.png"
+            <Image
+              src={logoImg}
               alt="NotaKita Logo"
               className="survey-logo"
+              width={192}
+              height={64}
             />
           </div>
           <div className="progress-container row-between">
             <span className="meta">
-              Langkah {step + 1} dari {totalSteps}
+              {stepIndicator}
             </span>
             <div className="progress-track">
               <div
@@ -124,17 +134,21 @@ export default function OnboardingSurvey() {
             onClick={handleBack}
             disabled={step === 1}
           >
-            Kembali
+            {t.onboarding.back}
           </button>
-          <button onClick={logout} className="btn btn-ghost" title="Logout">
-            Logout
+          <button
+            onClick={logout}
+            className="btn btn-ghost"
+            title={t.onboarding.logout}
+          >
+            {t.onboarding.logout}
           </button>
           <button
             className="btn btn-primary"
             onClick={handleNext}
             disabled={selectedOption === undefined}
           >
-            {step === totalSteps - 1 ? "Simpan" : "Lanjut"}
+            {step === totalSteps - 1 ? t.onboarding.save : t.onboarding.next}
           </button>
         </footer>
       </main>

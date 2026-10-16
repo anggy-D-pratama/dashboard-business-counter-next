@@ -5,11 +5,13 @@ import './SettingsPage.css';
 import { useLocale } from '../contexts/LocaleContext';
 import { ChangePasswordForm } from './settings/ChangePasswordForm';
 import { BusinessModelSettings } from './settings/BusinessModelSettings';
+type SettingsTab = "profile" | "security";
+
+const TAB_ORDER: SettingsTab[] = ["profile", "security"];
 
 export function SettingsPage() {
   const [activeTab, setActiveTab] = useState<'profile' | 'security'>('profile');
   const { t } = useLocale();
-
   return (
     <div className='settings-page'>
       <header className='settings-header animate-fade-in'>

@@ -66,6 +66,13 @@
   border-color: var(--accent);
 }
 
+.dropzone:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
 .dropzone.loading,
 .dropzone.processing {
   cursor: wait;

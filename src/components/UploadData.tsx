@@ -4,8 +4,8 @@ import { useEffect, useRef } from 'react';
 import { useUpload } from '../hooks/useUpload';
 import { useLocale } from '../contexts/LocaleContext';
 import './UploadData.css';
-
 export function UploadData() {
+  const { t } = useLocale();
   const {
     uploadStatus,
     setUploadStatus,
@@ -15,8 +15,18 @@ export function UploadData() {
     resumePolling,
   } = useUpload();
 
-  const { t } = useLocale();
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const isBusy = uploadStatus === 'uploading' || uploadStatus === 'processing';
+  const isInteractive = uploadStatus === 'idle' || uploadStatus === 'error';
+
+  const handleDropzoneKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.target !== e.currentTarget) return;
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      triggerFileInput();
+    }
+  };
 
   useEffect(() => {
     resumePolling();
@@ -61,11 +71,16 @@ export function UploadData() {
                   ? 'error'
                   : ''
           }`}
+          role={isInteractive ? "button" : undefined}
+          tabIndex={isInteractive ? 0 : undefined}
+          aria-label={isInteractive ? t.a11y.dropzoneLabel : undefined}
           onDragOver={(e: React.DragEvent<HTMLDivElement>) => {
             e.preventDefault();
           }}
           onDrop={onDrop}
           onClick={triggerFileInput}
+          onKeyDown={isInteractive ? handleDropzoneKeyDown : undefined}
+          aria-busy={isBusy}
         >
           <input
             type='file'

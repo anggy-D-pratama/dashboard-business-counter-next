@@ -214,8 +214,7 @@ export default function RegisterPage() {
               {passwordRules.map((rule, index) => (
                 <div
                   key={index}
-                  className={`rule ${rule.valid ? 'valid' : ''}`}
-                >
+                  className={`rule ${rule.valid ? 'valid' : ''}`}                >
                   <svg
                     width='12'
                     height='12'
@@ -290,8 +289,7 @@ export default function RegisterPage() {
                     <circle cx='12' cy='12' r='3'></circle>
                   </svg>
                 )}
-              </button>
-            </div>
+              </button>            </div>
           </div>
 
           <button

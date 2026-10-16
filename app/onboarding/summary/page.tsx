@@ -4,6 +4,7 @@ import "./page.css";
 import "../page.css";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useLocale } from "@/src/contexts/LocaleContext";
 
 interface RecommendedModel {
   name: string;
@@ -12,6 +13,7 @@ interface RecommendedModel {
 
 export default function OnboardingSummary() {
   const router = useRouter();
+  const { t } = useLocale();
   const [modelData, setModelData] = useState<RecommendedModel | null>(null);
 
   useEffect(() => {
@@ -39,19 +41,20 @@ export default function OnboardingSummary() {
               />
             </svg>
           </div>
-          <h2>Analisis Selesai!</h2>
+          <h2>{t.onboarding.analysisComplete}</h2>
           <p className="lead">
-            Berdasarkan jawaban Anda, kami telah menyiapkan konfigurasi dasbor
-            yang paling optimal.
+            {t.onboarding.analysisDescription}
           </p>
         </header>
 
         <div className="result-content stack">
-          <p className="meta result-label">Model Bisnis yang Direkomendasikan</p>
+          <p className="meta result-label">{t.onboarding.recommendedModelLabel}</p>
 
           <div className="model-highlight-card card">
-            <h3 className="metric-value">{modelData?.name || "Memuat..."}</h3>
-            <p>{modelData?.description || "Memuat deskripsi..."}</p>
+            <h3 className="metric-value">
+              {modelData?.name || t.onboarding.loading}
+            </h3>
+            <p>{modelData?.description || t.onboarding.loadingDescription}</p>
           </div>
         </div>
 
@@ -62,7 +65,7 @@ export default function OnboardingSummary() {
               router.push("/");
             }}
           >
-            Mulai Gunakan Dasbor
+            {t.onboarding.startDashboard}
           </button>
         </footer>
       </main>

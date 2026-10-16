@@ -173,8 +173,7 @@ export function ChangePasswordForm() {
                     <circle cx='12' cy='12' r='3'></circle>
                   </svg>
                 )}
-              </button>
-            </div>
+              </button>            </div>
           </div>
 
           <div className='form-divider'></div>
@@ -238,8 +237,7 @@ export function ChangePasswordForm() {
                   <div
                     key={index}
                     className={`rule ${rule.valid ? 'valid' : ''}`}
-                  >
-                    <svg
+                  >                    <svg
                       width='12'
                       height='12'
                       viewBox='0 0 24 24'

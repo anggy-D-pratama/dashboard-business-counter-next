@@ -4,12 +4,12 @@ import React from "react";
 import { useLocale } from "../contexts/LocaleContext";
 
 export function LanguageSwitcher({ className = "" }: { className?: string }) {
-  const { locale, setLocale } = useLocale();
+  const { locale, setLocale, t } = useLocale();
 
   return (
     <div
       role="group"
-      aria-label="Language"
+      aria-label={t.shell.languageLabel}
       className={`lang-switcher ${className}`}
     >
       <button
