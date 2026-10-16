@@ -87,8 +87,10 @@ export function DashboardOverview() {
     return `Rp ${value.toLocaleString()}`;
   };
 
-  const transactionCount = reportData?.transaction_count ?? 0;
-  const hasData = transactionCount > 0;
+  const hasAvailableMetrics = stats.some((stat) => stat.available);
+  const hasTransactionData = (reportData?.transaction_count ?? 0) > 0;
+  const hasData = hasAvailableMetrics || hasTransactionData;
+  const showEmptyState = !isLoading && !hasData;
 
   return (
     <div
@@ -126,132 +128,178 @@ export function DashboardOverview() {
         </div>
       </header>
 
-      <section
-        className="grid-4"
-        aria-label={t.dashboard.metricsLabel}
-        aria-busy={isLoading}
-      >
-        {isLoading
-          ? metricDefs.map((def) => <MetricCardSkeleton key={def.key} />)
-          : metricDefs.map((def) => {
-              const stat = resolveMetric(def.key);
-              return (
-                <article key={def.key} className="card">
-                  <span className="meta">{def.label}</span>
-                  <div className="metric-value">
-                    <strong className="num">{formatMetricValue(def.key, stat)}</strong>
-                    <span className="metric-delta">
-                      {stat?.available ? def.unit : t.dashboard.noData}
-                    </span>
-                  </div>
-                </article>
-              );
-            })}
-      </section>
-
-      <section className="grid-2-1" aria-label={t.dashboard.chartTitle}>
-        <article className="card">
-          <div className="row-between panel-head">
-            <div className="stack">
-              <h2>{t.dashboard.chartTitle}</h2>
-              <p className="meta">{t.dashboard.chartCaption}</p>
-            </div>
-            <span className="pill">{t.dashboard.live}</span>
+      {showEmptyState ? (
+        <section
+          className="card empty-state"
+          aria-label={t.dashboard.emptyState.title}
+        >
+          <div className="empty-state-icon" aria-hidden="true">
+            <svg
+              width="36"
+              height="36"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M22 12h-6l-2 3h-4l-2-3H2" />
+              <path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" />
+            </svg>
           </div>
-
-          <div
-            className="chart"
-            aria-label={t.dashboard.chartTitle}
+          <h2>{t.dashboard.emptyState.title}</h2>
+          <p>{t.dashboard.emptyState.description}</p>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={fetchDailyReport}
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              aria-hidden="true"
+            >
+              <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+            </svg>
+            {t.dashboard.emptyState.retryButton}
+          </button>
+        </section>
+      ) : (
+        <>
+          <section
+            className="grid-4"
+            aria-label={t.dashboard.metricsLabel}
             aria-busy={isLoading}
           >
-            {(isLoading
-              ? SKELETON_BAR_HEIGHTS
-              : TEMPLATE_BAR_HEIGHTS
-            ).map((height, index) =>
-              isLoading ? (
-                <div
-                  className="bar-wrap bar-wrap-loading"
-                  key={`skeleton-${index}`}
-                  aria-hidden="true"
-                >
-                  <Skeleton
-                    className="bar-skeleton"
-                    style={{ height: `${height}%` }}
-                  />
-                  <Skeleton className="skeleton-bar-label" />
-                </div>
-              ) : (
-                <div className="bar-wrap" key={t.dashboard.weekdayShort[index]}>
-                  <div
-                    className={`bar${index === 3 ? " active" : ""}`}
-                    style={{
-                      height: hasData ? `${height}%` : "0%",
-                    }}
-                  />
-                  <span className="bar-label">{t.dashboard.weekdayShort[index]}</span>
-                </div>
-              ),
-            )}
-          </div>
-        </article>
+            {isLoading
+              ? metricDefs.map((def) => <MetricCardSkeleton key={def.key} />)
+              : metricDefs.map((def) => {
+                  const stat = resolveMetric(def.key);
+                  return (
+                    <article key={def.key} className="card">
+                      <span className="meta">{def.label}</span>
+                      <div className="metric-value">
+                        <strong className="num">{formatMetricValue(def.key, stat)}</strong>
+                        <span className="metric-delta">
+                          {stat?.available ? def.unit : t.dashboard.noData}
+                        </span>
+                      </div>
+                    </article>
+                  );
+                })}
+          </section>
 
-        <aside className="card">
-          <div className="row-between panel-head">
-            <h2>{t.dashboard.statusSystem}</h2>
-          </div>
-
-          <div
-            className="activity-list"
-            role="status"
-            aria-live="polite"
-            aria-label={t.dashboard.statusSystem}
-            aria-busy={isLoading}
-          >
-            {isLoading ? (
-              <>
-                <StatusRowSkeleton />
-                <StatusRowSkeleton />
-                <StatusRowSkeleton />
-              </>
-            ) : (
-              <>
-                <div className="activity-item">
-                  <span className="activity-dot" aria-hidden="true" />
-                  <div>
-                    <strong>{t.dashboard.apiStatus}</strong>
-                    <p>{t.dashboard.operational}</p>
-                  </div>
-                  <span className="status shipped">
-                    {t.dashboard.operational}
-                  </span>
+          <section className="grid-2-1" aria-label={t.dashboard.chartTitle}>
+            <article className="card">
+              <div className="row-between panel-head">
+                <div className="stack">
+                  <h2>{t.dashboard.chartTitle}</h2>
+                  <p className="meta">{t.dashboard.chartCaption}</p>
                 </div>
+                <span className="pill">{t.dashboard.live}</span>
+              </div>
 
-                <div className="activity-item">
-                  <span className="activity-dot" aria-hidden="true" />
-                  <div>
-                    <strong>{t.dashboard.waEngine}</strong>
-                    <p>{t.dashboard.dataUnavailable}</p>
-                  </div>
-                  <span className="status pending">
-                    {t.dashboard.dataUnavailable}
-                  </span>
-                </div>
+              <div
+                className="chart"
+                aria-label={t.dashboard.chartTitle}
+                aria-busy={isLoading}
+              >
+                {(isLoading
+                  ? SKELETON_BAR_HEIGHTS
+                  : TEMPLATE_BAR_HEIGHTS
+                ).map((height, index) =>
+                  isLoading ? (
+                    <div
+                      className="bar-wrap bar-wrap-loading"
+                      key={`skeleton-${index}`}
+                      aria-hidden="true"
+                    >
+                      <Skeleton
+                        className="bar-skeleton"
+                        style={{ height: `${height}%` }}
+                      />
+                      <Skeleton className="skeleton-bar-label" />
+                    </div>
+                  ) : (
+                    <div className="bar-wrap" key={t.dashboard.weekdayShort[index]}>
+                      <div
+                        className={`bar${index === 3 ? " active" : ""}`}
+                        style={{
+                          height: hasData ? `${height}%` : "0%",
+                        }}
+                      />
+                      <span className="bar-label">{t.dashboard.weekdayShort[index]}</span>
+                    </div>
+                  ),
+                )}
+              </div>
+            </article>
 
-                <div className="activity-item">
-                  <span className="activity-dot" aria-hidden="true" />
-                  <div>
-                    <strong>{t.dashboard.workerQueue}</strong>
-                    <p>{t.dashboard.dataUnavailable}</p>
-                  </div>
-                  <span className="status pending">
-                    {t.dashboard.dataUnavailable}
-                  </span>
-                </div>
-              </>
-            )}
-          </div>
-        </aside>
-      </section>
+            <aside className="card">
+              <div className="row-between panel-head">
+                <h2>{t.dashboard.statusSystem}</h2>
+              </div>
+
+              <div
+                className="activity-list"
+                role="status"
+                aria-live="polite"
+                aria-label={t.dashboard.statusSystem}
+                aria-busy={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <StatusRowSkeleton />
+                    <StatusRowSkeleton />
+                    <StatusRowSkeleton />
+                  </>
+                ) : (
+                  <>
+                    <div className="activity-item">
+                      <span className="activity-dot" aria-hidden="true" />
+                      <div>
+                        <strong>{t.dashboard.apiStatus}</strong>
+                        <p>{t.dashboard.operational}</p>
+                      </div>
+                      <span className="status shipped">
+                        {t.dashboard.operational}
+                      </span>
+                    </div>
+
+                    <div className="activity-item">
+                      <span className="activity-dot" aria-hidden="true" />
+                      <div>
+                        <strong>{t.dashboard.waEngine}</strong>
+                        <p>{t.dashboard.dataUnavailable}</p>
+                      </div>
+                      <span className="status pending">
+                        {t.dashboard.dataUnavailable}
+                      </span>
+                    </div>
+
+                    <div className="activity-item">
+                      <span className="activity-dot" aria-hidden="true" />
+                      <div>
+                        <strong>{t.dashboard.workerQueue}</strong>
+                        <p>{t.dashboard.dataUnavailable}</p>
+                      </div>
+                      <span className="status pending">
+                        {t.dashboard.dataUnavailable}
+                      </span>
+                    </div>
+                  </>
+                )}
+              </div>
+            </aside>
+          </section>
+        </>
+      )}
     </div>
   );
 }
