@@ -95,14 +95,21 @@ export function Navigation() {
         }`}
       >
         <Link href="/" className="sidebar-logo" aria-label="NotaKita">
-          {isCollapsed ? (
-            <span className="sidebar-logo-mark">N</span>
-          ) : (
-            <img
-              src="/logo.png"
-              alt="NotaKita Logo"
-              className="sidebar-logo-image"
-            />
+          <span className="sidebar-logo-mark" aria-hidden="true">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+            >
+              <path d="M7 5h10v14H7z"></path>
+              <path d="M10 9h4M10 13h4M10 17h2"></path>
+            </svg>
+          </span>
+          {!isCollapsed && (
+            <span className="sidebar-logo-copy">
+              <span className="sidebar-logo-wordmark">NotaKita</span>
+            </span>
           )}
         </Link>
       </div>
@@ -159,10 +166,11 @@ export function Navigation() {
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth="2"
+                strokeWidth="1.8"
               >
-                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" />
+                <path d="M10 17l5-5-5-5M15 12H3M21 3v18" />
               </svg>
+              <span className="sidebar-logout-label">{t.nav.logout}</span>
             </button>
           </div>
         ) : (
