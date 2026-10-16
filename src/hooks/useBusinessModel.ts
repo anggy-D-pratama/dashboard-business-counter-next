@@ -24,7 +24,7 @@ interface BusinessModelAnswers {
   value: string;
 }
 
-interface BusinessModels {
+export interface BusinessModel {
   id: string;
   name: string;
   description: string;
@@ -42,8 +42,8 @@ export function useBusinessModel() {
     BusinessModelQuestions[]
   >([]);
 
-  const [businessModels, setBusinessModels] = useState<BusinessModels[]>([]);
-  const [businessModel, setBusinessModel] = useState<BusinessModels | null>(
+  const [businessModels, setBusinessModels] = useState<BusinessModel[]>([]);
+  const [businessModel, setBusinessModel] = useState<BusinessModel | null>(
     null,
   );
 

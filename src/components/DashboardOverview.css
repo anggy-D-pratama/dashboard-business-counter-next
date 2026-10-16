@@ -130,6 +130,48 @@
   border-top: 1px solid var(--border);
 }
 
+.dashboard-overview .chart.skeleton-chart {
+  align-items: stretch;
+}
+
+.dashboard-overview .skeleton-bar-wrap {
+  display: grid;
+  gap: 8px;
+  align-items: end;
+  height: 100%;
+}
+
+.dashboard-overview .skeleton-bar {
+  border-radius: 8px 8px 2px 2px;
+}
+
+.dashboard-overview .skeleton-label {
+  width: 108px;
+  height: 12px;
+  margin-bottom: var(--gap-sm);
+}
+
+.dashboard-overview .skeleton-num {
+  width: min(180px, 70%);
+  height: clamp(28px, 3.5vw, 42px);
+}
+
+.dashboard-overview .skeleton-bar-label {
+  height: 11px;
+  width: 100%;
+}
+
+.dashboard-overview .skeleton-status-label {
+  width: 120px;
+  height: 14px;
+}
+
+.dashboard-overview .skeleton-status-value {
+  width: 168px;
+  height: 12px;
+  margin-top: 8px;
+}
+
 .dashboard-overview .bar-wrap {
   display: grid;
   gap: 8px;

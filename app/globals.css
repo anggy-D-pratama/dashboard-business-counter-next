@@ -407,6 +407,43 @@ input:focus:-webkit-autofill {
   height: 13px;
 }
 
+/* Skeleton loading (shadcn-style primitive).
+   Colors and shimmer are derived entirely from globals.css tokens
+   (--surface, --border, --muted) so dark mode follows automatically. */
+.skeleton {
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background: var(--border);
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--surface),
+    transparent
+  );
+  animation: skeleton-shimmer 1.6s infinite;
+}
+
+@keyframes skeleton-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton::after {
+    animation: none;
+  }
+}
+
 /* Utility Animations */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }

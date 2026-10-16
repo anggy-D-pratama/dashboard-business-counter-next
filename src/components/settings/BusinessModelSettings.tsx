@@ -2,10 +2,40 @@
 
 import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
-import { defaultModels } from "@/src/constants/defaultModels";
-import { useBusinessModel } from "@/src/hooks/useBusinessModel";
+import { defaultModels, type DefaultModel } from "@/src/constants/defaultModels";
+import { useBusinessModel, type BusinessModel } from "@/src/hooks/useBusinessModel";
 import { useAuth } from "@/src/hooks/useAuth";
 import { Modal } from "@/src/components/Modal";
+import { Skeleton } from "@/src/components/ui/skeleton";
+
+function BusinessModelSkeleton() {
+  return (
+    <div className="business-model-section" aria-hidden="true">
+      <div className="card settings-card">
+        <div className="card-header">
+          <Skeleton className="skeleton-settings-title" />
+          <Skeleton className="skeleton-settings-copy" />
+        </div>
+
+        <div className="model-grid">
+          {[0, 1, 2, 3].map((index) => (
+            <div className="card model-card" key={index}>
+              <div className="model-card-header">
+                <Skeleton className="skeleton-model-icon" />
+                <Skeleton className="skeleton-model-badge" />
+              </div>
+              <div className="model-details">
+                <Skeleton className="skeleton-model-title" />
+                <Skeleton className="skeleton-model-copy" />
+                <Skeleton className="skeleton-model-copy short" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function BusinessModelSettings() {
   const { token } = useAuth();
@@ -28,15 +58,15 @@ export function BusinessModelSettings() {
 
   const models =
     businessModels.length > 0
-      ? businessModels.map((apiModel: any) => {
+      ? businessModels.map((apiModel: BusinessModel) => {
           const defaultModel =
             defaultModels.find((dm) => dm.category === apiModel.category) ||
-            ({} as any);
+            ({} as DefaultModel);
           return {
             ...apiModel,
             isActive: businessModel?.id === apiModel.id,
             icon: defaultModel.icon || "solar:box-minimalistic-bold-duotone",
-            examples: [],
+            examples: [] as string[],
           };
         })
       : defaultModels;
@@ -52,11 +82,7 @@ export function BusinessModelSettings() {
   };
 
   if (isLoading) {
-    return (
-      <div style={{ padding: "var(--gap-lg)", textAlign: "center" }}>
-        <p style={{ color: "var(--muted)" }}>Memuat data...</p>
-      </div>
-    );
+    return <BusinessModelSkeleton />;
   }
 
   return (
@@ -162,3 +188,4 @@ export function BusinessModelSettings() {
     </div>
   );
 }
+
