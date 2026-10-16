@@ -44,6 +44,7 @@ export function BusinessModelSettings() {
       : defaultModels;
 
   const handleSelect = (modelId: string) => {
+    if (isLoading || isSaving) return;
     setSelectedModel(modelId);
   };
 
@@ -66,73 +67,84 @@ export function BusinessModelSettings() {
           </p>
         </div>
 
-        {isLoading ? (
-          <div
-            className="model-grid"
-            aria-busy="true"
-            aria-label="Memuat model bisnis"
-          >
-            {defaultModels.map((model) => (
-              <div
-                key={model.id}
-                className="card model-card model-card-skeleton"
-                aria-hidden="true"
-              >
-                <div className="model-card-header">
-                  <Skeleton className="model-icon-skeleton" />
-                  <Skeleton className="model-badge-skeleton" />
-                </div>
-                <div className="model-details">
-                  <Skeleton className="model-title-skeleton" />
-                  <Skeleton className="model-desc-skeleton" />
-                  <Skeleton className="model-desc-skeleton short" />
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="model-grid">
-            {models.map((model) => (
-              <div
-                key={model.id}
-                className={`card model-card ${model.isActive ? "active" : ""} ${selectedModel === model.id ? "selected" : ""}`}
-                onClick={() => handleSelect(model.id)}
-              >
-                <div className="model-card-header">
-                  <div className="model-icon-wrapper">
-                    <Icon icon={model.icon} width="24" height="24" />
+        <div
+          className="model-grid"
+          aria-busy={isLoading}
+          aria-label="Memuat model bisnis"
+        >
+          {isLoading ? (
+            <>
+              {defaultModels.map((model) => (
+                <div
+                  key={`skeleton-${model.id}`}
+                  className="card model-card model-card-skeleton"
+                  aria-hidden="true"
+                >
+                  <div className="model-card-header">
+                    <Skeleton className="model-icon-skeleton" />
+                    <Skeleton className="model-badge-skeleton" />
                   </div>
-                  {model.isActive && (
-                    <span className="model-active-badge">
-                      <Icon
-                        icon="lucide:check"
-                        width="12"
-                        height="12"
-                        style={{ marginRight: "4px" }}
-                      />
-                      Aktif
-                    </span>
-                  )}
+                  <div className="model-details">
+                    <Skeleton className="model-title-skeleton" />
+                    <Skeleton className="model-desc-skeleton" />
+                    <Skeleton className="model-desc-skeleton short" />
+                  </div>
                 </div>
-
-                <div className="model-details">
-                  <h3>{model.name}</h3>
-                  <p>{model.description}</p>
-                </div>
-
-                <div className="model-examples">
-                  {(model.examples || []).map(
-                    (example: string, idx: number) => (
-                      <span key={idx} className="example-tag">
-                        {example}
+              ))}
+            </>
+          ) : (
+            <>
+              {models.map((model) => (
+                <div
+                  key={model.id}
+                  className={`card model-card ${model.isActive ? "active" : ""} ${selectedModel === model.id ? "selected" : ""}`}
+                  onClick={() => handleSelect(model.id)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleSelect(model.id);
+                    }
+                  }}
+                  aria-pressed={selectedModel === model.id || model.isActive}
+                >
+                  <div className="model-card-header">
+                    <div className="model-icon-wrapper">
+                      <Icon icon={model.icon} width="24" height="24" />
+                    </div>
+                    {model.isActive && (
+                      <span className="model-active-badge">
+                        <Icon
+                          icon="lucide:check"
+                          width="12"
+                          height="12"
+                          style={{ marginRight: "4px" }}
+                        />
+                        Aktif
                       </span>
-                    ),
-                  )}
+                    )}
+                  </div>
+
+                  <div className="model-details">
+                    <h3>{model.name}</h3>
+                    <p>{model.description}</p>
+                  </div>
+
+                  <div className="model-examples">
+                    {(model.examples || []).map(
+                      (example: string, idx: number) => (
+                        <span key={idx} className="example-tag">
+                          {example}
+                        </span>
+                      ),
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
+              ))}
+            </>
+          )}
+        </div>
 
         <div
           className="form-actions"
@@ -145,7 +157,7 @@ export function BusinessModelSettings() {
           <button
             className="btn btn-primary"
             disabled={
-              isLoading || !selectedModel || selectedModel === businessModel?.id
+              isLoading || isSaving || !selectedModel || selectedModel === businessModel?.id
             }
             onClick={() => setShowConfirmModal(true)}
           >
