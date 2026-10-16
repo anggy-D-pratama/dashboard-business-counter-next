@@ -1,4 +1,19 @@
-export const defaultModels = [
+export interface DefaultModel {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  isActive: boolean;
+  examples: string[];
+  theme: {
+    color: string;
+    bg: string;
+    badge: string;
+  };
+  icon: string;
+}
+
+export const defaultModels: DefaultModel[] = [
   {
     id: "retail",
     name: "Retail Intelligence",

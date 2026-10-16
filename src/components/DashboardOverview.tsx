@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useReport } from "../hooks/useReport";
 import { useLocale } from "../contexts/LocaleContext";
+import { Skeleton } from "./ui/skeleton";
 import "./DashboardOverview.css";
 
 const METRIC_KEYS = {
@@ -24,6 +25,33 @@ type ReportMetric = {
 };
 
 const TEMPLATE_BAR_HEIGHTS = [44, 62, 48, 76, 68, 35, 52];
+
+const SKELETON_BAR_HEIGHTS = [46, 62, 50, 82, 72, 38, 56];
+
+function MetricCardSkeleton() {
+  return (
+    <article className="card skeleton-card" aria-hidden="true">
+      <Skeleton className="skeleton-meta" />
+      <div className="skeleton-metric-row">
+        <Skeleton className="skeleton-value" />
+        <Skeleton className="skeleton-unit" />
+      </div>
+    </article>
+  );
+}
+
+function StatusRowSkeleton() {
+  return (
+    <div className="activity-item skeleton-activity-item" aria-hidden="true">
+      <span className="activity-dot" />
+      <div className="skeleton-activity-copy">
+        <Skeleton className="skeleton-activity-title" />
+        <Skeleton className="skeleton-activity-caption" />
+      </div>
+      <Skeleton className="skeleton-activity-status" />
+    </div>
+  );
+}
 
 export function DashboardOverview() {
   const { fetchDailyReport, reportData, isLoading } = useReport();
@@ -78,6 +106,7 @@ export function DashboardOverview() {
             className="btn btn-filter"
             onClick={fetchDailyReport}
             disabled={isLoading}
+            aria-busy={isLoading}
           >
             <svg
               width="16"
@@ -86,6 +115,7 @@ export function DashboardOverview() {
               fill="none"
               stroke="currentColor"
               strokeWidth="2"
+              aria-hidden="true"
             >
               <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
             </svg>
@@ -95,20 +125,22 @@ export function DashboardOverview() {
       </header>
 
       <section className="grid-4" aria-label="Key metrics">
-        {metricDefs.map((def) => {
-          const stat = resolveMetric(def.key);
-          return (
-            <article key={def.key} className="card">
-              <span className="meta">{def.label}</span>
-              <div className="metric-value">
-                <strong className="num">{formatMetricValue(def.key, stat)}</strong>
-                <span className="metric-delta">
-                  {isLoading ? "—" : stat?.available ? def.unit : t.dashboard.noData}
-                </span>
-              </div>
-            </article>
-          );
-        })}
+        {isLoading
+          ? metricDefs.map((def) => <MetricCardSkeleton key={def.key} />)
+          : metricDefs.map((def) => {
+              const stat = resolveMetric(def.key);
+              return (
+                <article key={def.key} className="card">
+                  <span className="meta">{def.label}</span>
+                  <div className="metric-value">
+                    <strong className="num">{formatMetricValue(def.key, stat)}</strong>
+                    <span className="metric-delta">
+                      {stat?.available ? def.unit : t.dashboard.noData}
+                    </span>
+                  </div>
+                </article>
+              );
+            })}
       </section>
 
       <section className="grid-2-1" aria-label={t.dashboard.chartTitle}>
@@ -122,15 +154,34 @@ export function DashboardOverview() {
           </div>
 
           <div className="chart" aria-label={t.dashboard.chartTitle}>
-            {t.dashboard.weekdayShort.map((day, index) => (
-              <div className="bar-wrap" key={day}>
+            {(isLoading
+              ? SKELETON_BAR_HEIGHTS
+              : TEMPLATE_BAR_HEIGHTS
+            ).map((height, index) =>
+              isLoading ? (
                 <div
-                  className={`bar${index === 3 ? " active" : ""}`}
-                  style={{ height: hasData ? `${TEMPLATE_BAR_HEIGHTS[index]}%` : "0%" }}
-                />
-                <span className="bar-label">{day}</span>
-              </div>
-            ))}
+                  className="bar-wrap bar-wrap-loading"
+                  key={`skeleton-${index}`}
+                  aria-hidden="true"
+                >
+                  <Skeleton
+                    className="bar-skeleton"
+                    style={{ height: `${height}%` }}
+                  />
+                  <Skeleton className="skeleton-bar-label" />
+                </div>
+              ) : (
+                <div className="bar-wrap" key={t.dashboard.weekdayShort[index]}>
+                  <div
+                    className={`bar${index === 3 ? " active" : ""}`}
+                    style={{
+                      height: hasData ? `${height}%` : "0%",
+                    }}
+                  />
+                  <span className="bar-label">{t.dashboard.weekdayShort[index]}</span>
+                </div>
+              ),
+            )}
           </div>
         </article>
 
@@ -139,35 +190,50 @@ export function DashboardOverview() {
             <h2>{t.dashboard.statusSystem}</h2>
           </div>
 
-          <div className="activity-list">
-            <div className="activity-item">
-              <span className="activity-dot" aria-hidden="true" />
-              <div>
-                <strong>{t.dashboard.apiStatus}</strong>
-                <p>{isLoading ? t.dashboard.loadingStatus : t.dashboard.operational}</p>
-              </div>
-              <span className={`status ${isLoading ? "pending" : "shipped"}`}>
-                {isLoading ? "—" : t.dashboard.operational}
-              </span>
-            </div>
+          <div
+            className="activity-list"
+            role="status"
+            aria-live="polite"
+            aria-label={t.dashboard.statusSystem}
+          >
+            {isLoading ? (
+              <>
+                <StatusRowSkeleton />
+                <StatusRowSkeleton />
+                <StatusRowSkeleton />
+              </>
+            ) : (
+              <>
+                <div className="activity-item">
+                  <span className="activity-dot" aria-hidden="true" />
+                  <div>
+                    <strong>{t.dashboard.apiStatus}</strong>
+                    <p>{t.dashboard.operational}</p>
+                  </div>
+                  <span className="status shipped">
+                    {t.dashboard.operational}
+                  </span>
+                </div>
 
-            <div className="activity-item">
-              <span className="activity-dot" aria-hidden="true" />
-              <div>
-                <strong>{t.dashboard.waEngine}</strong>
-                <p>—</p>
-              </div>
-              <span className="status pending">—</span>
-            </div>
+                <div className="activity-item">
+                  <span className="activity-dot" aria-hidden="true" />
+                  <div>
+                    <strong>{t.dashboard.waEngine}</strong>
+                    <p>—</p>
+                  </div>
+                  <span className="status pending">—</span>
+                </div>
 
-            <div className="activity-item">
-              <span className="activity-dot" aria-hidden="true" />
-              <div>
-                <strong>{t.dashboard.workerQueue}</strong>
-                <p>—</p>
-              </div>
-              <span className="status pending">—</span>
-            </div>
+                <div className="activity-item">
+                  <span className="activity-dot" aria-hidden="true" />
+                  <div>
+                    <strong>{t.dashboard.workerQueue}</strong>
+                    <p>—</p>
+                  </div>
+                  <span className="status pending">—</span>
+                </div>
+              </>
+            )}
           </div>
         </aside>
       </section>
