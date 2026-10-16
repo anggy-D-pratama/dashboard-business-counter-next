@@ -105,6 +105,21 @@ export const translations = {
       registerBtn: "Daftar Sekarang",
       loginPrompt: "Sudah punya akun?",
       loginLink: "Masuk di sini",
+    },
+    onboarding: {
+      loadingQuestions: "Memuat pertanyaan...",
+      stepIndicator: "Langkah {step} dari {total}",
+      back: "Kembali",
+      logout: "Logout",
+      save: "Simpan",
+      next: "Lanjut",
+      analysisComplete: "Analisis Selesai!",
+      analysisDescription:
+        "Berdasarkan jawaban Anda, kami telah menyiapkan konfigurasi dasbor yang paling optimal.",
+      recommendedModelLabel: "Model Bisnis yang Direkomendasikan",
+      loading: "Memuat...",
+      loadingDescription: "Memuat deskripsi...",
+      startDashboard: "Mulai Gunakan Dasbor",
     }
   },
   en: {
@@ -211,6 +226,21 @@ export const translations = {
       registerBtn: "Register Now",
       loginPrompt: "Already have an account?",
       loginLink: "Log In here",
+    },
+    onboarding: {
+      loadingQuestions: "Loading questions...",
+      stepIndicator: "Step {step} of {total}",
+      back: "Back",
+      logout: "Log Out",
+      save: "Save",
+      next: "Next",
+      analysisComplete: "Analysis Complete!",
+      analysisDescription:
+        "Based on your answers, we have prepared the most optimal dashboard configuration for you.",
+      recommendedModelLabel: "Recommended Business Model",
+      loading: "Loading...",
+      loadingDescription: "Loading description...",
+      startDashboard: "Start Using Dashboard",
     }
   }
 };
