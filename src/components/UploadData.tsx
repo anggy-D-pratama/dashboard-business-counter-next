@@ -41,6 +41,9 @@ export function UploadData() {
     }
   };
 
+  const isBusy =
+    uploadStatus === "uploading" || uploadStatus === "processing";
+
   return (
     <div className="upload-view">
       <header className="upload-header animate-fade-in">
@@ -53,19 +56,22 @@ export function UploadData() {
       <div className="upload-grid">
         <div
           className={`dropzone card animate-fade-in ${
-            uploadStatus === "uploading" || uploadStatus === "processing"
+            uploadStatus === "uploading"
               ? "loading"
-              : uploadStatus === "success"
-                ? "success"
-                : uploadStatus === "error"
-                  ? "error"
-                  : ""
+              : uploadStatus === "processing"
+                ? "processing"
+                : uploadStatus === "success"
+                  ? "success"
+                  : uploadStatus === "error"
+                    ? "error"
+                    : ""
           }`}
           onDragOver={(e: React.DragEvent<HTMLDivElement>) => {
             e.preventDefault();
           }}
           onDrop={onDrop}
           onClick={triggerFileInput}
+          aria-busy={isBusy}
         >
           <input
             type="file"
@@ -122,15 +128,24 @@ export function UploadData() {
               </>
             )}
 
-            {(uploadStatus === "uploading" ||
-              uploadStatus === "processing") && (
+            {isBusy && (
               <>
-                <h3 className="status-text">{uploadMessage}</h3>
+                <h3 className="status-text" aria-live="polite">
+                  {uploadMessage}
+                </h3>
                 {selectedFile && (
                   <p className="file-name">{selectedFile.name}</p>
                 )}
 
-                <div className="progress">
+                <div
+                  className="progress"
+                  role="progressbar"
+                  aria-label={
+                    uploadStatus === "uploading"
+                      ? "Mengunggah file"
+                      : "Memproses data"
+                  }
+                >
                   <div
                     className={`bar ${uploadStatus === "processing" ? "indeterminate" : ""}`}
                   ></div>
