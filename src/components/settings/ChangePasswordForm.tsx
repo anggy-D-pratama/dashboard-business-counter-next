@@ -58,7 +58,7 @@ export function ChangePasswordForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!validate()) return;
+    if (isLoading || !validate()) return;
 
     const result = await changePassword(
       current_password,
