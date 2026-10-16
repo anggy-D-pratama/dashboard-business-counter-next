@@ -37,6 +37,7 @@ export const translations = {
       title: "Dasbor Eksekutif",
       subtitle: "Wawasan strategis untuk performa bisnis Anda",
       syncButton: "Sinkronkan Data",
+      syncLoading: "Menyinkronkan...",
       volumeTransactions: "Volume Transaksi",
       live: "Langsung",
       statusSystem: "Status Sistem",
@@ -66,6 +67,7 @@ export const translations = {
       chartCaption: "Volume transaksi harian",
       noData: "Tidak ada data",
       transactionUnit: "TRX",
+      metricsLabel: "Metrik utama",
       weekdayShort: ["Sen", "Sel", "Rab", "Kam", "Jum", "Sab", "Min"],
     },
     upload: {
@@ -238,6 +240,7 @@ export const translations = {
       title: "Executive Dashboard",
       subtitle: "Strategic insights for your business performance",
       syncButton: "Sync Data",
+      syncLoading: "Syncing...",
       volumeTransactions: "Transaction Volume",
       live: "Live",
       statusSystem: "System Status",
@@ -267,6 +270,7 @@ export const translations = {
       chartCaption: "Daily transaction volume",
       noData: "No data",
       transactionUnit: "TRX",
+      metricsLabel: "Key metrics",
       weekdayShort: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     },
     upload: {
