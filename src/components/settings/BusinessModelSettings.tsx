@@ -47,6 +47,16 @@ export function BusinessModelSettings() {
     setSelectedModel(modelId);
   };
 
+  const handleCardKeyDown = (
+    event: React.KeyboardEvent<HTMLDivElement>,
+    modelId: string,
+  ) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      handleSelect(modelId);
+    }
+  };
+
   const handleUpsertModel = async (modelId: string) => {
     setIsSaving(true);
     await upsertModel(modelId);
@@ -96,7 +106,12 @@ export function BusinessModelSettings() {
               <div
                 key={model.id}
                 className={`card model-card ${model.isActive ? "active" : ""} ${selectedModel === model.id ? "selected" : ""}`}
+                role="button"
+                tabIndex={0}
+                aria-pressed={selectedModel === model.id}
+                aria-current={model.isActive ? "true" : undefined}
                 onClick={() => handleSelect(model.id)}
+                onKeyDown={(event) => handleCardKeyDown(event, model.id)}
               >
                 <div className="model-card-header">
                   <div className="model-icon-wrapper">

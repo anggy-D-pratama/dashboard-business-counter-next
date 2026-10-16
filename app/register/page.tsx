@@ -175,8 +175,8 @@ export default function RegisterPage() {
                 type="button"
                 className="password-toggle"
                 onClick={() => setShowPassword(!showPassword)}
-                tabIndex={-1}
                 aria-label={showPassword ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
+                aria-pressed={showPassword}
               >
                 {showPassword ? (
                   <svg
@@ -258,8 +258,8 @@ export default function RegisterPage() {
                 onClick={() => {
                   setShowConfirmPassword(!showConfirmPassword);
                 }}
-                tabIndex={-1}
                 aria-label={showConfirmPassword ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
+                aria-pressed={showConfirmPassword}
               >
                 {showConfirmPassword ? (
                   <svg
