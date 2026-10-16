@@ -85,6 +85,17 @@
   --border: oklch(34% 0.025 135);
   --border-active: oklch(54% 0.13 142);
 
+  /* Brand tokens (dark) — brighter oklch pairs so token-based components
+     (btn-primary, error-banner, password rules, metric-glow) keep contrast */
+  --primary: oklch(71% 0.14 274);
+  --primary-hover: oklch(78% 0.11 274);
+  --primary-glow: color-mix(in oklch, var(--primary) 22%, transparent);
+  --accent-purple: oklch(70% 0.18 294);
+  --accent-cyan: oklch(79% 0.14 196);
+  --success: oklch(76% 0.17 163);
+  --warning: oklch(84% 0.16 84);
+  --danger: oklch(70% 0.19 27);
+
   /* OpenDesign tokens (dark) */
   --bg: oklch(18% 0.025 145);
   --surface: oklch(23% 0.025 145);
