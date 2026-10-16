@@ -73,6 +73,7 @@ export default function RegisterPage() {
 
   const handleRegister = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (isLoading) return;
     if (!validate()) return;
     const fullPhone = `62${phone}`;
     await register(name, email, fullPhone, password, password_confirmation);
@@ -116,181 +117,187 @@ export default function RegisterPage() {
             </div>
           )}
 
-          <div className="field">
-            <label htmlFor="name">Nama Lengkap</label>
-            <input
-              id="name"
-              className="input"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              type="text"
-              placeholder="John Doe"
-              required
-            />
-          </div>
-
-          <div className="field">
-            <label htmlFor="email">Email</label>
-            <input
-              id="email"
-              className="input"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-              type="email"
-              placeholder="email@notakita.com"
-              required
-            />
-          </div>
-
-          <div className="field">
-            <label htmlFor="phone">Nomor Telepon</label>
-            <div className="phone-input-minimal">
-              <div className="prefix">62</div>
+          <fieldset
+            className="register-fieldset"
+            disabled={isLoading}
+            aria-busy={isLoading}
+          >
+            <div className="field">
+              <label htmlFor="name">Nama Lengkap</label>
               <input
-                id="phone"
-                value={phone}
-                type="tel"
-                placeholder="8123456789"
-                onChange={onPhoneInput}
+                id="name"
+                className="input"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                type="text"
+                placeholder="John Doe"
                 required
               />
             </div>
-          </div>
 
-          <div className="field">
-            <label htmlFor="password">Kata Sandi</label>
-            <div className="password-input-wrapper">
+            <div className="field">
+              <label htmlFor="email">Email</label>
               <input
-                id="password"
+                id="email"
                 className="input"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                type={showPassword ? `text` : `password`}
-                placeholder="••••••••"
-                required
-              />
-              <button
-                type="button"
-                className="password-toggle"
-                onClick={() => setShowPassword(!showPassword)}
-                aria-label={showPassword ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
-                aria-pressed={showPassword}
-              >
-                {showPassword ? (
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    aria-hidden="true"
-                  >
-                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-                    <line x1="1" y1="1" x2="23" y2="23"></line>
-                  </svg>
-                ) : (
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    aria-hidden="true"
-                  >
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                    <circle cx="12" cy="12" r="3"></circle>
-                  </svg>
-                )}
-              </button>
-            </div>
-
-            <div className="password-requirements">
-              {passwordRules.map((rule, index) => (
-                <div
-                  key={index}
-                  className={`rule ${rule.valid ? `valid` : ``}`}
-                >
-                  <svg
-                    width="12"
-                    height="12"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="3"
-                    aria-hidden="true"
-                  >
-                    {rule.valid ? (
-                      <polyline points="20 6 9 17 4 12"></polyline>
-                    ) : (
-                      <>
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                      </>
-                    )}
-                  </svg>
-                  {rule.label}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="field">
-            <label htmlFor="confirm">Konfirmasi Kata Sandi</label>
-            <div className="password-input-wrapper">
-              <input
-                id="confirm"
-                className="input"
-                value={password_confirmation}
+                value={email}
                 onChange={(e) => {
-                  setPasswordConfirmation(e.target.value);
+                  setEmail(e.target.value);
                 }}
-                type={showConfirmPassword ? "text" : "password"}
-                placeholder="••••••••"
+                type="email"
+                placeholder="email@notakita.com"
                 required
               />
-              <button
-                type="button"
-                className="password-toggle"
-                onClick={() => {
-                  setShowConfirmPassword(!showConfirmPassword);
-                }}
-                aria-label={showConfirmPassword ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
-                aria-pressed={showConfirmPassword}
-              >
-                {showConfirmPassword ? (
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    aria-hidden="true"
-                  >
-                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
-                    <line x1="1" y1="1" x2="23" y2="23"></line>
-                  </svg>
-                ) : (
-                  <svg
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    aria-hidden="true"
-                  >
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-                    <circle cx="12" cy="12" r="3"></circle>
-                  </svg>
-                )}
-              </button>
             </div>
-          </div>
+
+            <div className="field">
+              <label htmlFor="phone">Nomor Telepon</label>
+              <div className="phone-input-minimal">
+                <div className="prefix">62</div>
+                <input
+                  id="phone"
+                  value={phone}
+                  type="tel"
+                  placeholder="8123456789"
+                  onChange={onPhoneInput}
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="field">
+              <label htmlFor="password">Kata Sandi</label>
+              <div className="password-input-wrapper">
+                <input
+                  id="password"
+                  className="input"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  type={showPassword ? `text` : `password`}
+                  placeholder="••••••••"
+                  required
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
+                  aria-pressed={showPassword}
+                >
+                  {showPassword ? (
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      aria-hidden="true"
+                    >
+                      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                      <line x1="1" y1="1" x2="23" y2="23"></line>
+                    </svg>
+                  ) : (
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      aria-hidden="true"
+                    >
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                  )}
+                </button>
+              </div>
+
+              <div className="password-requirements">
+                {passwordRules.map((rule, index) => (
+                  <div
+                    key={index}
+                    className={`rule ${rule.valid ? `valid` : ``}`}
+                  >
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="3"
+                      aria-hidden="true"
+                    >
+                      {rule.valid ? (
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                      ) : (
+                        <>
+                          <line x1="18" y1="6" x2="6" y2="18"></line>
+                          <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </>
+                      )}
+                    </svg>
+                    {rule.label}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="field">
+              <label htmlFor="confirm">Konfirmasi Kata Sandi</label>
+              <div className="password-input-wrapper">
+                <input
+                  id="confirm"
+                  className="input"
+                  value={password_confirmation}
+                  onChange={(e) => {
+                    setPasswordConfirmation(e.target.value);
+                  }}
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder="••••••••"
+                  required
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => {
+                    setShowConfirmPassword(!showConfirmPassword);
+                  }}
+                  aria-label={showConfirmPassword ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
+                  aria-pressed={showConfirmPassword}
+                >
+                  {showConfirmPassword ? (
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      aria-hidden="true"
+                    >
+                      <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                      <line x1="1" y1="1" x2="23" y2="23"></line>
+                    </svg>
+                  ) : (
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      aria-hidden="true"
+                    >
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                  )}
+                </button>
+              </div>
+            </div>
+          </fieldset>
 
           <button
             type="submit"
@@ -303,7 +310,9 @@ export default function RegisterPage() {
           </button>
 
           <div className="auth-footer">
-            <Link href="/login">Masuk</Link>
+            <Link href="/login" aria-disabled={isLoading}>
+              Masuk
+            </Link>
           </div>
         </form>
       </section>
