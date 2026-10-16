@@ -107,7 +107,8 @@ export function BusinessModelSettings() {
                       handleSelect(model.id);
                     }
                   }}
-                  aria-pressed={selectedModel === model.id || model.isActive}
+                  aria-pressed={selectedModel === model.id}
+                  aria-current={model.isActive ? "true" : undefined}
                 >
                   <div className="model-card-header">
                     <div className="model-icon-wrapper">

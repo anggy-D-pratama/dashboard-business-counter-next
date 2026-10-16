@@ -259,6 +259,26 @@ input::placeholder {
   border-color: var(--accent);
 }
 
+/* Consistent keyboard focus indicator for all interactive controls.
+   Token-based only (no hardcoded colors). More specific component rules
+   (e.g. .tab-button:focus-visible, .input:focus) still win where defined. */
+:where(
+  a[href],
+  button,
+  input,
+  select,
+  textarea,
+  summary,
+  [role="button"],
+  [role="tab"],
+  [role="tabpanel"],
+  [tabindex]:not([tabindex="-1"])
+):focus-visible {
+  outline: 3px solid var(--accent-soft);
+  outline-offset: 2px;
+  border-color: var(--accent);
+}
+
 /* Field wrapper (OpenDesign form inventory) */
 .field {
   display: flex;
