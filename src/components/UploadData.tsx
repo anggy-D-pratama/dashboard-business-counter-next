@@ -1,10 +1,9 @@
-"use client";
+'use client';
 
-import { useEffect, useRef } from "react";
-import { useUpload } from "../hooks/useUpload";
-import { useLocale } from "../contexts/LocaleContext";
-import "./UploadData.css";
-
+import { useEffect, useRef } from 'react';
+import { useUpload } from '../hooks/useUpload';
+import { useLocale } from '../contexts/LocaleContext';
+import './UploadData.css';
 export function UploadData() {
   const { t } = useLocale();
   const {
@@ -18,6 +17,17 @@ export function UploadData() {
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const isBusy = uploadStatus === 'uploading' || uploadStatus === 'processing';
+  const isInteractive = uploadStatus === 'idle' || uploadStatus === 'error';
+
+  const handleDropzoneKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.target !== e.currentTarget) return;
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      triggerFileInput();
+    }
+  };
+
   useEffect(() => {
     resumePolling();
   }, [resumePolling]);
@@ -28,7 +38,7 @@ export function UploadData() {
     if (file) {
       validateAndUploadFile(file);
     }
-    target.value = "";
+    target.value = '';
   };
 
   const onDrop = (e: React.DragEvent) => {
@@ -38,45 +48,28 @@ export function UploadData() {
   };
 
   const triggerFileInput = () => {
-    if (uploadStatus === "idle" || uploadStatus === "error") {
+    if (uploadStatus === 'idle' || uploadStatus === 'error') {
       fileInputRef.current?.click();
     }
   };
 
-  const isBusy =
-    uploadStatus === "uploading" || uploadStatus === "processing";
-
-  const isInteractive = uploadStatus === "idle" || uploadStatus === "error";
-
-  const handleDropzoneKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (e.target !== e.currentTarget) return;
-    if (e.key === "Enter" || e.key === " ") {
-      e.preventDefault();
-      triggerFileInput();
-    }
-  };
-
   return (
-    <div className="upload-view">
-      <header className="upload-header animate-fade-in">
-        <h1>Integrasi Data</h1>
-        <p className="lead">
-          Sinkronkan data bisnis Anda melalui unggahan spreadsheet yang aman.
-        </p>
+    <div className='upload-view'>
+      <header className='upload-header animate-fade-in'>
+        <h1>{t.upload.heading}</h1>
+        <p className='lead'>{t.upload.lead}</p>
       </header>
 
-      <div className="upload-grid">
+      <div className='upload-grid'>
         <div
           className={`dropzone card animate-fade-in ${
-            uploadStatus === "uploading"
-              ? "loading"
-              : uploadStatus === "processing"
-                ? "processing"
-                : uploadStatus === "success"
-                  ? "success"
-                  : uploadStatus === "error"
-                    ? "error"
-                    : ""
+            uploadStatus === 'uploading' || uploadStatus === 'processing'
+              ? 'loading'
+              : uploadStatus === 'success'
+                ? 'success'
+                : uploadStatus === 'error'
+                  ? 'error'
+                  : ''
           }`}
           role={isInteractive ? "button" : undefined}
           tabIndex={isInteractive ? 0 : undefined}
@@ -90,98 +83,89 @@ export function UploadData() {
           aria-busy={isBusy}
         >
           <input
-            type="file"
+            type='file'
             hidden
             ref={fileInputRef}
             onChange={handleFileUpload}
-            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+            accept='.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel'
           />
 
-          <div className="drop-content">
-            <div className="icon-box">
-              {uploadStatus !== "success" ? (
+          <div className='drop-content'>
+            <div className='icon-box'>
+              {uploadStatus !== 'success' ? (
                 <svg
-                  width="32"
-                  height="32"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
+                  width='32'
+                  height='32'
+                  viewBox='0 0 24 24'
+                  fill='none'
+                  stroke='currentColor'
+                  strokeWidth='2'
                 >
                   <path
-                    d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                    d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
                   />
                 </svg>
               ) : (
                 <svg
-                  width="32"
-                  height="32"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="var(--success)"
-                  strokeWidth="3"
+                  width='32'
+                  height='32'
+                  viewBox='0 0 24 24'
+                  fill='none'
+                  stroke='var(--success)'
+                  strokeWidth='3'
                 >
-                  <polyline points="20 6 9 17 4 12"></polyline>
+                  <polyline points='20 6 9 17 4 12'></polyline>
                 </svg>
               )}
             </div>
 
-            {(uploadStatus === "idle" || uploadStatus === "error") && (
+            {(uploadStatus === 'idle' || uploadStatus === 'error') && (
               <>
-                <h3>Pilih File Sumber</h3>
-                <p>Tarik dan lepas atau klik untuk mencari file</p>
-                <div className="file-types">
-                  <span className="btn-filter file-type">CSV</span>
-                  <span className="btn-filter file-type">XLSX</span>
-                  <span className="btn-filter file-type">XLS</span>
+                <h3>{t.upload.dropzoneTitle}</h3>
+                <p>{t.upload.dropzoneHint}</p>
+                <div className='file-types'>
+                  <span className='btn-filter file-type'>CSV</span>
+                  <span className='btn-filter file-type'>XLSX</span>
+                  <span className='btn-filter file-type'>XLS</span>
                 </div>
-                <p className="file-meta">Maksimal 25 MB</p>
-                {uploadStatus === "error" && (
-                  <p className="error-msg">{uploadMessage}</p>
+                <p className='file-meta'>{t.upload.maxSize}</p>
+                {uploadStatus === 'error' && (
+                  <p className='error-msg'>{uploadMessage}</p>
                 )}
               </>
             )}
 
-            {isBusy && (
+            {(uploadStatus === 'uploading' ||
+              uploadStatus === 'processing') && (
               <>
-                <h3 className="status-text" aria-live="polite">
-                  {uploadMessage}
-                </h3>
+                <h3 className='status-text'>{uploadMessage}</h3>
                 {selectedFile && (
-                  <p className="file-name">{selectedFile.name}</p>
+                  <p className='file-name'>{selectedFile.name}</p>
                 )}
 
-                <div
-                  className="progress"
-                  role="progressbar"
-                  aria-label={
-                    uploadStatus === "uploading"
-                      ? "Mengunggah file"
-                      : "Memproses data"
-                  }
-                >
+                <div className='progress'>
                   <div
-                    className={`bar ${uploadStatus === "processing" ? "indeterminate" : ""}`}
+                    className={`bar ${uploadStatus === 'processing' ? 'indeterminate' : ''}`}
                   ></div>
                 </div>
               </>
             )}
 
-            {uploadStatus === "success" && (
-              <div className="success-box">
-                <h3>Proses Selesai</h3>
+            {uploadStatus === 'success' && (
+              <div className='success-box'>
+                <h3>{t.upload.processingSuccess}</h3>
                 <p>{uploadMessage}</p>
 
                 <button
-                  className="btn btn-secondary"
+                  className='btn btn-secondary'
                   onClick={(e) => {
                     e.stopPropagation();
-                    setUploadStatus("idle");
+                    setUploadStatus('idle');
                   }}
                 >
-                  Unggah Lainnya
+                  {t.upload.uploadAnother}
                 </button>
               </div>
             )}
@@ -189,42 +173,40 @@ export function UploadData() {
         </div>
 
         <div
-          className="card spec-card animate-fade-in"
-          style={{ animationDelay: "0.2s" }}
+          className='card spec-card animate-fade-in'
+          style={{ animationDelay: '0.2s' }}
         >
-          <div className="spec-header">
+          <div className='spec-header'>
             <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="var(--accent)"
-              strokeWidth="2"
+              width='20'
+              height='20'
+              viewBox='0 0 24 24'
+              fill='none'
+              stroke='var(--accent)'
+              strokeWidth='2'
             >
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="12" y1="16" x2="12" y2="12"></line>
-              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+              <circle cx='12' cy='12' r='10'></circle>
+              <line x1='12' y1='16' x2='12' y2='12'></line>
+              <line x1='12' y1='8' x2='12.01' y2='8'></line>
             </svg>
-            <h3>Spesifikasi Teknis</h3>
+            <h3>{t.upload.specTitle}</h3>
           </div>
-          <div className="spec-list">
-            <div className="spec-item">
-              <span className="meta spec-label">Skema</span>
-              <code className="spec-value">
-                invoice_number, income, outcome, time
-              </code>
+          <div className='spec-list'>
+            <div className='spec-item'>
+              <span className='meta spec-label'>{t.upload.specSchemaLabel}</span>
+              <code className='spec-value'>{t.upload.specSchemaValue}</code>
             </div>
-            <div className="spec-item">
-              <span className="meta spec-label">Maksimal Ukuran</span>
-              <span className="spec-value">25.00 MB</span>
+            <div className='spec-item'>
+              <span className='meta spec-label'>{t.upload.specMaxSizeLabel}</span>
+              <span className='spec-value'>{t.upload.specMaxSizeValue}</span>
             </div>
-            <div className="spec-item">
-              <span className="meta spec-label">Baris Header</span>
-              <span className="spec-value">Wajib (Baris 1)</span>
+            <div className='spec-item'>
+              <span className='meta spec-label'>{t.upload.specHeaderRowLabel}</span>
+              <span className='spec-value'>{t.upload.specHeaderRowValue}</span>
             </div>
-            <div className="spec-item">
-              <span className="meta spec-label">Set Karakter</span>
-              <span className="spec-value">UTF-8 Direkomendasikan</span>
+            <div className='spec-item'>
+              <span className='meta spec-label'>{t.upload.specCharsetLabel}</span>
+              <span className='spec-value'>{t.upload.specCharsetValue}</span>
             </div>
           </div>
         </div>

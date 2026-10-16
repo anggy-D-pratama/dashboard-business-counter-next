@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { useAuth } from './useAuth'
+import { useLocale } from '../contexts/LocaleContext'
 import { config } from '../config'
 
 interface UploadResponse {
@@ -15,11 +16,12 @@ interface UploadResponse {
 
 export function useUpload() {
   const { token } = useAuth()
-  
+  const { t } = useLocale()
+
   const [uploadStatus, setUploadStatus] = useState<'idle' | 'uploading' | 'processing' | 'success' | 'error'>('idle')
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [uploadMessage, setUploadMessage] = useState('')
-  
+
   const pollTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Clean up the polling timer on component unmount
@@ -45,7 +47,7 @@ export function useUpload() {
     if (!uploadId || uploadId === 'undefined') {
       console.error('Invalid uploadId for polling:', uploadId)
       setUploadStatus('error')
-      setUploadMessage('Invalid upload ID received from server')
+      setUploadMessage(t.upload.invalidUploadId)
       return
     }
 
@@ -59,15 +61,15 @@ export function useUpload() {
       const response = await res.json()
 
       if (!res.ok) {
-        throw new Error(response.message || 'Error checking upload status')
+        throw new Error(response.message || t.upload.checkError)
       }
 
       if (response.status === 'success') {
         const processingStatus = response.data.status
-        
+
         if (processingStatus === 'completed') {
           setUploadStatus('success')
-          setUploadMessage('File processed successfully!')
+          setUploadMessage(t.upload.success)
           if (typeof window !== 'undefined') {
             localStorage.removeItem('last_upload_id')
           }
@@ -76,20 +78,20 @@ export function useUpload() {
           }, 3000)
         } else if (processingStatus === 'failed') {
           setUploadStatus('error')
-          setUploadMessage(response.data.error_message || 'Processing failed')
+          setUploadMessage(response.data.error_message || t.upload.failed)
           if (typeof window !== 'undefined') {
             localStorage.removeItem('last_upload_id')
           }
         } else {
           // Still pending or processing — keep polling
           setUploadStatus('processing')
-          setUploadMessage(processingStatus === 'processing' ? 'Processing data...' : 'Waiting in queue...')
+          setUploadMessage(processingStatus === 'processing' ? t.upload.processing : t.upload.queued)
           pollTimerRef.current = setTimeout(() => pollUploadStatus(uploadId), 2000)
         }
       }
     } catch (error: any) {
       setUploadStatus('error')
-      setUploadMessage(error.message || 'Error checking upload status')
+      setUploadMessage(error.message || t.upload.checkError)
       if (typeof window !== 'undefined') {
         localStorage.removeItem('last_upload_id')
       }
@@ -98,19 +100,19 @@ export function useUpload() {
 
   const validateAndUploadFile = async (file: File | undefined | null) => {
     if (!file) return
-    
+
     const allowedExtensions = ['.csv', '.xlsx', '.xls']
     const fileName = file.name.toLowerCase()
     const isValid = allowedExtensions.some(ext => fileName.endsWith(ext))
 
     if (!isValid) {
-      alert('Invalid file type. Please upload a Spreadsheet (.xlsx, .xls) or CSV file.')
+      alert(t.upload.alertInvalidFile)
       return
     }
 
     setSelectedFile(file)
     setUploadStatus('uploading')
-    setUploadMessage('Uploading file...')
+    setUploadMessage(t.upload.uploading)
 
     const formData = new FormData()
     formData.append('file', file)
@@ -127,7 +129,7 @@ export function useUpload() {
       const response = await res.json()
 
       if (!res.ok) {
-        throw new Error(response.message || 'Network error occurred during upload')
+        throw new Error(response.message || t.upload.networkError)
       }
 
       if (response.status === 'success' && response.data?.id) {
@@ -137,17 +139,17 @@ export function useUpload() {
         if (typeof window !== 'undefined') {
           localStorage.setItem('last_upload_id', uploadId)
         }
-        
+
         setUploadStatus('processing')
-        setUploadMessage('File uploaded, starting processing...')
+        setUploadMessage(t.upload.starting)
         pollUploadStatus(uploadId)
       } else {
         setUploadStatus('error')
-        setUploadMessage(response.message || 'Upload failed: no ID returned')
+        setUploadMessage(response.message || t.upload.noId)
       }
     } catch (error: any) {
       setUploadStatus('error')
-      setUploadMessage(error.message || 'Network error occurred during upload')
+      setUploadMessage(error.message || t.upload.networkError)
     }
   }
 
@@ -157,7 +159,7 @@ export function useUpload() {
     const lastId = localStorage.getItem('last_upload_id')
     if (lastId && uploadStatus === 'idle') {
       setUploadStatus('processing')
-      setUploadMessage('Resuming progress check...')
+      setUploadMessage(t.upload.resume)
       pollUploadStatus(lastId)
     }
   }
