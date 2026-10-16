@@ -2,40 +2,11 @@
 
 import React, { useEffect, useState } from "react";
 import { Icon } from "@iconify/react";
-import { defaultModels, type DefaultModel } from "@/src/constants/defaultModels";
-import { useBusinessModel, type BusinessModel } from "@/src/hooks/useBusinessModel";
+import { defaultModels } from "@/src/constants/defaultModels";
+import { useBusinessModel } from "@/src/hooks/useBusinessModel";
 import { useAuth } from "@/src/hooks/useAuth";
 import { Modal } from "@/src/components/Modal";
 import { Skeleton } from "@/src/components/ui/skeleton";
-
-function BusinessModelSkeleton() {
-  return (
-    <div className="business-model-section" aria-hidden="true">
-      <div className="card settings-card">
-        <div className="card-header">
-          <Skeleton className="skeleton-settings-title" />
-          <Skeleton className="skeleton-settings-copy" />
-        </div>
-
-        <div className="model-grid">
-          {[0, 1, 2, 3].map((index) => (
-            <div className="card model-card" key={index}>
-              <div className="model-card-header">
-                <Skeleton className="skeleton-model-icon" />
-                <Skeleton className="skeleton-model-badge" />
-              </div>
-              <div className="model-details">
-                <Skeleton className="skeleton-model-title" />
-                <Skeleton className="skeleton-model-copy" />
-                <Skeleton className="skeleton-model-copy short" />
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export function BusinessModelSettings() {
   const { token } = useAuth();
@@ -50,6 +21,7 @@ export function BusinessModelSettings() {
 
   const [selectedModel, setSelectedModel] = useState("");
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     getAllModel();
@@ -58,15 +30,15 @@ export function BusinessModelSettings() {
 
   const models =
     businessModels.length > 0
-      ? businessModels.map((apiModel: BusinessModel) => {
+      ? businessModels.map((apiModel: any) => {
           const defaultModel =
             defaultModels.find((dm) => dm.category === apiModel.category) ||
-            ({} as DefaultModel);
+            ({} as any);
           return {
             ...apiModel,
             isActive: businessModel?.id === apiModel.id,
             icon: defaultModel.icon || "solar:box-minimalistic-bold-duotone",
-            examples: [] as string[],
+            examples: [],
           };
         })
       : defaultModels;
@@ -76,14 +48,12 @@ export function BusinessModelSettings() {
   };
 
   const handleUpsertModel = async (modelId: string) => {
+    setIsSaving(true);
     await upsertModel(modelId);
+    setIsSaving(false);
     setShowConfirmModal(false);
     setSelectedModel("");
   };
-
-  if (isLoading) {
-    return <BusinessModelSkeleton />;
-  }
 
   return (
     <div className="business-model-section">
@@ -96,47 +66,73 @@ export function BusinessModelSettings() {
           </p>
         </div>
 
-        <div className="model-grid">
-          {models.map((model) => (
-            <div
-              key={model.id}
-              className={`card model-card ${model.isActive ? "active" : ""} ${selectedModel === model.id ? "selected" : ""}`}
-              onClick={() => handleSelect(model.id)}
-            >
-              <div className="model-card-header">
-                <div className="model-icon-wrapper">
-                  <Icon icon={model.icon} width="24" height="24" />
+        {isLoading ? (
+          <div
+            className="model-grid"
+            aria-busy="true"
+            aria-label="Memuat model bisnis"
+          >
+            {defaultModels.map((model) => (
+              <div
+                key={model.id}
+                className="card model-card model-card-skeleton"
+                aria-hidden="true"
+              >
+                <div className="model-card-header">
+                  <Skeleton className="model-icon-skeleton" />
+                  <Skeleton className="model-badge-skeleton" />
                 </div>
-                {model.isActive && (
-                  <span className="model-active-badge">
-                    <Icon
-                      icon="lucide:check"
-                      width="12"
-                      height="12"
-                      style={{ marginRight: "4px" }}
-                    />
-                    Aktif
-                  </span>
-                )}
+                <div className="model-details">
+                  <Skeleton className="model-title-skeleton" />
+                  <Skeleton className="model-desc-skeleton" />
+                  <Skeleton className="model-desc-skeleton short" />
+                </div>
               </div>
-
-              <div className="model-details">
-                <h3>{model.name}</h3>
-                <p>{model.description}</p>
-              </div>
-
-              <div className="model-examples">
-                {(model.examples || []).map(
-                  (example: string, idx: number) => (
-                    <span key={idx} className="example-tag">
-                      {example}
+            ))}
+          </div>
+        ) : (
+          <div className="model-grid">
+            {models.map((model) => (
+              <div
+                key={model.id}
+                className={`card model-card ${model.isActive ? "active" : ""} ${selectedModel === model.id ? "selected" : ""}`}
+                onClick={() => handleSelect(model.id)}
+              >
+                <div className="model-card-header">
+                  <div className="model-icon-wrapper">
+                    <Icon icon={model.icon} width="24" height="24" />
+                  </div>
+                  {model.isActive && (
+                    <span className="model-active-badge">
+                      <Icon
+                        icon="lucide:check"
+                        width="12"
+                        height="12"
+                        style={{ marginRight: "4px" }}
+                      />
+                      Aktif
                     </span>
-                  ),
-                )}
+                  )}
+                </div>
+
+                <div className="model-details">
+                  <h3>{model.name}</h3>
+                  <p>{model.description}</p>
+                </div>
+
+                <div className="model-examples">
+                  {(model.examples || []).map(
+                    (example: string, idx: number) => (
+                      <span key={idx} className="example-tag">
+                        {example}
+                      </span>
+                    ),
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         <div
           className="form-actions"
@@ -148,7 +144,9 @@ export function BusinessModelSettings() {
         >
           <button
             className="btn btn-primary"
-            disabled={!selectedModel || selectedModel === businessModel?.id}
+            disabled={
+              isLoading || !selectedModel || selectedModel === businessModel?.id
+            }
             onClick={() => setShowConfirmModal(true)}
           >
             Simpan Perubahan
@@ -167,14 +165,18 @@ export function BusinessModelSettings() {
             <button
               className="btn btn-secondary"
               onClick={() => setShowConfirmModal(false)}
+              disabled={isSaving}
             >
               Batal
             </button>
             <button
               className="btn btn-primary"
               onClick={() => handleUpsertModel(selectedModel)}
+              disabled={isSaving}
+              aria-busy={isSaving}
             >
-              {isLoading ? "Menyimpan..." : "Ya, Ubah Model"}
+              {isSaving && <span className="spinner" aria-hidden="true"></span>}
+              {isSaving ? "Menyimpan..." : "Ya, Ubah Model"}
             </button>
           </>
         }
@@ -188,4 +190,3 @@ export function BusinessModelSettings() {
     </div>
   );
 }
-
