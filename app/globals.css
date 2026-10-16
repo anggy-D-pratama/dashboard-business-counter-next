@@ -433,7 +433,7 @@ input:focus:-webkit-autofill {
 .app-main {
   flex: 1;
   min-width: 0;
-  padding-block: var(--gap-lg, 32px);
+  padding-block: var(--gap-sm, 12px);
 }
 
 .app-footer {
