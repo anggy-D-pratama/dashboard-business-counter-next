@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useUpload } from "../hooks/useUpload";
 import "./UploadData.css";
 
@@ -20,7 +20,7 @@ export function UploadData() {
     resumePolling();
   }, [resumePolling]);
 
-  const handleFileUpload = (e: any) => {
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
     const file = target.files?.[0];
     if (file) {
@@ -41,23 +41,37 @@ export function UploadData() {
     }
   };
 
+  const isBusy =
+    uploadStatus === "uploading" || uploadStatus === "processing";
+
   return (
     <div className="upload-view">
-      <header className="header animate-fade-in">
-        <div className="header-text">
-          <h1>Integrasi Data</h1>
-          <p>Sinkronkan data bisnis Anda melalui unggahan spreadsheet yang aman.</p>
-        </div>
+      <header className="upload-header animate-fade-in">
+        <h1>Integrasi Data</h1>
+        <p className="lead">
+          Sinkronkan data bisnis Anda melalui unggahan spreadsheet yang aman.
+        </p>
       </header>
 
       <div className="upload-grid">
         <div
-          className={`drop-container card animate-fade-in ${uploadStatus === "uploading" || uploadStatus === "processing" ? "loading" : uploadStatus === "success" ? "success" : uploadStatus === "error" ? "error" : ""}`}
-          onDragOver={(e: any) => {
+          className={`dropzone card animate-fade-in ${
+            uploadStatus === "uploading"
+              ? "loading"
+              : uploadStatus === "processing"
+                ? "processing"
+                : uploadStatus === "success"
+                  ? "success"
+                  : uploadStatus === "error"
+                    ? "error"
+                    : ""
+          }`}
+          onDragOver={(e: React.DragEvent<HTMLDivElement>) => {
             e.preventDefault();
           }}
           onDrop={onDrop}
           onClick={triggerFileInput}
+          aria-busy={isBusy}
         >
           <input
             type="file"
@@ -103,27 +117,37 @@ export function UploadData() {
                 <h3>Pilih File Sumber</h3>
                 <p>Tarik dan lepas atau klik untuk mencari file</p>
                 <div className="file-types">
-                  <span>CSV</span>
-                  <span>XLSX</span>
-                  <span>XLS</span>
+                  <span className="btn-filter file-type">CSV</span>
+                  <span className="btn-filter file-type">XLSX</span>
+                  <span className="btn-filter file-type">XLS</span>
                 </div>
+                <p className="file-meta">Maksimal 25 MB</p>
                 {uploadStatus === "error" && (
                   <p className="error-msg">{uploadMessage}</p>
                 )}
               </>
             )}
 
-            {(uploadStatus === "uploading" ||
-              uploadStatus === "processing") && (
+            {isBusy && (
               <>
-                <h3 className="status-text">{uploadMessage}</h3>
+                <h3 className="status-text" aria-live="polite">
+                  {uploadMessage}
+                </h3>
                 {selectedFile && (
                   <p className="file-name">{selectedFile.name}</p>
                 )}
 
-                <div className="progress-container">
+                <div
+                  className="progress"
+                  role="progressbar"
+                  aria-label={
+                    uploadStatus === "uploading"
+                      ? "Mengunggah file"
+                      : "Memproses data"
+                  }
+                >
                   <div
-                    className={`progress-bar ${uploadStatus === "processing" ? "indeterminate" : ""}`}
+                    className={`bar ${uploadStatus === "processing" ? "indeterminate" : ""}`}
                   ></div>
                 </div>
               </>
@@ -149,16 +173,16 @@ export function UploadData() {
         </div>
 
         <div
-          className="card guidelines animate-fade-in"
+          className="card spec-card animate-fade-in"
           style={{ animationDelay: "0.2s" }}
         >
-          <div className="guidelines-header">
+          <div className="spec-header">
             <svg
               width="20"
               height="20"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="var(--primary)"
+              stroke="var(--accent)"
               strokeWidth="2"
             >
               <circle cx="12" cy="12" r="10"></circle>
@@ -169,21 +193,21 @@ export function UploadData() {
           </div>
           <div className="spec-list">
             <div className="spec-item">
-              <span className="spec-label">Skema</span>
+              <span className="meta spec-label">Skema</span>
               <code className="spec-value">
                 invoice_number, income, outcome, time
               </code>
             </div>
             <div className="spec-item">
-              <span className="spec-label">Maksimal Ukuran</span>
+              <span className="meta spec-label">Maksimal Ukuran</span>
               <span className="spec-value">25.00 MB</span>
             </div>
             <div className="spec-item">
-              <span className="spec-label">Baris Header</span>
+              <span className="meta spec-label">Baris Header</span>
               <span className="spec-value">Wajib (Baris 1)</span>
             </div>
             <div className="spec-item">
-              <span className="spec-label">Set Karakter</span>
+              <span className="meta spec-label">Set Karakter</span>
               <span className="spec-value">UTF-8 Direkomendasikan</span>
             </div>
           </div>

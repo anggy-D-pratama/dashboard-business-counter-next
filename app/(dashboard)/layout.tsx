@@ -12,21 +12,21 @@ export default function DashboardLayout({
 }) {
   return (
     <SidebarProvider>
-      <div className="dashboard-page flex w-full">
+      <div className="app-shell">
         <Navigation />
 
         <SidebarInset>
-          <div className="main-wrapper flex flex-col flex-1 min-w-0 min-h-screen">
-            <TopMenu />
-            
-            <main className="container main-content flex-1 p-4 md:p-6">{children}</main>
+          <TopMenu />
 
-            <footer className="footer-container border-t border-gray-200 py-4 px-6 mt-auto text-sm text-gray-500 bg-white">
-              <div className="container mx-auto">
-                {/* Footer siap disisipi konten/teks di task mendatang */}
-              </div>
-            </footer>
-          </div>
+          <main className="app-main">
+            <div className="container">{children}</div>
+          </main>
+
+          <footer className="app-footer">
+            <div className="container">
+              {/* Footer siap disisipi konten/teks di task mendatang */}
+            </div>
+          </footer>
         </SidebarInset>
       </div>
     </SidebarProvider>

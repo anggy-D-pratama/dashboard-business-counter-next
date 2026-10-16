@@ -104,7 +104,7 @@ export const Sidebar = React.forwardRef<
     return (
       <div
         ref={ref}
-        className={`flex h-full w-[260px] flex-col bg-card border-r border-border ${className}`}
+        className={`sidebar ${className}`}
         {...props}
       >
         {children}
@@ -118,7 +118,7 @@ export const Sidebar = React.forwardRef<
       {isMobile && openMobile && (
         <div
           onClick={() => setOpenMobile(false)}
-          className="fixed inset-0 z-40 bg-black/50 transition-opacity md:hidden"
+          className="sidebar-overlay md:hidden"
         />
       )}
 
@@ -127,16 +127,10 @@ export const Sidebar = React.forwardRef<
         data-state={state}
         data-collapsible={state === "collapsed" ? collapsible : ""}
         className={`
-          fixed top-0 bottom-0 left-0 z-40 flex flex-col border-r border-border bg-white transition-[width,transform] duration-200 ease-in-out
-          ${
-            isMobile
-              ? openMobile
-                ? "translate-x-0 w-[260px]"
-                : "-translate-x-full w-[260px]"
-              : state === "collapsed"
-              ? "w-[68px]"
-              : "w-[260px]"
-          }
+          sidebar
+          ${isMobile ? "sidebar-mobile" : ""}
+          ${isMobile && openMobile ? "sidebar-open" : ""}
+          ${!isMobile && state === "collapsed" ? "sidebar-collapsed" : ""}
           ${className}
         `}
         {...props}
@@ -188,16 +182,16 @@ export const SidebarInset = React.forwardRef<
 >(({ className = "", children, ...props }, ref) => {
   const { isMobile, state } = useSidebar();
 
-  const marginLeftClass = isMobile
-    ? "ml-0"
+  const insetClass = isMobile
+    ? "sidebar-inset-mobile"
     : state === "collapsed"
-    ? "md:ml-[68px]"
-    : "md:ml-[260px]";
+    ? "sidebar-inset-collapsed"
+    : "sidebar-inset";
 
   return (
     <div
       ref={ref}
-      className={`relative flex min-h-screen flex-1 flex-col transition-[margin] duration-200 ease-in-out min-w-0 ${marginLeftClass} ${className}`}
+      className={`sidebar-inset ${insetClass} ${className}`}
       {...props}
     >
       {children}

@@ -1,84 +1,156 @@
+/* Settings — OpenDesign restyle.
+   Consumes tokens from app/globals.css only (no hardcoded colors).
+   Tabs use the global .tab-button / .tab-panel inventory; panels are
+   mounted together and toggled with the [hidden] attribute so the
+   Profil Bisnis / Keamanan switch can never fall back to display:none races. */
+
 .settings-page {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: var(--gap-lg);
+  width: 100%;
+  min-width: 0;
 }
 
-.header h2 {
-  font-family: var(--font-heading);
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: var(--text-main);
-  margin-bottom: 0.25rem;
+.settings-header h1 {
+  font-family: var(--font-display);
+  font-size: var(--fs-h2);
+  color: var(--fg);
+  margin: 0 0 var(--gap-xs);
+  letter-spacing: -0.015em;
 }
 
-.header p {
-  color: var(--text-muted);
-  font-size: 0.9375rem;
+.settings-header .lead {
+  font-size: var(--fs-lead);
+  line-height: 1.55;
+  color: var(--muted);
+  max-width: 60ch;
+  margin: 0;
 }
 
+/* Tab strip */
+.tabs-nav {
+  display: flex;
+  gap: var(--gap-sm);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tab-icon {
+  transition: transform 0.2s ease;
+}
+
+.tab-button:hover .tab-icon {
+  transform: translateY(-1px);
+}
+
+/* Panels: global .tab-panel gives padding; hidden state is handled by [hidden] */
+.tab-panels {
+  width: 100%;
+  min-width: 0;
+}
+
+.tab-panels .tab-panel {
+  padding: var(--gap-md) 0 0;
+}
+
+.tab-panels .tab-panel[hidden] {
+  display: none;
+}
+
+/* Layout scaffolding used by both settings panels */
 .settings-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
-  max-width: 600px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--gap-md);
+  max-width: 720px;
+  width: 100%;
 }
 
 .settings-card {
-  padding: 2rem;
+  padding: var(--gap-lg);
 }
 
+/* OpenDesign setting-row: hairline-separated row with label + value */
+.setting-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: var(--gap-sm) 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.setting-row:last-child {
+  border-bottom: 0;
+}
+
+.setting-row .setting-label {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.setting-row .setting-value {
+  font-size: 15px;
+  color: var(--fg);
+}
+
+/* about-item: compact meta line (e.g. model description, system status) */
+.about-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--gap-sm);
+  padding: var(--gap-sm) 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.about-item:last-child {
+  padding-bottom: 0;
+}
+
+/* Card header shared by both panels */
 .card-header {
-  margin-bottom: 2rem;
+  margin-bottom: var(--gap-md);
 }
 
-.card-header h3 {
-  font-size: 1.25rem;
+.card-header h2 {
+  font-size: var(--fs-h3);
   font-weight: 600;
-  margin-bottom: 0.25rem;
+  color: var(--fg);
+  margin: 0 0 4px;
 }
 
 .card-header p {
-  font-size: 0.875rem;
-  color: var(--text-muted);
+  color: var(--muted);
+  font-size: 14px;
+  margin: 0;
+  max-width: 60ch;
 }
 
+/* Forms — field/input live in globals.css; local overrides are token-only */
 .settings-form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--gap-md);
 }
 
-.form-group {
+.password-fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--gap-md);
+  min-width: 0;
 }
 
-.form-group label {
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.form-group input {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  background: var(--bg-main);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  color: var(--text-main);
-  outline: none;
-  transition: all 0.2s;
-  font-size: 0.9375rem;
-}
-
-.form-group input:focus {
-  border-color: var(--primary);
-  background: var(--bg-card);
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+.settings-form .form-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 0;
 }
 
 .password-input-wrapper {
@@ -92,7 +164,7 @@
   transform: translateY(-50%);
   background: transparent;
   border: none;
-  color: var(--text-muted);
+  color: var(--muted);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -101,17 +173,17 @@
 }
 
 .password-toggle:hover {
-  color: var(--text-main);
+  color: var(--fg);
 }
 
 .password-requirements {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.5rem;
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
   padding: 1rem;
-  background: var(--bg-main);
-  border-radius: var(--radius-md);
+  background: var(--fg-soft);
+  border-radius: var(--radius);
   border: 1px solid var(--border);
 }
 
@@ -120,32 +192,26 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  color: #ef4444;
-  transition: all 0.3s ease;
+  color: var(--danger);
+  transition: color 0.3s ease;
 }
 
 .rule.valid {
-  color: #10b981;
-}
-
-.form-divider {
-  height: 1px;
-  background: var(--border);
-  margin: 0.5rem 0;
+  color: var(--success);
 }
 
 .form-actions {
   display: flex;
   justify-content: flex-end;
-  margin-top: 1rem;
+  margin-top: var(--gap-sm);
 }
 
 .error-banner {
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.2);
-  color: #ef4444;
+  background: color-mix(in oklch, var(--danger) 10%, transparent);
+  border: 1px solid color-mix(in oklch, var(--danger) 22%, transparent);
+  color: var(--danger);
   padding: 0.75rem;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius);
   font-size: 0.8125rem;
   display: flex;
   align-items: center;
@@ -153,11 +219,11 @@
 }
 
 .success-banner {
-  background: rgba(16, 185, 129, 0.1);
-  border: 1px solid rgba(16, 185, 129, 0.2);
-  color: #10b981;
+  background: color-mix(in oklch, var(--success) 10%, transparent);
+  border: 1px solid color-mix(in oklch, var(--success) 22%, transparent);
+  color: var(--success);
   padding: 0.75rem;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius);
   font-size: 0.8125rem;
   display: flex;
   align-items: center;
@@ -167,134 +233,68 @@
 .spinner {
   width: 16px;
   height: 16px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: white;
+  border: 2px solid color-mix(in oklch, currentColor 30%, transparent);
+  border-top-color: currentColor;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
   display: inline-block;
   margin-right: 8px;
 }
 
-@keyframes spin { 
-  to { transform: rotate(360deg); } 
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-@media (max-width: 600px) {
-  .password-requirements { grid-template-columns: 1fr; }
-}
-
-/* Tab Navigation */
-.tabs-nav {
-  display: flex;
-  border-bottom: 1px solid var(--border);
-  gap: 2rem;
-}
-
-.tab-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.625rem;
-  padding: 1rem 0;
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid transparent;
-  color: var(--text-muted);
-  font-family: var(--font-sans);
-  font-size: 0.9375rem;
-  font-weight: 600;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  outline: none;
-}
-
-.tab-btn:hover {
-  color: var(--text-main);
-  border-bottom-color: var(--border-active);
-}
-
-.tab-btn.active {
-  color: var(--primary);
-  border-bottom-color: var(--primary);
-}
-
-.tab-btn:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: -2px;
-  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-}
-
-.tab-icon {
-  transition: transform 0.2s ease;
-}
-
-.tab-btn:hover .tab-icon {
-  transform: translateY(-1px);
-}
-
-.tab-btn.active .tab-icon {
-  stroke: var(--primary);
-}
-
-/* Tab Panels */
-.tab-panels {
-  position: relative;
-  width: 100%;
-}
-
-.tab-panel {
-  display: none;
-}
-
-.tab-panel.active {
-  display: block;
-}
-
-/* Business Model Settings Card Grid */
+/* Business model section + cards */
 .business-model-section {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--gap-md);
   width: 100%;
 }
 
 .model-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
+  gap: var(--gap-md);
   width: 100%;
-  margin-top: 0.5rem;
+  margin-top: var(--gap-xs);
 }
 
 .model-card {
   position: relative;
-  background: var(--bg-card);
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 1.5rem;
+  padding: var(--gap-md);
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
+  gap: var(--gap-sm);
+  transition: transform 0.05s ease, background 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .model-card:hover {
-  border-color: var(--theme-color, var(--primary));
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border-color: var(--accent);
+  box-shadow: var(--shadow-lg);
 }
 
-.model-card.active {
-  border-color: var(--theme-color, var(--primary));
-  background: var(--theme-bg);
+.model-card.active,
+.model-card.selected {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+.model-card:focus-visible {
+  outline: 3px solid var(--accent-soft);
+  outline-offset: 2px;
 }
 
 .model-card-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  gap: var(--gap-sm);
 }
 
 .model-icon-wrapper {
@@ -303,9 +303,9 @@
   justify-content: center;
   width: 44px;
   height: 44px;
-  border-radius: var(--radius-md);
-  background: var(--theme-badge);
-  color: var(--theme-color, var(--primary));
+  border-radius: var(--radius);
+  background: var(--fg-soft);
+  color: var(--accent);
   transition: transform 0.2s ease;
 }
 
@@ -318,11 +318,11 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #10b981;
-  background: rgba(16, 185, 129, 0.1);
+  color: var(--success);
+  background: color-mix(in oklch, var(--success) 12%, transparent);
   padding: 0.25rem 0.625rem;
-  border-radius: 50px;
-  display: flex;
+  border-radius: 999px;
+  display: inline-flex;
   align-items: center;
   gap: 4px;
 }
@@ -330,21 +330,21 @@
 .model-details {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 6px;
   flex-grow: 1;
 }
 
-.model-details h4 {
-  font-size: 1.0625rem;
+.model-details h3 {
+  font-size: var(--fs-body);
   font-weight: 600;
-  color: var(--text-main);
+  color: var(--fg);
   margin: 0;
 }
 
 .model-details p {
   font-size: 0.8125rem;
-  color: var(--text-muted);
-  line-height: 1.4;
+  color: var(--muted);
+  line-height: 1.45;
   margin: 0;
 }
 
@@ -353,36 +353,31 @@
   flex-wrap: wrap;
   gap: 0.375rem;
   margin-top: auto;
-  padding-top: 0.5rem;
+  padding-top: var(--gap-xs);
 }
 
 .example-tag {
   font-size: 0.75rem;
-  color: var(--text-muted);
-  background: var(--bg-main);
+  color: var(--muted);
+  background: var(--surface);
   padding: 0.1875rem 0.5rem;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius);
   border: 1px solid var(--border);
 }
 
-.model-card.active .example-tag {
-  background: var(--bg-card);
-}
-
-.model-card-footer {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 0.5rem;
+.model-card.active .example-tag,
+.model-card.selected .example-tag {
+  background: var(--surface);
 }
 
 .model-select-btn {
   font-size: 0.8125rem;
   font-weight: 600;
   padding: 0.5rem 1rem;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius);
   border: 1px solid var(--border);
-  background: var(--bg-card);
-  color: var(--text-main);
+  background: var(--surface);
+  color: var(--fg);
   cursor: pointer;
   transition: all 0.2s;
   width: 100%;
@@ -390,37 +385,82 @@
 }
 
 .model-card:hover .model-select-btn {
-  border-color: var(--theme-color, var(--primary));
-  background: var(--theme-color, var(--primary));
-  color: white;
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--surface);
 }
 
-.model-card.active .model-select-btn {
+.model-card.active .model-select-btn,
+.model-card.selected .model-select-btn {
   display: none;
 }
 
-/* --- Styling for the Currently Selected Model Card --- */
-.model-card.selected {
-  /* Give it a bold border matching its specific theme color */
-  border: 2px solid var(--theme-color, #3b82f6) !important;
-  
-  /* A soft background tint */
-  background: var(--theme-bg, rgba(59, 130, 246, 0.05));
-  
-  /* A beautiful floating shadow and an outer glow ring */
-  box-shadow: 
-    0 10px 25px -5px rgba(0, 0, 0, 0.1), 
-    0 0 0 4px var(--theme-badge, rgba(59, 130, 246, 0.1));
-    
-  /* Lift the card up slightly */
-  transform: translateY(-4px);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+/* Buttons disabled state — token-only */
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
 }
 
-.model-card.selected .model-icon-wrapper {
-  background: var(--theme-color, #3b82f6);
-  color: white;
-  transform: scale(1.1);
-  box-shadow: 0 4px 12px var(--theme-badge, rgba(59, 130, 246, 0.2));
-  transition: all 0.3s ease;
+/* Business model skeleton (EAT-153) — colors from .skeleton primitive */
+.model-card-skeleton {
+  min-height: 168px;
+  cursor: default;
+}
+
+.model-card-skeleton:hover {
+  border-color: var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+.model-icon-skeleton {
+  width: 44px;
+  height: 44px;
+}
+
+.model-badge-skeleton {
+  width: 72px;
+  height: 20px;
+  border-radius: 999px;
+}
+
+.model-title-skeleton {
+  width: 58%;
+  height: 16px;
+}
+
+.model-desc-skeleton {
+  width: 100%;
+  height: 11px;
+}
+
+.model-desc-skeleton.short {
+  width: 70%;
+}
+
+/* Responsive — no horizontal overflow at 360px */
+@media (max-width: 600px) {
+  .settings-header h1 {
+    font-size: var(--fs-h3);
+  }
+
+  .tabs-nav {
+    gap: var(--gap-xs);
+  }
+
+  .settings-card {
+    padding: var(--gap-md);
+  }
+
+  .password-requirements {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .form-actions .btn {
+    width: 100%;
+  }
 }
