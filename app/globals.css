@@ -418,5 +418,29 @@ input:focus:-webkit-autofill {
 .container {
   max-width: var(--container, 1300px);
   margin: 0 auto;
-  padding: 0 2rem;
+  padding-inline: var(--gutter, 28px);
+}
+
+/* Shared dashboard app shell */
+.app-shell {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  background: var(--bg, var(--bg-main));
+  color: var(--fg, var(--text-main));
+}
+
+.app-main {
+  flex: 1;
+  min-width: 0;
+  padding-block: var(--gap-lg, 32px);
+}
+
+.app-footer {
+  margin-top: auto;
+  border-top: 1px solid var(--border);
+  background: var(--surface, var(--bg-card));
+  color: var(--muted, var(--text-muted));
+  font-size: 0.8125rem;
+  padding-block: 1rem;
 }

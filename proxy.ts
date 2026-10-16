@@ -17,7 +17,6 @@ export function proxy(req: NextRequest) {
 
   if (user && req.nextUrl.pathname !== "/onboarding") {
     const parsedUser = JSON.parse(user);
-    console.log(parsedUser);
     if (!parsedUser.business_model_id) {
       return NextResponse.redirect(new URL("/onboarding", req.url));
     }
