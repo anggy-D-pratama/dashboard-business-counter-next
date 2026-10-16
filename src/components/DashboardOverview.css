@@ -130,48 +130,6 @@
   border-top: 1px solid var(--border);
 }
 
-.dashboard-overview .chart.skeleton-chart {
-  align-items: stretch;
-}
-
-.dashboard-overview .skeleton-bar-wrap {
-  display: grid;
-  gap: 8px;
-  align-items: end;
-  height: 100%;
-}
-
-.dashboard-overview .skeleton-bar {
-  border-radius: 8px 8px 2px 2px;
-}
-
-.dashboard-overview .skeleton-label {
-  width: 108px;
-  height: 12px;
-  margin-bottom: var(--gap-sm);
-}
-
-.dashboard-overview .skeleton-num {
-  width: min(180px, 70%);
-  height: clamp(28px, 3.5vw, 42px);
-}
-
-.dashboard-overview .skeleton-bar-label {
-  height: 11px;
-  width: 100%;
-}
-
-.dashboard-overview .skeleton-status-label {
-  width: 120px;
-  height: 14px;
-}
-
-.dashboard-overview .skeleton-status-value {
-  width: 168px;
-  height: 12px;
-  margin-top: 8px;
-}
-
 .dashboard-overview .bar-wrap {
   display: grid;
   gap: 8px;
@@ -238,6 +196,76 @@
   font-size: 13px;
 }
 
+/* Skeleton loading (EAT-154) — colors come from the .skeleton primitive
+   in app/globals.css; local rules only control size/layout. */
+.dashboard-overview .skeleton-card {
+  min-height: 118px;
+}
+
+.dashboard-overview .skeleton-meta {
+  width: 42%;
+  max-width: 140px;
+  height: 12px;
+}
+
+.dashboard-overview .skeleton-metric-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--gap-sm);
+  margin-top: var(--gap-sm);
+}
+
+.dashboard-overview .skeleton-value {
+  width: 58%;
+  max-width: 190px;
+  height: 38px;
+  border-radius: 8px;
+}
+
+.dashboard-overview .skeleton-unit {
+  width: 28%;
+  max-width: 64px;
+  height: 12px;
+}
+
+.dashboard-overview .bar-wrap-loading {
+  grid-template-rows: minmax(0, 1fr) auto;
+}
+
+.dashboard-overview .bar-skeleton {
+  width: 100%;
+  min-height: 14px;
+  border-radius: 8px 8px 2px 2px;
+}
+
+.dashboard-overview .skeleton-bar-label {
+  width: 70%;
+  height: 10px;
+  margin: 0 auto;
+}
+
+.dashboard-overview .skeleton-activity-copy {
+  display: grid;
+  gap: 8px;
+}
+
+.dashboard-overview .skeleton-activity-title {
+  width: min(130px, 65%);
+  height: 14px;
+}
+
+.dashboard-overview .skeleton-activity-caption {
+  width: min(100px, 60%);
+  height: 11px;
+}
+
+.dashboard-overview .skeleton-activity-status {
+  width: 84px;
+  height: 20px;
+  border-radius: 999px;
+}
+
 @media (max-width: 920px) {
   .dashboard-overview .grid-4,
   .dashboard-overview .grid-2-1 {
@@ -260,6 +288,10 @@
   }
 
   .dashboard-overview .activity-item .status {
+    grid-column: 2;
+  }
+
+  .dashboard-overview .skeleton-activity-status {
     grid-column: 2;
   }
 }
