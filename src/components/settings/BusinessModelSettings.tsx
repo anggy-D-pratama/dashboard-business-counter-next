@@ -61,6 +61,7 @@ export function BusinessModelSettings() {
         });
 
   const handleSelect = (modelId: string) => {
+    if (isLoading || isSaving) return;
     setSelectedModel(modelId);
   };
 
