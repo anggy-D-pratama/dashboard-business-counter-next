@@ -1,5 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import logoImg from "@/public/logo.png";
 import "./page.css";
 import { useAuth } from "@/src/hooks/useAuth";
 import { useBusinessModel } from "@/src/hooks/useBusinessModel";
@@ -74,10 +76,12 @@ export default function OnboardingSurvey() {
       <main className="survey-card card">
         <header className="survey-header stack">
           <div className="survey-logo-wrap">
-            <img
-              src="/logo.png"
+            <Image
+              src={logoImg}
               alt="NotaKita Logo"
               className="survey-logo"
+              width={192}
+              height={64}
             />
           </div>
           <div className="progress-container row-between">
