@@ -157,7 +157,7 @@ export const SidebarTrigger = React.forwardRef<
         toggleSidebar();
       }}
       aria-label="Toggle Sidebar"
-      className={`inline-flex items-center justify-center rounded-md p-2 text-gray-500 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${className}`}
+      className={`inline-flex items-center justify-center rounded-md p-2 text-(color:--muted) hover:bg-(--fg-soft) hover:text-(color:--fg) focus:outline-none focus:ring-2 focus:ring-(color:--accent) ${className}`}
       {...props}
     >
       <svg
