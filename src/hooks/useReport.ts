@@ -25,11 +25,13 @@ export function useReport() {
   const { token } = useAuth();
   const [reportData, setReportData] = useState<ReportData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchDailyReport = useCallback(async () => {
     if (!token) return;
 
     setIsLoading(true);
+    setError(null);
     try {
       const today = new Date().toISOString().split("T")[0];
       const res = await fetch(`${config.apiUrl}/reports/daily?date=${today}`, {
@@ -45,15 +47,23 @@ export function useReport() {
       if (response.status === "success") {
         setReportData(response.data);
       }
+      setError(null);
     } catch (err) {
       console.error("Error fetching daily report", err);
+      setError(
+        err instanceof Error && err.message
+          ? err.message
+          : "Failed to fetch report",
+      );
     } finally {
       setIsLoading(false);
     }
   }, [token]);
+
   return {
     reportData,
     isLoading,
+    error,
     fetchDailyReport,
   };
 }

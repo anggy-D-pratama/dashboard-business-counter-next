@@ -54,7 +54,7 @@ function StatusRowSkeleton() {
 }
 
 export function DashboardOverview() {
-  const { fetchDailyReport, reportData, isLoading } = useReport();
+  const { fetchDailyReport, reportData, isLoading, error } = useReport();
   const { t } = useLocale();
 
   useEffect(() => {
@@ -90,7 +90,8 @@ export function DashboardOverview() {
   const hasAvailableMetrics = stats.some((stat) => stat.available);
   const hasTransactionData = (reportData?.transaction_count ?? 0) > 0;
   const hasData = hasAvailableMetrics || hasTransactionData;
-  const showEmptyState = !isLoading && !hasData;
+  const showErrorState = !isLoading && error !== null;
+  const showEmptyState = !isLoading && error === null && !hasData;
 
   return (
     <div
@@ -128,7 +129,55 @@ export function DashboardOverview() {
         </div>
       </header>
 
-      {showEmptyState ? (
+      {showErrorState ? (
+        <section
+          className="card empty-state error-state"
+          aria-label={t.dashboard.errorState.title}
+        >
+          <div className="empty-state-icon error-state-icon" aria-hidden="true">
+            <svg
+              width="36"
+              height="36"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+              <line x1="12" y1="9" x2="12" y2="13" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+          </div>
+          <h2>{t.dashboard.errorState.title}</h2>
+          <p>{t.dashboard.errorState.description}</p>
+          {error ? (
+            <p className="error-state-reason" role="status">
+              {error}
+            </p>
+          ) : null}
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={fetchDailyReport}
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              aria-hidden="true"
+            >
+              <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+            </svg>
+            {t.dashboard.errorState.retryButton}
+          </button>
+        </section>
+      ) : showEmptyState ? (
         <section
           className="card empty-state"
           aria-label={t.dashboard.emptyState.title}

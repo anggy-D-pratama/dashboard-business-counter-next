@@ -236,6 +236,23 @@
   margin-top: var(--gap-xs);
 }
 
+/* Error state (EAT-164) — same layout rhythm as empty state, with a
+   danger-tinted icon and the fetch failure reason shown below the copy. */
+.dashboard-overview .empty-state.error-state .empty-state-icon {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.dashboard-overview .empty-state .error-state-reason {
+  max-width: 56ch;
+  margin: 0;
+  color: var(--danger);
+  font-family: var(--font-mono, ui-monospace, Menlo, monospace);
+  font-size: var(--fs-meta);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
 /* Skeleton loading (EAT-153) — colors come from the .skeleton primitive
    in app/globals.css; local rules only control size/layout. */
 .dashboard-overview .skeleton-card {
