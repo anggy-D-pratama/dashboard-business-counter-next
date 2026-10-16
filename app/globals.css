@@ -421,6 +421,7 @@ input:focus:-webkit-autofill {
   max-width: var(--container, 1300px);
   margin: 0 auto;
   padding-inline: var(--gutter, 28px);
+  width: 100%;
 }
 
 /* Shared dashboard app shell */
