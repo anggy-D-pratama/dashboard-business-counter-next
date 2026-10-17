@@ -61,7 +61,7 @@ export function useCategories() {
   }, [token]);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- baseline pattern, same as useTransactions/useReport
     fetchCategories();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
