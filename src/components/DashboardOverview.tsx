@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useReport } from "../hooks/useReport";
 import { useLocale } from "../contexts/LocaleContext";
 import { Skeleton } from "./ui/skeleton";
+import { TrendChart } from "./TrendChart";
 import "./DashboardOverview.css";
 
 const METRIC_KEYS = {
@@ -23,10 +24,6 @@ type ReportMetric = {
   available: boolean;
   reason?: string;
 };
-
-const TEMPLATE_BAR_HEIGHTS = [44, 62, 48, 76, 68, 35, 52];
-
-const SKELETON_BAR_HEIGHTS = [46, 62, 50, 82, 72, 38, 56];
 
 function MetricCardSkeleton() {
   return (
@@ -248,46 +245,13 @@ export function DashboardOverview() {
             <article className="card">
               <div className="row-between panel-head">
                 <div className="stack">
-                  <h2>{t.dashboard.chartTitle}</h2>
-                  <p className="meta">{t.dashboard.chartCaption}</p>
+                  <h2>{t.dashboard.trend.title}</h2>
+                  <p className="meta">{t.dashboard.trend.caption}</p>
                 </div>
                 <span className="pill">{t.dashboard.live}</span>
               </div>
 
-              <div
-                className="chart"
-                aria-label={t.dashboard.chartTitle}
-                aria-busy={isLoading}
-              >
-                {(isLoading
-                  ? SKELETON_BAR_HEIGHTS
-                  : TEMPLATE_BAR_HEIGHTS
-                ).map((height, index) =>
-                  isLoading ? (
-                    <div
-                      className="bar-wrap bar-wrap-loading"
-                      key={`skeleton-${index}`}
-                      aria-hidden="true"
-                    >
-                      <Skeleton
-                        className="bar-skeleton"
-                        style={{ height: `${height}%` }}
-                      />
-                      <Skeleton className="skeleton-bar-label" />
-                    </div>
-                  ) : (
-                    <div className="bar-wrap" key={t.dashboard.weekdayShort[index]}>
-                      <div
-                        className={`bar${index === 3 ? " active" : ""}`}
-                        style={{
-                          height: hasData ? `${height}%` : "0%",
-                        }}
-                      />
-                      <span className="bar-label">{t.dashboard.weekdayShort[index]}</span>
-                    </div>
-                  ),
-                )}
-              </div>
+              <TrendChart />
             </article>
 
             <aside className="card">
