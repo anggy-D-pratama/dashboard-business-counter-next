@@ -101,23 +101,6 @@
   color: var(--danger);
 }
 
-.transaction-category-select {
-  min-width: 140px;
-  width: auto;
-  min-height: 38px;
-  padding: 6px 10px;
-  font-size: 0.875rem;
-}
-
-.category-inline-error {
-  padding: 10px 14px;
-  border: 1px solid var(--danger);
-  border-radius: var(--radius-sm, 8px);
-  background: color-mix(in oklch, var(--danger) 10%, transparent);
-  color: var(--danger);
-  font-size: 0.875rem;
-}
-
 .transaction-action {
   display: inline-flex;
   align-items: center;
@@ -152,6 +135,23 @@
 .skeleton-cell {
   height: 16px;
   max-width: 160px;
+}
+
+.transaction-category-select {
+  min-width: 140px;
+  width: auto;
+  min-height: 38px;
+  padding: 6px 10px;
+  font-size: 0.875rem;
+}
+
+.category-inline-error {
+  padding: 10px 14px;
+  border: 1px solid var(--danger);
+  border-radius: var(--radius-sm, 8px);
+  background: color-mix(in oklch, var(--danger) 10%, transparent);
+  color: var(--danger);
+  font-size: 0.875rem;
 }
 
 .transactions-pagination {

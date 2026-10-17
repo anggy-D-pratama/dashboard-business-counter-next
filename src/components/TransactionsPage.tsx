@@ -3,17 +3,17 @@
 import { useMemo, useState } from "react";
 import { Icon } from "@iconify/react";
 import { useLocale } from "../contexts/LocaleContext";
-import { useAuth } from "../hooks/useAuth";
-import { config } from "../config";
 import {
   TransactionsFilter,
   useTransactions,
 } from "../hooks/useTransactions";
-import { UserCategory, useCategories } from "../hooks/useCategories";
-import { CategoryManagerModal } from "./CategoryManagerModal";
 import { Skeleton } from "./ui/skeleton";
 import { TransactionDetailModal } from "./TransactionDetailModal";
 import "./TransactionsPage.css";
+import { useAuth } from "../hooks/useAuth";
+import { config } from "../config";
+import { UserCategory, useCategories } from "../hooks/useCategories";
+import { CategoryManagerModal } from "./CategoryManagerModal";
 
 const EMPTY_FILTERS: TransactionsFilter = {
   from: "",
