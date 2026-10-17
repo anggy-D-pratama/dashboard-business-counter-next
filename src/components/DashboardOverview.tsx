@@ -12,10 +12,19 @@ const METRIC_KEYS = {
   OUTCOME: "outcome",
   NET_PROFIT: "net_profit",
   TRANSACTION_COUNT: "transaction_count",
-  PRODUCTION_COST: "production_cost",
+  REVENUE: "revenue",
   HPP: "hpp",
   FOOD_COST_PERCENTAGE: "food_cost_percentage",
+  PRODUCTION_COST: "production_cost",
+  GROSS_MARGIN: "gross_margin",
 } as const;
+
+const GENERIC_METRIC_KEYS = [
+  METRIC_KEYS.INCOME,
+  METRIC_KEYS.OUTCOME,
+  METRIC_KEYS.NET_PROFIT,
+  METRIC_KEYS.TRANSACTION_COUNT,
+] as const;
 
 type ReportMetric = {
   key: string;
@@ -58,23 +67,36 @@ export function DashboardOverview() {
     fetchDailyReport();
   }, [fetchDailyReport]);
 
-  const stats: ReportMetric[] = reportData?.summary_data?.metrics ?? (reportData
-    ? [
-        { key: METRIC_KEYS.INCOME, label: t.dashboard.metricIncome, value: reportData.total_income, available: true },
-        { key: METRIC_KEYS.OUTCOME, label: t.dashboard.metricOutcome, value: reportData.total_outcome, available: true },
-        { key: METRIC_KEYS.NET_PROFIT, label: t.dashboard.metricNetProfit, value: reportData.net_profit, available: true },
-        { key: METRIC_KEYS.TRANSACTION_COUNT, label: t.dashboard.metricTransactions, value: reportData.transaction_count, available: true },
-      ]
-    : []);
+  const summaryMetrics = reportData?.summary_data?.metrics;
+  const stats: ReportMetric[] =
+    summaryMetrics && summaryMetrics.length > 0
+      ? summaryMetrics
+      : reportData
+        ? [
+            { key: METRIC_KEYS.INCOME, value: reportData.total_income, available: true },
+            { key: METRIC_KEYS.OUTCOME, value: reportData.total_outcome, available: true },
+            { key: METRIC_KEYS.NET_PROFIT, value: reportData.net_profit, available: true },
+            { key: METRIC_KEYS.TRANSACTION_COUNT, value: reportData.transaction_count, available: true },
+          ]
+        : [];
 
-  const metricDefs = [
-    { key: METRIC_KEYS.INCOME, label: t.dashboard.metricIncome, unit: "IDR" },
-    { key: METRIC_KEYS.OUTCOME, label: t.dashboard.metricOutcome, unit: "IDR" },
-    { key: METRIC_KEYS.NET_PROFIT, label: t.dashboard.metricNetProfit, unit: "IDR" },
-    { key: METRIC_KEYS.TRANSACTION_COUNT, label: t.dashboard.metricTransactions, unit: t.dashboard.transactionUnit },
-  ];
+  const modelMetricsI18n = t.dashboard.modelMetrics as Record<string, string>;
+  const modelNamesI18n = t.dashboard.modelNames as Record<string, string>;
 
-  const resolveMetric = (key: string) => stats.find((stat) => stat.key === key);
+  const resolveMetricLabel = (key: string) => modelMetricsI18n[key] ?? key;
+
+  const resolveModelName = (model?: string) => {
+    if (!model) return "";
+    return modelNamesI18n[model] ?? model;
+  };
+
+  const activeModel = resolveModelName(reportData?.summary_data?.model);
+
+  const resolveMetricUnit = (key: string) => {
+    if (key === METRIC_KEYS.TRANSACTION_COUNT) return t.dashboard.transactionUnit;
+    if (key === METRIC_KEYS.FOOD_COST_PERCENTAGE) return "";
+    return "IDR";
+  };
 
   const formatMetricValue = (key: string, stat?: ReportMetric) => {
     if (!stat?.available) return "—";
@@ -219,26 +241,43 @@ export function DashboardOverview() {
       ) : (
         <>
           <section
-            className="grid-4"
+            className="stack metrics-section"
             aria-label={t.dashboard.metricsLabel}
             aria-busy={isLoading}
           >
-            {isLoading
-              ? metricDefs.map((def) => <MetricCardSkeleton key={def.key} />)
-              : metricDefs.map((def) => {
-                  const stat = resolveMetric(def.key);
-                  return (
-                    <article key={def.key} className="card">
-                      <span className="meta">{def.label}</span>
-                      <div className="metric-value">
-                        <strong className="num">{formatMetricValue(def.key, stat)}</strong>
-                        <span className="metric-delta">
-                          {stat?.available ? def.unit : t.dashboard.noData}
-                        </span>
-                      </div>
-                    </article>
-                  );
-                })}
+            {activeModel ? (
+              <div className="row-between metrics-head">
+                <span className="meta">{t.dashboard.metricsLabel}</span>
+                <span className="model-badge">
+                  {t.dashboard.activeBusinessModel}: {activeModel}
+                </span>
+              </div>
+            ) : null}
+
+            <div className="grid-4">
+              {isLoading
+                ? GENERIC_METRIC_KEYS.map((key) => <MetricCardSkeleton key={key} />)
+                : stats.map((stat, index) => {
+                    const key = stat.key;
+                    const unit = resolveMetricUnit(key);
+                    const reason = stat.available
+                      ? ""
+                      : stat.reason || t.dashboard.metricUnavailable;
+                    return (
+                      <article key={`${key}-${index}`} className="card metric-card">
+                        <span className="meta">{resolveMetricLabel(key)}</span>
+                        <div className="metric-value">
+                          <strong className="num">{formatMetricValue(key, stat)}</strong>
+                          {stat.available ? (
+                            unit ? <span className="metric-delta">{unit}</span> : null
+                          ) : (
+                            <span className="metric-delta metric-reason">{reason}</span>
+                          )}
+                        </div>
+                      </article>
+                    );
+                  })}
+            </div>
           </section>
 
           <section className="grid-2-1" aria-label={t.dashboard.chartTitle}>
