@@ -1,0 +1,216 @@
+.transaction-detail-modal .modal-content {
+  max-width: 680px;
+  width: calc(100% - 2rem);
+  max-height: min(720px, calc(100vh - 2rem));
+  overflow-y: auto;
+}
+
+.transaction-detail-modal .modal-body {
+  min-width: 0;
+}
+
+.transaction-detail-loading,
+.transaction-detail-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-sm, 12px);
+  padding: 2rem 0.5rem;
+  text-align: center;
+  color: var(--text-main);
+}
+
+.transaction-detail-error p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.transaction-detail-error .error-reason {
+  font-size: 0.875rem;
+  color: var(--danger);
+}
+
+.transaction-detail-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+  color: var(--text-main);
+}
+
+.transaction-detail-summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap-xs, 8px);
+}
+
+.transaction-detail-summary .field {
+  min-width: 0;
+}
+
+.transaction-detail-summary .field-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.transaction-detail-summary .field-value {
+  font-weight: 600;
+  color: var(--text-main);
+  word-break: break-word;
+}
+
+.transaction-detail-items {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  min-width: 0;
+}
+
+.transaction-detail-items th,
+.transaction-detail-items td {
+  padding: 10px 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.transaction-detail-items th {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.transaction-detail-items .num-cell {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.transaction-detail-total {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 4px;
+}
+
+.transaction-detail-total-row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--gap-sm, 12px);
+  font-size: 0.875rem;
+}
+
+.transaction-detail-total-row.grand-total {
+  font-size: 1.125rem;
+  font-weight: 800;
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+}
+
+.transaction-detail-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--gap-xs, 8px);
+  flex-wrap: wrap;
+}
+
+.transaction-detail-actions .btn {
+  min-height: 44px;
+}
+
+.receipt-print {
+  width: 80mm;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 4mm;
+  background: #fff;
+  color: #000;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.receipt-print .receipt-header {
+  text-align: center;
+  margin-bottom: 2mm;
+}
+
+.receipt-print .receipt-business-name {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.receipt-print .receipt-muted {
+  color: #000;
+}
+
+.receipt-print .receipt-divider {
+  border: 0;
+  border-top: 1px dashed #000;
+  margin: 2mm 0;
+}
+
+.receipt-print .receipt-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 4mm;
+}
+
+.receipt-print .receipt-row span {
+  white-space: normal;
+}
+
+.receipt-print .receipt-item-name {
+  flex: 1;
+}
+
+.receipt-print .receipt-total {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.receipt-print .receipt-footer {
+  text-align: center;
+  margin-top: 2mm;
+}
+
+@media screen {
+  .receipt-print {
+    display: none;
+  }
+}
+
+@media print {
+  @page {
+    size: 80mm auto;
+    margin: 0;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  .receipt-print,
+  .receipt-print * {
+    visibility: visible;
+  }
+
+  .receipt-print {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 80mm;
+    max-width: 80mm;
+    box-shadow: none;
+  }
+}

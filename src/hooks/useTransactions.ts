@@ -126,3 +126,55 @@ export function useTransactions() {
     setFilters,
   };
 }
+
+export function useTransactionDetail() {
+  const { token } = useAuth();
+  const [data, setData] = useState<Transaction | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchTransaction = useCallback(
+    async (id: string) => {
+      if (!token || !id) return;
+
+      setIsLoading(true);
+      setError(null);
+      setData(null);
+
+      try {
+        const res = await fetch(`${config.apiUrl}/transactions/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const response = await res.json();
+
+        if (!res.ok) {
+          throw new Error(response.message || "Failed to fetch transaction");
+        }
+
+        if (response.status === "success") {
+          setData(response.data);
+        }
+      } catch (err) {
+        console.error("Error fetching transaction detail", err);
+        setError(
+          err instanceof Error && err.message
+            ? err.message
+            : "Failed to fetch transaction",
+        );
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [token],
+  );
+
+  return {
+    data,
+    isLoading,
+    error,
+    fetchTransaction,
+  };
+}
