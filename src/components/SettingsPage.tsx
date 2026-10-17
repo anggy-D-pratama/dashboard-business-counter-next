@@ -5,6 +5,7 @@ import './SettingsPage.css';
 import { useLocale } from '../contexts/LocaleContext';
 import { ChangePasswordForm } from './settings/ChangePasswordForm';
 import { BusinessModelSettings } from './settings/BusinessModelSettings';
+import { ProfileSettings } from './settings/ProfileSettings';
 
 type SettingsTab = 'profile' | 'security';
 
@@ -124,7 +125,10 @@ export function SettingsPage() {
           tabIndex={0}
           hidden={activeTab !== 'profile'}
         >
-          <BusinessModelSettings />
+          <div className='settings-stack'>
+            <ProfileSettings />
+            <BusinessModelSettings />
+          </div>
         </div>
         <div
           className='tab-panel'
