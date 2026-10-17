@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { Icon } from "@iconify/react";
 import { useLocale } from "../contexts/LocaleContext";
 import { useAuth } from "../hooks/useAuth";
+import { useProfile } from "../hooks/useProfile";
 import {
   Transaction,
   useTransactionDetail,
@@ -74,8 +75,11 @@ function DetailRows({ transaction }: { transaction: Transaction }) {
 function Receipt({ transaction }: { transaction: Transaction }) {
   const { t } = useLocale();
   const { user } = useAuth();
-  const businessName = user?.name?.trim() || t.common.appName;
-  const businessPhone = user?.phone?.trim() || "";
+  const { profile } = useProfile();
+  const businessName =
+    profile?.business_name?.trim() || user?.name?.trim() || t.common.appName;
+  const businessAddress = profile?.business_address?.trim() || "";
+  const businessPhone = profile?.phone?.trim() || user?.phone?.trim() || "";
   const isIncome = transaction.income > 0;
   const subtotal = transaction.qty * transaction.item_value;
   const total = Math.max(0, subtotal - transaction.discount);
@@ -84,6 +88,7 @@ function Receipt({ transaction }: { transaction: Transaction }) {
     <div className="receipt-print" role="document" aria-label={t.transactionDetail.printReceipt}>
       <div className="receipt-header">
         <div className="receipt-business-name">{businessName}</div>
+        {businessAddress ? <div>{businessAddress}</div> : null}
         {businessPhone ? <div>{businessPhone}</div> : null}
         <div>{formatDateTime(transaction.transaction_time)}</div>
       </div>
