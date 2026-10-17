@@ -39,7 +39,7 @@
 
 .transactions-table {
   width: 100%;
-  min-width: 920px;
+  min-width: 980px;
   border-collapse: collapse;
   font-size: 0.875rem;
 }
@@ -95,6 +95,32 @@
 .transaction-badge-expense {
   background: color-mix(in oklch, var(--danger) 16%, transparent);
   color: var(--danger);
+}
+
+.transaction-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius, var(--radius-sm));
+  background: var(--surface, var(--bg-card));
+  color: var(--text-main);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.transaction-action:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-glow);
+}
+
+.transactions-action-cell {
+  text-align: center;
+  white-space: nowrap;
 }
 
 .skeleton-head {
