@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useReport } from "../hooks/useReport";
 import { useLocale } from "../contexts/LocaleContext";
+import { BusinessInsights } from "./BusinessInsights";
 import { Skeleton } from "./ui/skeleton";
 import "./DashboardOverview.css";
 
@@ -128,6 +129,8 @@ export function DashboardOverview() {
           </button>
         </div>
       </header>
+
+      <BusinessInsights dailyReport={reportData} />
 
       {showErrorState ? (
         <section
