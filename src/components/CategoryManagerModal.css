@@ -1,0 +1,101 @@
+.categories-manager {
+  gap: var(--gap-md, 20px);
+}
+
+.category-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm, 12px);
+}
+
+.category-color-input {
+  width: 72px;
+  height: 44px;
+  min-height: 44px;
+  padding: 4px;
+  cursor: pointer;
+}
+
+.category-form-actions {
+  display: flex;
+  gap: var(--gap-xs, 8px);
+  flex-wrap: wrap;
+}
+
+.category-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs, 8px);
+}
+
+.category-list ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.category-list-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm, 8px);
+  background: var(--surface, var(--bg-card));
+  flex-wrap: wrap;
+}
+
+.category-swatch {
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  flex: 0 0 auto;
+}
+
+.category-name {
+  flex: 1;
+  min-width: 120px;
+  color: var(--text-main);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.category-item-actions {
+  display: flex;
+  gap: var(--gap-xs, 8px);
+}
+
+.category-form-error {
+  color: var(--danger);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.category-delete-btn {
+  color: var(--danger);
+}
+
+.category-delete-btn:hover {
+  border-color: var(--danger);
+}
+
+@media (max-width: 420px) {
+  .category-list-item {
+    align-items: flex-start;
+  }
+
+  .category-name {
+    width: 100%;
+  }
+
+  .category-item-actions {
+    width: 100%;
+  }
+
+  .category-item-actions .btn {
+    flex: 1;
+  }
+}
