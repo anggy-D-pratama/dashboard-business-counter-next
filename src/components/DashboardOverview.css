@@ -118,6 +118,49 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* Dynamic model-metrics grid (EAT-173) */
+.dashboard-overview .metrics-section {
+  gap: var(--gap-sm);
+}
+
+.dashboard-overview .metrics-head {
+  flex-wrap: wrap;
+}
+
+.dashboard-overview .model-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border: 1px solid var(--border-active, var(--border));
+  border-radius: 999px;
+  background: var(--accent-soft, var(--primary-glow));
+  color: var(--accent, var(--primary));
+  font-family: var(--font-mono, ui-monospace, Menlo, monospace);
+  font-size: var(--fs-meta);
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.dashboard-overview .metric-card {
+  min-width: 0;
+}
+
+.dashboard-overview .metric-value {
+  flex-wrap: wrap;
+}
+
+.dashboard-overview .metric-value strong.num {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.dashboard-overview .metric-delta.metric-reason {
+  max-width: 52%;
+  text-align: right;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
 /* Activity / system status */
 .dashboard-overview .activity-list {
   display: grid;
