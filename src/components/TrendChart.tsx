@@ -86,6 +86,9 @@ export function TrendChart() {
 
   const showEmptyState = !isLoading && (error !== null || data.length === 0);
 
+  const weekdayIndexFor = (date: Date) =>
+    date.getDay() === 0 ? 6 : date.getDay() - 1;
+
   return (
     <div className="trend-chart" aria-busy={isLoading}>
       <div
@@ -181,7 +184,9 @@ export function TrendChart() {
               const outcomeX = centerX + gap / 2;
               const incomeHeight = (point.income / maxValue) * chartHeight;
               const outcomeHeight = (point.outcome / maxValue) * chartHeight;
-              const dayLabel = t.dashboard.weekdayShort[point.date.getDay()];
+              const dayLabel = t.dashboard.weekdayShort[weekdayIndexFor(point.date)];
+              const incomeLabel = `${t.dashboard.trend.legendIncome} ${dayLabel}: ${formatRupiah(point.income)}`;
+              const outcomeLabel = `${t.dashboard.trend.legendOutcome} ${dayLabel}: ${formatRupiah(point.outcome)}`;
 
               return (
                 <g key={point.key}>
@@ -192,10 +197,9 @@ export function TrendChart() {
                     width={barWidth}
                     height={incomeHeight}
                     rx={Math.min(3, barWidth / 2)}
+                    aria-label={incomeLabel}
                   >
-                    <title>
-                      {`${t.dashboard.trend.legendIncome} ${dayLabel}: ${formatRupiah(point.income)}`}
-                    </title>
+                    <title>{incomeLabel}</title>
                   </rect>
                   <rect
                     className="trend-bar trend-bar-outcome"
@@ -204,10 +208,9 @@ export function TrendChart() {
                     width={barWidth}
                     height={outcomeHeight}
                     rx={Math.min(3, barWidth / 2)}
+                    aria-label={outcomeLabel}
                   >
-                    <title>
-                      {`${t.dashboard.trend.legendOutcome} ${dayLabel}: ${formatRupiah(point.outcome)}`}
-                    </title>
+                    <title>{outcomeLabel}</title>
                   </rect>
                   <text
                     className="trend-axis-label"
@@ -225,7 +228,7 @@ export function TrendChart() {
 
           <ul className="trend-a11y-list">
             {points.map((point) => {
-              const dayLabel = t.dashboard.weekdayShort[point.date.getDay()];
+              const dayLabel = t.dashboard.weekdayShort[weekdayIndexFor(point.date)];
               return (
                 <li key={point.key}>
                   {`${t.dashboard.trend.legendIncome}: ${formatRupiah(point.income)}; ${t.dashboard.trend.legendOutcome}: ${formatRupiah(point.outcome)} (${dayLabel})`}
