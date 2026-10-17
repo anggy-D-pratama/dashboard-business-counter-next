@@ -1,0 +1,332 @@
+.reports-page {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-lg);
+}
+
+/* Title block */
+.reports-page-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.reports-page .eyebrow {
+  font-family: var(--font-mono, ui-monospace, Menlo, monospace);
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent, var(--primary));
+  margin: 0 0 var(--gap-sm);
+}
+
+.reports-page h1 {
+  font-size: var(--fs-h1);
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+  margin: 0;
+}
+
+.reports-page h2 {
+  font-size: var(--fs-h2);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  margin: 0;
+}
+
+.reports-page .lead {
+  font-size: var(--fs-lead);
+  line-height: 1.55;
+  color: var(--muted, var(--text-muted));
+  max-width: 60ch;
+  margin: 10px 0 0;
+}
+
+/* Date range form */
+.reports-form-card {
+  padding: var(--gap-md);
+}
+
+.reports-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--gap-md);
+}
+
+.reports-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1 1 190px;
+  min-width: 0;
+}
+
+.reports-field label {
+  font-size: 13px;
+  color: var(--muted, var(--text-muted));
+}
+
+.reports-form-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+.reports-validation {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--danger);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Export toolbar */
+.reports-export-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--gap-sm);
+}
+
+.reports-export-bar .btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Print area / table */
+.reports-print-area {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  min-width: 0;
+}
+
+.reports-print-title {
+  display: none;
+}
+
+.reports-range-line {
+  margin: 0;
+  color: var(--muted, var(--text-muted));
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.reports-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.reports-table {
+  width: 100%;
+  min-width: 620px;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.reports-table-caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.reports-table th,
+.reports-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.reports-table thead th {
+  font-family: var(--font-mono, ui-monospace, Menlo, monospace);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted, var(--text-muted));
+  background: var(--fg-soft, var(--bg-main));
+}
+
+.reports-table tbody tr:hover {
+  background: var(--bg-card-hover, var(--fg-soft));
+}
+
+.reports-table tfoot td {
+  font-weight: 700;
+  background: var(--fg-soft, var(--bg-main));
+  border-top: 2px solid var(--border);
+}
+
+.reports-table .align-right {
+  text-align: right;
+}
+
+.reports-table .num {
+  font-family: var(--font-mono, ui-monospace, Menlo, monospace);
+  font-variant-numeric: tabular-nums;
+}
+
+.reports-num-negative {
+  color: var(--danger);
+}
+
+/* State cards (loading, error, empty) */
+.reports-page .reports-state-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-sm);
+  width: 100%;
+  min-width: 0;
+  text-align: center;
+  padding: clamp(40px, 8vw, 72px) clamp(20px, 5vw, 40px);
+}
+
+.reports-page .reports-state-icon {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  border-radius: 999px;
+  background: var(--accent-soft, color-mix(in oklch, var(--primary) 12%, transparent));
+  color: var(--accent, var(--primary));
+}
+
+.reports-page .reports-error-icon {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.reports-page .reports-state-card h2 {
+  margin-top: var(--gap-xs);
+}
+
+.reports-page .reports-state-card p {
+  max-width: 44ch;
+  margin: 0;
+  color: var(--muted, var(--text-muted));
+  font-size: var(--fs-body);
+  line-height: 1.6;
+}
+
+.reports-page .reports-state-card .btn {
+  margin-top: var(--gap-xs);
+}
+
+.reports-error-reason {
+  max-width: 56ch;
+  margin: 0;
+  color: var(--danger);
+  font-family: var(--font-mono, ui-monospace, Menlo, monospace);
+  font-size: var(--fs-meta);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+/* Skeleton */
+.reports-skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+}
+
+.reports-skeleton-header {
+  width: 100%;
+  height: 20px;
+}
+
+.reports-skeleton-row {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr 1fr 1fr 0.8fr;
+  gap: 14px;
+  width: 100%;
+}
+
+.reports-skeleton-cell {
+  height: 14px;
+}
+
+@media (max-width: 560px) {
+  .reports-export-bar {
+    justify-content: stretch;
+  }
+
+  .reports-export-bar .btn {
+    flex: 1 1 auto;
+  }
+}
+
+/* Print: only the report area (title, range, table, total). */
+@media print {
+  body {
+    background: #fff !important;
+  }
+
+  .sidebar,
+  .topbar,
+  .app-footer,
+  .sidebar-overlay {
+    display: none !important;
+  }
+
+  .sidebar-inset {
+    margin-inline-start: 0 !important;
+  }
+
+  .app-main {
+    padding: 0 !important;
+  }
+
+  .container {
+    max-width: none !important;
+    padding: 0 !important;
+  }
+
+  .reports-no-print {
+    display: none !important;
+  }
+
+  .reports-page {
+    gap: var(--gap-sm);
+  }
+
+  .reports-print-title {
+    display: block !important;
+    font-size: 26px;
+    margin: 0 0 var(--gap-xs);
+  }
+
+  .reports-print-area {
+    border: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .reports-table-wrap {
+    overflow: visible !important;
+  }
+
+  .reports-table {
+    min-width: 0 !important;
+    font-size: 12px;
+  }
+
+  .reports-table th,
+  .reports-table td {
+    padding: 8px 10px;
+  }
+}
