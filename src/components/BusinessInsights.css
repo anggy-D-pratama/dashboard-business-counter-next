@@ -122,6 +122,75 @@
   line-height: 1.6;
 }
 
+.bi-busy {
+  border-top: 1px solid var(--border);
+  padding-top: var(--gap-md);
+}
+
+.bi-busy-head {
+  margin-bottom: 12px;
+}
+
+.bi-busy-head h3 {
+  margin: 0;
+  font-size: var(--fs-body, 15px);
+}
+
+.bi-busy-head p {
+  margin: 4px 0 0;
+  color: var(--muted, var(--text-muted));
+  font-size: var(--fs-meta, 12px);
+  line-height: 1.55;
+}
+
+.bi-busy-empty {
+  margin: 0;
+  padding: 16px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius, var(--radius-sm));
+  color: var(--muted, var(--text-muted));
+  text-align: center;
+}
+
+.bi-busy-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.bi-busy-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-sm);
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius, var(--radius-sm));
+  background: var(
+    --fg-soft,
+    color-mix(in oklch, var(--fg, var(--text-main)) 4%, var(--surface, var(--bg-card)))
+  );
+  min-width: 0;
+}
+
+.bi-busy-hour {
+  font-family: var(--font-mono, ui-monospace, Menlo, monospace);
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent, var(--primary));
+  white-space: nowrap;
+}
+
+.bi-busy-meta {
+  color: var(--fg, var(--text-main));
+  font-size: 14px;
+  text-align: right;
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+}
+
 .bi-skeleton {
   display: grid;
   gap: var(--gap-md);
@@ -158,6 +227,16 @@
   }
 
   .bi-row dd {
+    text-align: left;
+  }
+
+  .bi-busy-row {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .bi-busy-meta {
     text-align: left;
   }
 }

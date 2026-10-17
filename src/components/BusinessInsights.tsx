@@ -3,6 +3,7 @@
 import { useEffect, useMemo } from "react";
 import { useLocale } from "../contexts/LocaleContext";
 import { useReportRange } from "../hooks/useReportRange";
+import { useTrafficHourly, TrafficHour } from "../hooks/useTrafficHourly";
 import { Skeleton } from "./ui/skeleton";
 import "./BusinessInsights.css";
 
@@ -233,6 +234,24 @@ function getTopExpense(
   return null;
 }
 
+function formatHour(hour: number): string {
+  return `${String(hour).padStart(2, "0")}:00`;
+}
+
+function getTopBusyHours(
+  traffic: TrafficHour[],
+  limit = 3,
+): TrafficHour[] {
+  return [...traffic]
+    .sort((a, b) => {
+      if (b.transaction_count !== a.transaction_count) {
+        return b.transaction_count - a.transaction_count;
+      }
+      return b.total_income - a.total_income;
+    })
+    .slice(0, limit);
+}
+
 export function BusinessInsights({
   dailyReport = null,
 }: BusinessInsightsProps) {
@@ -242,13 +261,21 @@ export function BusinessInsights({
     isLoading: rangeLoading,
     fetchRange,
   } = useReportRange();
+  const {
+    data: trafficData,
+    isLoading: trafficLoading,
+    fetchTrafficHourly,
+  } = useTrafficHourly();
 
   useEffect(() => {
     const to = new Date();
     const from = new Date();
     from.setDate(from.getDate() - 6);
-    fetchRange(toLocalDateString(from), toLocalDateString(to));
-  }, [fetchRange]);
+    const fromString = toLocalDateString(from);
+    const toString = toLocalDateString(to);
+    fetchRange(fromString, toString);
+    fetchTrafficHourly(fromString, toString);
+  }, [fetchRange, fetchTrafficHourly]);
 
   const summary = useMemo(() => {
     const reports = Array.isArray(rangeData) ? rangeData : [];
@@ -325,6 +352,11 @@ export function BusinessInsights({
   const topExpense = useMemo(
     () => getTopExpense(dailyReport, t.dashboard.metricOutcome),
     [dailyReport, t],
+  );
+
+  const topBusyHours = useMemo(
+    () => getTopBusyHours(Array.isArray(trafficData) ? trafficData : []),
+    [trafficData],
   );
 
   return (
@@ -418,6 +450,35 @@ export function BusinessInsights({
               </dd>
             </div>
           </dl>
+
+          <section className="bi-busy" aria-label={t.dashboard.insights.busyHours}>
+            <div className="bi-busy-head">
+              <h3>{t.dashboard.insights.busyHours}</h3>
+              <p>{t.dashboard.insights.busyHoursCaption}</p>
+            </div>
+
+            {trafficLoading ? (
+              <Skeleton className="bi-skeleton-row" aria-hidden="true" />
+            ) : topBusyHours.length === 0 ? (
+              <p className="bi-busy-empty">
+                {t.dashboard.insights.busyHoursEmpty}
+              </p>
+            ) : (
+              <ol className="bi-busy-list">
+                {topBusyHours.map((hour) => (
+                  <li key={hour.hour} className="bi-busy-row">
+                    <strong className="bi-busy-hour">
+                      {formatHour(hour.hour)}
+                    </strong>
+                    <span className="bi-busy-meta">
+                      {hour.transaction_count} {t.dashboard.insights.busyHoursCount} ·{" "}
+                      {formatCurrency(hour.total_income)}
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            )}
+          </section>
         </>
       )}
     </section>

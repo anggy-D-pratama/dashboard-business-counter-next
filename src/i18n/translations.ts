@@ -137,6 +137,10 @@ export const translations = {
         topExpense: "Pengeluaran Terbesar",
         noData: "—",
         emptyState: "Belum cukup data untuk ringkasan 7 hari",
+        busyHours: "Jam Tersibuk",
+        busyHoursCaption: "3 jam dengan transaksi terbanyak.",
+        busyHoursCount: "transaksi",
+        busyHoursEmpty: "Belum ada data jam ramai",
       },
     },
     reports: {
@@ -552,6 +556,10 @@ export const translations = {
         topExpense: "Top Expense",
         noData: "—",
         emptyState: "Not enough data for a 7-day summary",
+        busyHours: "Busiest Hours",
+        busyHoursCaption: "Top 3 hours with the most transactions.",
+        busyHoursCount: "transactions",
+        busyHoursEmpty: "No busy-hour data yet",
       },
     },
     reports: {
