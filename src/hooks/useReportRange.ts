@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 import { useAuth } from "./useAuth";
 import { config } from "../config";
 
-export interface DailyReportRangeItem {
+export interface ReportRangeItem {
   report_date: string;
   total_income: number;
   total_outcome: number;
@@ -14,7 +14,7 @@ export interface DailyReportRangeItem {
 
 export function useReportRange() {
   const { token } = useAuth();
-  const [data, setData] = useState<DailyReportRangeItem[]>([]);
+  const [data, setData] = useState<ReportRangeItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -26,7 +26,7 @@ export function useReportRange() {
       setError(null);
       try {
         const res = await fetch(
-          `${config.apiUrl}/reports/range?from=${from}&to=${to}`,
+          `${config.apiUrl}/reports/range?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -38,15 +38,15 @@ export function useReportRange() {
           throw new Error(response.message || "Failed to fetch report range");
         }
 
-        if (response.status === "success") {
-          setData(Array.isArray(response.data) ? response.data : []);
-        } else {
-          setData([]);
-        }
+        setData(
+          response.status === "success" && Array.isArray(response.data)
+            ? response.data
+            : [],
+        );
         setError(null);
       } catch (err) {
-        // Graceful fallback for the trend chart only. The daily dashboard
-        // must keep working, so this error is never logged to the console.
+        // EAT-171: fallback tanpa console error. Dashboard trend chart
+        // menampilkan empty-state; dashboard harian tetap berfungsi.
         setData([]);
         setError(
           err instanceof Error && err.message
@@ -60,5 +60,10 @@ export function useReportRange() {
     [token],
   );
 
-  return { data, isLoading, error, fetchRange };
+  return {
+    data,
+    isLoading,
+    error,
+    fetchRange,
+  };
 }
