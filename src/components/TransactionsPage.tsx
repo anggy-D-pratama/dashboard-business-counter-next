@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { Icon } from "@iconify/react";
 import { useLocale } from "../contexts/LocaleContext";
 import { useAuth } from "../hooks/useAuth";
 import { config } from "../config";
@@ -11,6 +12,7 @@ import {
 import { UserCategory, useCategories } from "../hooks/useCategories";
 import { CategoryManagerModal } from "./CategoryManagerModal";
 import { Skeleton } from "./ui/skeleton";
+import { TransactionDetailModal } from "./TransactionDetailModal";
 import "./TransactionsPage.css";
 
 const EMPTY_FILTERS: TransactionsFilter = {
@@ -64,7 +66,7 @@ function TransactionsSkeleton() {
       <table className="transactions-table">
         <thead>
           <tr>
-            {Array.from({ length: 9 }).map((_, index) => (
+            {Array.from({ length: 10 }).map((_, index) => (
               <th key={index}>
                 <Skeleton className="skeleton-head" />
               </th>
@@ -74,7 +76,7 @@ function TransactionsSkeleton() {
         <tbody>
           {Array.from({ length: 5 }).map((_, rowIndex) => (
             <tr key={rowIndex}>
-              {Array.from({ length: 9 }).map((_, cellIndex) => (
+              {Array.from({ length: 10 }).map((_, cellIndex) => (
                 <td key={cellIndex}>
                   <Skeleton className="skeleton-cell" />
                 </td>
@@ -102,13 +104,15 @@ export function TransactionsPage() {
     categories,
     isLoading: categoriesLoading,
     error: categoriesError,
-    fetchCategories,
     createCategory,
     renameCategory,
     deleteCategory,
   } = useCategories();
 
   const [form, setForm] = useState<TransactionsFilter>(EMPTY_FILTERS);
+  const [selectedTransactionId, setSelectedTransactionId] = useState<
+    string | null
+  >(null);
   const [isManageOpen, setIsManageOpen] = useState(false);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [categoryError, setCategoryError] = useState<string | null>(null);
@@ -206,10 +210,7 @@ export function TransactionsPage() {
         </button>
       </header>
 
-      <section
-        className="card transactions-filter"
-        aria-label={t.transactions.filterTitle}
-      >
+      <section className="card transactions-filter" aria-label={t.transactions.filterTitle}>
         <div className="transactions-filter-grid">
           <div className="field">
             <label htmlFor="tx-from">{t.transactions.from}</label>
@@ -410,6 +411,9 @@ export function TransactionsPage() {
                       <th scope="col" className="num-cell">
                         {t.transactions.amount}
                       </th>
+                      <th scope="col" className="transactions-action-cell">
+                        {t.transactions.actions}
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
@@ -493,6 +497,31 @@ export function TransactionsPage() {
                           >
                             {formatRupiah(amount)}
                           </td>
+                          <td
+                            data-label={t.transactions.actions}
+                            className="transactions-action-cell"
+                          >
+                            <button
+                              type="button"
+                              className="transaction-action"
+                              aria-label={t.transactions.viewDetailAria.replace(
+                                "{invoice}",
+                                transaction.invoice_number ||
+                                  transaction.item_name ||
+                                  transaction.id,
+                              )}
+                              title={t.transactions.viewDetail}
+                              onClick={() =>
+                                setSelectedTransactionId(transaction.id)
+                              }
+                            >
+                              <Icon
+                                icon="material-symbols:receipt-long"
+                                width="20"
+                                height="20"
+                              />
+                            </button>
+                          </td>
                         </tr>
                       );
                     })}
@@ -539,6 +568,11 @@ export function TransactionsPage() {
           </footer>
         </>
       )}
+
+      <TransactionDetailModal
+        transactionId={selectedTransactionId}
+        onClose={() => setSelectedTransactionId(null)}
+      />
 
       <CategoryManagerModal
         isOpen={isManageOpen}
