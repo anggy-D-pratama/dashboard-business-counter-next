@@ -13,6 +13,7 @@ interface ModalProps {
   children: ReactNode;
   footer?: ReactNode;
   maxWidth?: string;
+  className?: string;
 }
 
 const FOCUSABLE_SELECTOR = [
@@ -33,6 +34,7 @@ export function Modal({
   children,
   footer,
   maxWidth = "450px",
+  className,
 }: ModalProps) {
   const { t } = useLocale();
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -133,7 +135,9 @@ export function Modal({
         aria-labelledby={title ? titleId : undefined}
         aria-label={title ? undefined : t.a11y.dialogLabel}
         tabIndex={-1}
-        className="modal-content card animate-fade-in"
+        className={`modal-content card animate-fade-in${
+          className ? ` ${className}` : ""
+        }`}
         style={{
           background: "var(--surface, var(--bg-card))",
           padding: "2rem",

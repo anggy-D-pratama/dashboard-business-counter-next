@@ -1,11 +1,11 @@
-.transaction-detail-modal .modal-content {
+.modal-content.transaction-detail-modal {
   max-width: 680px;
   width: calc(100% - 2rem);
   max-height: min(720px, calc(100vh - 2rem));
   overflow-y: auto;
 }
 
-.transaction-detail-modal .modal-body {
+.modal-content.transaction-detail-modal .modal-body {
   min-width: 0;
 }
 
@@ -212,5 +212,20 @@
     width: 80mm;
     max-width: 80mm;
     box-shadow: none;
+  }
+}
+
+@media (max-width: 420px) {
+  .transaction-detail-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .transaction-detail-items {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .transaction-detail-actions .btn {
+    flex: 1;
   }
 }

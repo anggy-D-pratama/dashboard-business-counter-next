@@ -38,7 +38,6 @@ interface TransactionDetailModalProps {
 function DetailRows({ transaction }: { transaction: Transaction }) {
   const { t } = useLocale();
   const isIncome = transaction.income > 0;
-  const amount = transaction.income + transaction.outcome;
   const subtotal = transaction.qty * transaction.item_value;
   const total = Math.max(0, subtotal - transaction.discount);
 
@@ -78,7 +77,6 @@ function Receipt({ transaction }: { transaction: Transaction }) {
   const businessName = user?.name?.trim() || t.common.appName;
   const businessPhone = user?.phone?.trim() || "";
   const isIncome = transaction.income > 0;
-  const amount = transaction.income + transaction.outcome;
   const subtotal = transaction.qty * transaction.item_value;
   const total = Math.max(0, subtotal - transaction.discount);
 
@@ -160,8 +158,6 @@ export function TransactionDetailModal({
     }
   }, [transactionId, fetchTransaction]);
 
-  const showReceipt = Boolean(transactionId && !isLoading && !error && data);
-
   return (
     <Modal
       isOpen={transactionId !== null}
@@ -170,100 +166,99 @@ export function TransactionDetailModal({
       icon="material-symbols:receipt-long"
       iconColor="#6366f1"
       maxWidth="680px"
+      className="transaction-detail-modal"
     >
-      <div className="transaction-detail-modal">
-        {isLoading ? (
-          <div className="transaction-detail-loading" role="status">
-            {t.transactionDetail.loading}
-          </div>
-        ) : error ? (
-          <div className="transaction-detail-error" role="alert">
-            <strong>{t.transactionDetail.errorTitle}</strong>
-            <p>{t.transactionDetail.errorDescription}</p>
-            {error ? <p className="error-reason">{error}</p> : null}
-            <button
-              type="button"
-              className="btn btn-secondary"
-              onClick={() => fetchTransaction(transactionId as string)}
-            >
-              {t.transactionDetail.retry}
-            </button>
-          </div>
-        ) : data ? (
-          <div className="transaction-detail-body">
-            <DetailRows transaction={data} />
+      {isLoading ? (
+        <div className="transaction-detail-loading" role="status">
+          {t.transactionDetail.loading}
+        </div>
+      ) : error ? (
+        <div className="transaction-detail-error" role="alert">
+          <strong>{t.transactionDetail.errorTitle}</strong>
+          <p>{t.transactionDetail.errorDescription}</p>
+          {error ? <p className="error-reason">{error}</p> : null}
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => fetchTransaction(transactionId as string)}
+          >
+            {t.transactionDetail.retry}
+          </button>
+        </div>
+      ) : data ? (
+        <div className="transaction-detail-body">
+          <DetailRows transaction={data} />
 
-            <table className="transaction-detail-items">
-              <caption className="sr-only">{t.transactionDetail.item}</caption>
-              <thead>
-                <tr>
-                  <th scope="col">{t.transactionDetail.item}</th>
-                  <th scope="col" className="num-cell">
-                    {t.transactionDetail.qty}
-                  </th>
-                  <th scope="col" className="num-cell">
-                    {t.transactionDetail.unitValue}
-                  </th>
-                  <th scope="col" className="num-cell">
-                    {t.transactionDetail.total}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>{data.item_name || "—"}</td>
-                  <td className="num-cell">{data.qty}</td>
-                  <td className="num-cell">{formatRupiah(data.item_value)}</td>
-                  <td className="num-cell">
-                    {formatRupiah(
-                      Math.max(0, data.qty * data.item_value - data.discount),
-                    )}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
-            <div className="transaction-detail-total">
-              <div className="transaction-detail-total-row">
-                <span>{t.transactionDetail.subtotal}</span>
-                <span>{formatRupiah(data.qty * data.item_value)}</span>
-              </div>
-              <div className="transaction-detail-total-row">
-                <span>{t.transactionDetail.discount}</span>
-                <span>{formatRupiah(data.discount)}</span>
-              </div>
-              <div className="transaction-detail-total-row grand-total">
-                <span>{t.transactionDetail.total}</span>
-                <span>
+          <table className="transaction-detail-items">
+            <caption className="sr-only">{t.transactionDetail.item}</caption>
+            <thead>
+              <tr>
+                <th scope="col">{t.transactionDetail.item}</th>
+                <th scope="col" className="num-cell">
+                  {t.transactionDetail.qty}
+                </th>
+                <th scope="col" className="num-cell">
+                  {t.transactionDetail.unitValue}
+                </th>
+                <th scope="col" className="num-cell">
+                  {t.transactionDetail.total}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{data.item_name || "—"}</td>
+                <td className="num-cell">{data.qty}</td>
+                <td className="num-cell">{formatRupiah(data.item_value)}</td>
+                <td className="num-cell">
                   {formatRupiah(
                     Math.max(0, data.qty * data.item_value - data.discount),
                   )}
-                </span>
-              </div>
-            </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
-            <div className="transaction-detail-actions">
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={() => window.print()}
-              >
-                <Icon icon="material-symbols:print" width="20" height="20" />
-                {t.transactionDetail.printReceipt}
-              </button>
-              <button
-                type="button"
-                className="btn btn-secondary"
-                onClick={onClose}
-              >
-                {t.transactionDetail.close}
-              </button>
+          <div className="transaction-detail-total">
+            <div className="transaction-detail-total-row">
+              <span>{t.transactionDetail.subtotal}</span>
+              <span>{formatRupiah(data.qty * data.item_value)}</span>
             </div>
-
-            <Receipt transaction={data} />
+            <div className="transaction-detail-total-row">
+              <span>{t.transactionDetail.discount}</span>
+              <span>{formatRupiah(data.discount)}</span>
+            </div>
+            <div className="transaction-detail-total-row grand-total">
+              <span>{t.transactionDetail.total}</span>
+              <span>
+                {formatRupiah(
+                  Math.max(0, data.qty * data.item_value - data.discount),
+                )}
+              </span>
+            </div>
           </div>
-        ) : null}
-      </div>
+
+          <div className="transaction-detail-actions">
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={() => window.print()}
+            >
+              <Icon icon="material-symbols:print" width="20" height="20" />
+              {t.transactionDetail.printReceipt}
+            </button>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={onClose}
+            >
+              {t.transactionDetail.close}
+            </button>
+          </div>
+
+          <Receipt transaction={data} />
+        </div>
+      ) : null}
     </Modal>
   );
 }
