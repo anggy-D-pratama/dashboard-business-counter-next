@@ -9,6 +9,10 @@
   gap: var(--gap-md, 20px);
 }
 
+.transactions-manage-btn {
+  flex: 0 0 auto;
+}
+
 .transactions-filter {
   display: flex;
   flex-direction: column;
@@ -74,6 +78,23 @@
 .transactions-table .transaction-amount {
   font-weight: 700;
   color: var(--text-main);
+}
+
+.transaction-category-select {
+  min-width: 140px;
+  width: auto;
+  min-height: 38px;
+  padding: 6px 10px;
+  font-size: 0.875rem;
+}
+
+.category-inline-error {
+  padding: 10px 14px;
+  border: 1px solid var(--danger);
+  border-radius: var(--radius-sm, 8px);
+  background: color-mix(in oklch, var(--danger) 10%, transparent);
+  color: var(--danger);
+  font-size: 0.875rem;
 }
 
 .transaction-badge {
@@ -150,11 +171,25 @@
 }
 
 @media (max-width: 420px) {
+  .transactions-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .transactions-manage-btn {
+    width: 100%;
+  }
+
   .transactions-filter-grid {
     grid-template-columns: minmax(0, 1fr);
   }
 
   .transactions-filter-actions .btn {
     flex: 1;
+  }
+
+  .transaction-category-select {
+    width: 100%;
+    min-width: 0;
   }
 }
