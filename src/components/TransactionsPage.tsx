@@ -9,6 +9,10 @@ import {
 } from "../hooks/useTransactions";
 import { Skeleton } from "./ui/skeleton";
 import { TransactionDetailModal } from "./TransactionDetailModal";
+import { useAuth } from "../hooks/useAuth";
+import { config } from "../config";
+import { UserCategory, useCategories } from "../hooks/useCategories";
+import { CategoryManagerModal } from "./CategoryManagerModal";
 import "./TransactionsPage.css";
 
 const EMPTY_FILTERS: TransactionsFilter = {
@@ -37,6 +41,23 @@ function formatDateTime(value: string) {
     dateStyle: "medium",
     timeStyle: "short",
   }).format(date);
+}
+
+function buildCategoryOptions(
+  categories: UserCategory[],
+  currentCategory: string,
+): string[] {
+  const names = categories.map((category) => category.name);
+  const current = currentCategory.trim();
+
+  if (
+    current &&
+    !names.some((name) => name.toLowerCase() === current.toLowerCase())
+  ) {
+    names.unshift(current);
+  }
+
+  return names;
 }
 
 function TransactionsSkeleton() {
@@ -70,6 +91,7 @@ function TransactionsSkeleton() {
 
 export function TransactionsPage() {
   const { t } = useLocale();
+  const { token } = useAuth();
   const {
     data,
     isLoading,
@@ -78,11 +100,22 @@ export function TransactionsPage() {
     page,
     setPage,
   } = useTransactions();
+  const {
+    categories,
+    isLoading: categoriesLoading,
+    error: categoriesError,
+    createCategory,
+    renameCategory,
+    deleteCategory,
+  } = useCategories();
 
   const [form, setForm] = useState<TransactionsFilter>(EMPTY_FILTERS);
   const [selectedTransactionId, setSelectedTransactionId] = useState<
     string | null
   >(null);
+  const [isManageOpen, setIsManageOpen] = useState(false);
+  const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [categoryError, setCategoryError] = useState<string | null>(null);
 
   const transactions = data?.transactions ?? [];
   const total = data?.total ?? 0;
@@ -101,6 +134,45 @@ export function TransactionsPage() {
     setForm(EMPTY_FILTERS);
     setPage(1);
     fetchTransactions(1, EMPTY_FILTERS);
+  };
+
+  const handleCategoryChange = async (
+    transactionId: string,
+    category: string,
+  ) => {
+    if (!token || updatingId) return;
+
+    setUpdatingId(transactionId);
+    setCategoryError(null);
+
+    try {
+      const res = await fetch(`${config.apiUrl}/transactions/${transactionId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ category }),
+      });
+
+      const response = await res.json();
+
+      if (!res.ok) {
+        throw new Error(
+          response.message || "Failed to update transaction category",
+        );
+      }
+
+      await fetchTransactions();
+    } catch (err) {
+      setCategoryError(
+        err instanceof Error && err.message
+          ? err.message
+          : "Failed to update transaction category",
+      );
+    } finally {
+      setUpdatingId(null);
+    }
   };
 
   const startEntry = total === 0 ? 0 : (page - 1) * limit + 1;
@@ -128,6 +200,14 @@ export function TransactionsPage() {
           <h1>{t.transactions.title}</h1>
           <p className="lead">{t.transactions.subtitle}</p>
         </div>
+
+        <button
+          type="button"
+          className="btn btn-secondary transactions-manage-btn"
+          onClick={() => setIsManageOpen(true)}
+        >
+          {t.categories.manageTitle}
+        </button>
       </header>
 
       <section className="card transactions-filter" aria-label={t.transactions.filterTitle}>
@@ -236,6 +316,12 @@ export function TransactionsPage() {
         </div>
       </section>
 
+      {categoryError ? (
+        <div className="category-inline-error" role="alert">
+          {categoryError}
+        </div>
+      ) : null}
+
       {showErrorState ? (
         <section
           className="card empty-state error-state"
@@ -334,6 +420,10 @@ export function TransactionsPage() {
                     {transactions.map((transaction) => {
                       const isIncome = transaction.income > 0;
                       const amount = transaction.income + transaction.outcome;
+                      const categoryOptions = buildCategoryOptions(
+                        categories,
+                        transaction.category,
+                      );
 
                       return (
                         <tr key={transaction.id}>
@@ -375,7 +465,31 @@ export function TransactionsPage() {
                             {transaction.payment_method || "—"}
                           </td>
                           <td data-label={t.transactions.category}>
-                            {transaction.category || "—"}
+                            <select
+                              className="input transaction-category-select"
+                              value={transaction.category || ""}
+                              disabled={updatingId === transaction.id}
+                              aria-label={`${t.transactions.category}: ${
+                                transaction.invoice_number ||
+                                transaction.item_name ||
+                                transaction.id
+                              }`}
+                              onChange={(event) =>
+                                handleCategoryChange(
+                                  transaction.id,
+                                  event.target.value,
+                                )
+                              }
+                            >
+                              <option value="">
+                                {t.transactions.categoryUnset}
+                              </option>
+                              {categoryOptions.map((categoryName) => (
+                                <option key={categoryName} value={categoryName}>
+                                  {categoryName}
+                                </option>
+                              ))}
+                            </select>
                           </td>
                           <td
                             data-label={t.transactions.amount}
@@ -458,6 +572,17 @@ export function TransactionsPage() {
       <TransactionDetailModal
         transactionId={selectedTransactionId}
         onClose={() => setSelectedTransactionId(null)}
+      />
+
+      <CategoryManagerModal
+        isOpen={isManageOpen}
+        onClose={() => setIsManageOpen(false)}
+        categories={categories}
+        isLoading={categoriesLoading}
+        error={categoriesError}
+        onCreate={createCategory}
+        onRename={renameCategory}
+        onDelete={deleteCategory}
       />
     </div>
   );
