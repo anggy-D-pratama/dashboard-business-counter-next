@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { useAuth } from "./useAuth";
 import { useLocale } from "../contexts/LocaleContext";
+import { useAuth } from "./useAuth";
 import { config } from "../config";
 
 export interface Profile {
@@ -48,9 +48,7 @@ export function useProfile() {
       });
       const response = await res.json();
       if (!res.ok) {
-        console.error("Error fetching profile", response.message);
-        setError(t.common.error);
-        return;
+        throw new Error(response.message || t.common.error);
       }
 
       if (response.status === "success") {
@@ -58,7 +56,9 @@ export function useProfile() {
       }
     } catch (err) {
       console.error("Error fetching profile", err);
-      setError(t.common.error);
+      setError(
+        err instanceof Error && err.message ? err.message : t.common.error,
+      );
     } finally {
       setIsLoading(false);
     }
@@ -67,7 +67,9 @@ export function useProfile() {
   const updateProfile = useCallback(
     async (payload: UpdateProfilePayload): Promise<UpdateProfileResult> => {
       if (!token) {
-        return { success: false, message: t.common.error };
+        const message = t.common.error;
+        setError(message);
+        return { success: false, message };
       }
 
       setIsSaving(true);
@@ -84,9 +86,7 @@ export function useProfile() {
         });
         const response = await res.json();
         if (!res.ok) {
-          console.error("Error updating profile", response.message);
-          setError(t.common.error);
-          return { success: false, message: t.common.error };
+          throw new Error(response.message || t.common.error);
         }
 
         if (response.status === "success") {
@@ -97,11 +97,15 @@ export function useProfile() {
           };
         }
 
-        return { success: false, message: t.common.error };
+        const message = t.common.error;
+        setError(message);
+        return { success: false, message };
       } catch (err) {
+        const message =
+          err instanceof Error && err.message ? err.message : t.common.error;
+        setError(message);
         console.error("Error updating profile", err);
-        setError(t.common.error);
-        return { success: false, message: t.common.error };
+        return { success: false, message };
       } finally {
         setIsSaving(false);
       }
@@ -109,11 +113,10 @@ export function useProfile() {
     [token, t],
   );
 
-  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchProfile();
   }, [fetchProfile]);
-  /* eslint-enable react-hooks/set-state-in-effect */
 
   return {
     profile,

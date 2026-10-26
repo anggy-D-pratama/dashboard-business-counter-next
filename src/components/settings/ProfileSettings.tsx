@@ -26,9 +26,9 @@ export function ProfileSettings() {
   const [prefilledFromProfile, setPrefilledFromProfile] = useState(false);
   const [prefilledFromAuth, setPrefilledFromAuth] = useState(false);
 
-  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     if (profile && !prefilledFromProfile) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setName(profile.name || "");
       setPhone(profile.phone || "");
       setBusinessName(profile.business_name || "");
@@ -39,12 +39,12 @@ export function ProfileSettings() {
 
   useEffect(() => {
     if (!profile && user && !prefilledFromAuth) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setName(user.name || "");
       setPhone(user.phone || "");
       setPrefilledFromAuth(true);
     }
   }, [profile, user, prefilledFromAuth]);
-  /* eslint-enable react-hooks/set-state-in-effect */
 
   const email = profile?.email || user?.email || "";
 
@@ -91,7 +91,7 @@ export function ProfileSettings() {
     });
 
     if (result.success) {
-      setSuccessMessage(result.message || t.settings.profileSaved);
+      setSuccessMessage(t.settings.profileSaved);
     }
   };
 
