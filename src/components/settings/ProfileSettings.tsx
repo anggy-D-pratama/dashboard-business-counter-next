@@ -26,6 +26,7 @@ export function ProfileSettings() {
   const [prefilledFromProfile, setPrefilledFromProfile] = useState(false);
   const [prefilledFromAuth, setPrefilledFromAuth] = useState(false);
 
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     if (profile && !prefilledFromProfile) {
       setName(profile.name || "");
@@ -43,6 +44,7 @@ export function ProfileSettings() {
       setPrefilledFromAuth(true);
     }
   }, [profile, user, prefilledFromAuth]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const email = profile?.email || user?.email || "";
 

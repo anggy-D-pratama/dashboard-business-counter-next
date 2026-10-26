@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "./useAuth";
+import { useLocale } from "../contexts/LocaleContext";
 import { config } from "../config";
 
 export interface Profile {
@@ -27,6 +28,7 @@ type UpdateProfileResult = {
 
 export function useProfile() {
   const { token } = useAuth();
+  const { t } = useLocale();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -46,7 +48,9 @@ export function useProfile() {
       });
       const response = await res.json();
       if (!res.ok) {
-        throw new Error(response.message || "Failed to fetch profile");
+        console.error("Error fetching profile", response.message);
+        setError(t.common.error);
+        return;
       }
 
       if (response.status === "success") {
@@ -54,20 +58,16 @@ export function useProfile() {
       }
     } catch (err) {
       console.error("Error fetching profile", err);
-      setError(
-        err instanceof Error && err.message
-          ? err.message
-          : "Failed to fetch profile",
-      );
+      setError(t.common.error);
     } finally {
       setIsLoading(false);
     }
-  }, [token]);
+  }, [token, t]);
 
   const updateProfile = useCallback(
     async (payload: UpdateProfilePayload): Promise<UpdateProfileResult> => {
       if (!token) {
-        return { success: false, message: "Not authenticated" };
+        return { success: false, message: t.common.error };
       }
 
       setIsSaving(true);
@@ -84,36 +84,36 @@ export function useProfile() {
         });
         const response = await res.json();
         if (!res.ok) {
-          throw new Error(response.message || "Failed to update profile");
+          console.error("Error updating profile", response.message);
+          setError(t.common.error);
+          return { success: false, message: t.common.error };
         }
 
         if (response.status === "success") {
           setProfile(response.data);
           return {
             success: true,
-            message: response.message || "Profile updated successfully",
+            message: t.settings.profileSaved,
           };
         }
 
-        return { success: false, message: "Failed to update profile" };
+        return { success: false, message: t.common.error };
       } catch (err) {
-        const message =
-          err instanceof Error && err.message
-            ? err.message
-            : "Failed to update profile";
-        setError(message);
         console.error("Error updating profile", err);
-        return { success: false, message };
+        setError(t.common.error);
+        return { success: false, message: t.common.error };
       } finally {
         setIsSaving(false);
       }
     },
-    [token],
+    [token, t],
   );
 
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     fetchProfile();
   }, [fetchProfile]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   return {
     profile,
